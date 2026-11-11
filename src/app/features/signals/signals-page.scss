@@ -1,0 +1,128 @@
+:host {
+  display: block;
+}
+
+.signals-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xl);
+  max-width: 820px;
+  margin-inline: auto;
+}
+
+.signals-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xs);
+}
+
+.signals-page__eyebrow {
+  color: var(--atlas-accent-strong);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.signals-page__title {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  font-weight: 700;
+}
+
+.signals-page__lead {
+  color: var(--atlas-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 60ch;
+}
+
+.signals-page__docs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-sm);
+  background: var(--atlas-surface);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  padding: var(--atlas-space-lg);
+  box-shadow: var(--atlas-shadow-sm);
+
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: var(--atlas-space-sm);
+  }
+
+  p {
+    color: var(--atlas-text-muted);
+    line-height: 1.6;
+  }
+
+  code {
+    background: var(--atlas-accent-soft);
+    color: var(--atlas-accent-strong);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  pre {
+    background: var(--atlas-navy);
+    color: var(--atlas-text-inverse);
+    border-radius: var(--atlas-radius-sm);
+    padding: var(--atlas-space-md);
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.6;
+
+    code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+  }
+}
+
+.signals-page__lab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-md);
+  background: linear-gradient(180deg, var(--atlas-accent-soft), transparent 60%);
+  border: 1px dashed var(--atlas-accent-strong);
+  border-radius: var(--atlas-radius-lg);
+  padding: var(--atlas-space-lg);
+}
+
+.signals-page__lab-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-space-sm);
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+}
+
+.signals-page__lab-badge {
+  background: var(--atlas-accent-strong);
+  color: var(--atlas-text-inverse);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.signals-page__lab-description {
+  color: var(--atlas-text-muted);
+  line-height: 1.6;
+
+  code {
+    background: var(--atlas-surface);
+    color: var(--atlas-accent-strong);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+}

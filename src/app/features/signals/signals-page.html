@@ -1,0 +1,47 @@
+<section class="signals-page">
+  <header class="signals-page__header">
+    <p class="signals-page__eyebrow">Estado reactivo</p>
+    <h1 class="signals-page__title">Signals</h1>
+    <p class="signals-page__lead">
+      Los <strong>signals</strong> son contenedores de valor que notifican a Angular cuándo
+      cambian, permitiendo una detección de cambios granular sin depender de Zone.js.
+    </p>
+  </header>
+
+  <article class="signals-page__docs">
+    <h2>Creando un signal</h2>
+    <p>
+      La función <code>signal()</code> crea un valor reactivo con un estado inicial. Se lee
+      invocándolo como función, <code>count()</code>, y se actualiza con <code>set()</code> o
+      <code>update()</code>, nunca mutando el valor directamente.
+    </p>
+    <pre><code>const count = signal(0);
+
+count();         // 0
+count.set(5);     // reemplaza el valor
+count.update(v =&gt; v + 1); // deriva el nuevo valor del anterior</code></pre>
+
+    <h2>Derivando estado con computed()</h2>
+    <p>
+      <code>computed()</code> crea un signal de solo lectura cuyo valor se recalcula de forma
+      perezosa cada vez que alguna de sus dependencias cambia, manteniendo la lógica de
+      derivación pura y predecible.
+    </p>
+    <pre><code>const count = signal(0);
+const doubled = computed(() =&gt; count() * 2);
+
+doubled(); // se recalcula solo cuando "count" cambia</code></pre>
+  </article>
+
+  <section class="signals-page__lab" aria-labelledby="lab-title">
+    <div class="signals-page__lab-heading">
+      <span class="signals-page__lab-badge">Laboratorio</span>
+      <h2 id="lab-title">Pruébalo en vivo</h2>
+    </div>
+    <p class="signals-page__lab-description">
+      Interactúa con el contador para observar cómo <code>doubled</code> se mantiene siempre
+      sincronizado con <code>count</code> sin ninguna suscripción manual.
+    </p>
+    <app-counter-demo />
+  </section>
+</section>

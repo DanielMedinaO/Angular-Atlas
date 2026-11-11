@@ -1,0 +1,30 @@
+<article class="counter" aria-labelledby="counter-title">
+  <h3 id="counter-title" class="counter__title">Contador reactivo</h3>
+  <p class="counter__hint">
+    <code>count</code> es un <code>signal</code> y <code>doubled</code> se deriva con
+    <code>computed()</code>: cada cambio en el contador recalcula automáticamente su doble.
+  </p>
+
+  <div class="counter__metrics" role="group" aria-label="Valores actuales del contador">
+    <div class="counter__metric">
+      <span class="counter__metric-label">Valor actual</span>
+      <span class="counter__metric-value" aria-live="polite">{{ count() }}</span>
+    </div>
+    <div class="counter__metric">
+      <span class="counter__metric-label">Doble (computed)</span>
+      <span class="counter__metric-value" aria-live="polite">{{ doubled() }}</span>
+    </div>
+  </div>
+
+  <div class="counter__actions">
+    <button type="button" class="counter__button counter__button--ghost" (click)="decrement()">
+      − Disminuir
+    </button>
+    <button type="button" class="counter__button counter__button--primary" (click)="increment()">
+      + Incrementar
+    </button>
+    <button type="button" class="counter__button counter__button--text" (click)="reset()">
+      Reiniciar
+    </button>
+  </div>
+</article>

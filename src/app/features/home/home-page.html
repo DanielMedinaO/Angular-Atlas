@@ -1,0 +1,32 @@
+<section class="home-page">
+  <section class="home-page__hero">
+    <p class="home-page__eyebrow">Angular Atlas</p>
+    <h1 class="home-page__title">Una biblioteca interactiva para dominar Angular</h1>
+    <p class="home-page__lead">
+      Explora conceptos modernos de Angular con documentación clara, demostraciones ejecutables
+      y ejercicios prácticos, pensados para aprender haciendo.
+    </p>
+    <a class="home-page__cta" routerLink="/signals">Empezar con Signals →</a>
+  </section>
+
+  <section class="home-page__topics" aria-label="Temáticas disponibles">
+    <h2 class="home-page__topics-title">Temáticas</h2>
+    <div class="home-page__grid">
+      @for (topic of topics; track topic.title) {
+        @if (topic.path) {
+          <a class="topic-card" [routerLink]="topic.path">
+            <h3 class="topic-card__title">{{ topic.title }}</h3>
+            <p class="topic-card__description">{{ topic.description }}</p>
+            <span class="topic-card__link">Ver contenido →</span>
+          </a>
+        } @else {
+          <div class="topic-card topic-card--disabled">
+            <h3 class="topic-card__title">{{ topic.title }}</h3>
+            <p class="topic-card__description">{{ topic.description }}</p>
+            <span class="topic-card__badge">Próximamente</span>
+          </div>
+        }
+      }
+    </div>
+  </section>
+</section>

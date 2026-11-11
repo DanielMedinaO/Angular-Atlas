@@ -1,1 +1,90 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+  color-scheme: light;
+
+  // Palette
+  --atlas-navy: #101a2e;
+  --atlas-navy-elevated: #18253f;
+  --atlas-bg: #f7f9fc;
+  --atlas-surface: #ffffff;
+  --atlas-border: #e3e8f0;
+  --atlas-accent: #0d9f8d;
+  --atlas-accent-strong: #097d6f;
+  --atlas-accent-soft: rgb(13 159 141 / 12%);
+  --atlas-text: #16233f;
+  --atlas-text-muted: #5b6b85;
+  --atlas-text-inverse: #eef2fa;
+  --atlas-text-inverse-muted: #9fb0cc;
+
+  // Layout
+  --atlas-sidebar-width: 260px;
+  --atlas-topbar-height: 64px;
+
+  // Spacing
+  --atlas-space-xs: 0.5rem;
+  --atlas-space-sm: 0.75rem;
+  --atlas-space-md: 1.25rem;
+  --atlas-space-lg: 2rem;
+  --atlas-space-xl: 3rem;
+
+  // Radii & elevation
+  --atlas-radius-sm: 8px;
+  --atlas-radius-md: 12px;
+  --atlas-radius-lg: 20px;
+  --atlas-shadow-sm: 0 1px 2px rgb(16 26 46 / 6%);
+  --atlas-shadow-md: 0 8px 24px rgb(16 26 46 / 10%);
+
+  --atlas-font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji';
+  --atlas-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--atlas-font-sans);
+  color: var(--atlas-text);
+  background: var(--atlas-bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+code,
+pre {
+  font-family: var(--atlas-font-mono);
+}
+
+:focus-visible {
+  outline: 3px solid var(--atlas-accent-strong);
+  outline-offset: 2px;
+}

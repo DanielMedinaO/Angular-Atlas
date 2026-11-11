@@ -1,0 +1,125 @@
+:host {
+  display: block;
+}
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xl);
+}
+
+.home-page__hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-sm);
+  max-width: 680px;
+  padding: var(--atlas-space-xl) 0;
+}
+
+.home-page__eyebrow {
+  color: var(--atlas-accent-strong);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.home-page__title {
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.home-page__lead {
+  color: var(--atlas-text-muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.home-page__cta {
+  align-self: flex-start;
+  margin-top: var(--atlas-space-xs);
+  background: var(--atlas-accent-strong);
+  color: var(--atlas-text-inverse);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--atlas-radius-sm);
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: #086d60;
+  }
+}
+
+.home-page__topics-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: var(--atlas-space-md);
+}
+
+.home-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--atlas-space-md);
+}
+
+.topic-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xs);
+  background: var(--atlas-surface);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  padding: var(--atlas-space-lg);
+  text-decoration: none;
+  color: var(--atlas-text);
+  box-shadow: var(--atlas-shadow-sm);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+a.topic-card:hover,
+a.topic-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--atlas-shadow-md);
+  border-color: var(--atlas-accent-strong);
+}
+
+.topic-card__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.topic-card__description {
+  color: var(--atlas-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.topic-card__link {
+  margin-top: auto;
+  color: var(--atlas-accent-strong);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.topic-card--disabled {
+  opacity: 0.75;
+}
+
+.topic-card__badge {
+  align-self: flex-start;
+  margin-top: auto;
+  background: var(--atlas-bg);
+  color: var(--atlas-text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--atlas-border);
+}

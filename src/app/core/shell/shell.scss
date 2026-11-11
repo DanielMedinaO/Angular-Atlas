@@ -1,0 +1,222 @@
+:host {
+  display: block;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--atlas-sidebar-width) minmax(0, 1fr);
+  grid-template-rows: var(--atlas-topbar-height) 1fr;
+  grid-template-areas:
+    'sidebar topbar'
+    'sidebar content';
+  min-height: 100vh;
+}
+
+.shell__topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-space-md);
+  padding-inline: var(--atlas-space-lg);
+  background: var(--atlas-surface);
+  border-bottom: 1px solid var(--atlas-border);
+}
+
+.shell__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-space-xs);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--atlas-text);
+}
+
+.shell__brand-mark {
+  color: var(--atlas-accent-strong);
+  font-size: 1.1rem;
+}
+
+.shell__menu-toggle {
+  display: none;
+  align-items: center;
+  gap: var(--atlas-space-xs);
+  border: 1px solid var(--atlas-border);
+  background: var(--atlas-surface);
+  border-radius: var(--atlas-radius-sm);
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+}
+
+.shell__menu-icon {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--atlas-text);
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 18px;
+    height: 2px;
+    background: var(--atlas-text);
+  }
+
+  &::before {
+    top: -6px;
+  }
+
+  &::after {
+    top: 6px;
+  }
+}
+
+.shell__backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgb(16 26 46 / 55%);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.shell__sidebar {
+  grid-area: sidebar;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--atlas-navy);
+  color: var(--atlas-text-inverse);
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-lg);
+  padding: var(--atlas-space-lg) var(--atlas-space-md);
+}
+
+.shell__sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-space-sm);
+  text-decoration: none;
+  color: var(--atlas-text-inverse);
+  padding-inline: var(--atlas-space-sm);
+}
+
+.shell__sidebar-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+
+  small {
+    color: var(--atlas-text-inverse-muted);
+    font-size: 0.75rem;
+  }
+}
+
+.shell__nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.shell__nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  text-decoration: none;
+  color: var(--atlas-text-inverse);
+  padding: 0.65rem var(--atlas-space-sm);
+  border-radius: var(--atlas-radius-sm);
+  border-left: 3px solid transparent;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    background: var(--atlas-navy-elevated);
+  }
+}
+
+.shell__nav-link-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.shell__nav-link-description {
+  font-size: 0.78rem;
+  color: var(--atlas-text-inverse-muted);
+}
+
+.shell__nav-link--active {
+  background: var(--atlas-navy-elevated);
+  border-left-color: var(--atlas-accent);
+
+  .shell__nav-link-label {
+    color: var(--atlas-text-inverse);
+  }
+
+  .shell__nav-link-description {
+    color: var(--atlas-accent);
+  }
+}
+
+.shell__content {
+  grid-area: content;
+  min-width: 0;
+  padding: var(--atlas-space-xl) var(--atlas-space-lg);
+}
+
+@media (max-width: 960px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'topbar'
+      'content';
+  }
+
+  .shell__menu-toggle {
+    display: inline-flex;
+  }
+
+  .shell__sidebar {
+    position: fixed;
+    inset-block: 0;
+    left: 0;
+    width: min(var(--atlas-sidebar-width), 80vw);
+    z-index: 30;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: var(--atlas-shadow-md);
+  }
+
+  .shell__sidebar--open {
+    transform: translateX(0);
+  }
+
+  .shell__backdrop {
+    display: block;
+  }
+
+  .shell__content {
+    padding: var(--atlas-space-lg) var(--atlas-space-md);
+  }
+}
+
+@media (max-width: 520px) {
+  .shell__topbar {
+    padding-inline: var(--atlas-space-md);
+  }
+
+  .shell__content {
+    padding: var(--atlas-space-md) var(--atlas-space-sm);
+  }
+}

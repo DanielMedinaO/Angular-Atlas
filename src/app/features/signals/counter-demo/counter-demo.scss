@@ -1,0 +1,111 @@
+:host {
+  display: block;
+}
+
+.counter {
+  background: var(--atlas-surface);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  padding: var(--atlas-space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-md);
+  box-shadow: var(--atlas-shadow-sm);
+}
+
+.counter__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.counter__hint {
+  color: var(--atlas-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+
+  code {
+    background: var(--atlas-accent-soft);
+    color: var(--atlas-accent-strong);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+}
+
+.counter__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--atlas-space-sm);
+}
+
+.counter__metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: var(--atlas-bg);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+  padding: var(--atlas-space-sm) var(--atlas-space-md);
+}
+
+.counter__metric-label {
+  font-size: 0.78rem;
+  color: var(--atlas-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.counter__metric-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--atlas-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.counter__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-space-sm);
+}
+
+.counter__button {
+  border-radius: var(--atlas-radius-sm);
+  padding: 0.6rem 1.1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.counter__button--primary {
+  background: var(--atlas-accent-strong);
+  color: var(--atlas-text-inverse);
+
+  &:hover {
+    background: #086d60;
+  }
+}
+
+.counter__button--ghost {
+  background: var(--atlas-surface);
+  color: var(--atlas-text);
+  border-color: var(--atlas-border);
+
+  &:hover {
+    border-color: var(--atlas-accent-strong);
+    color: var(--atlas-accent-strong);
+  }
+}
+
+.counter__button--text {
+  background: transparent;
+  color: var(--atlas-text-muted);
+
+  &:hover {
+    color: var(--atlas-text);
+  }
+}

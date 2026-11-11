@@ -1,0 +1,65 @@
+<div class="shell">
+  <header class="shell__topbar">
+    <button
+      type="button"
+      class="shell__menu-toggle"
+      (click)="toggleSidebar()"
+      [attr.aria-expanded]="sidebarOpen()"
+      aria-controls="primary-navigation"
+    >
+      <span class="shell__menu-icon" aria-hidden="true"></span>
+      <span class="shell__menu-label">Menú</span>
+    </button>
+
+    <a class="shell__brand" routerLink="/">
+      <span class="shell__brand-mark" aria-hidden="true">⟡</span>
+      Angular Atlas
+    </a>
+  </header>
+
+  @if (sidebarOpen()) {
+    <button
+      type="button"
+      class="shell__backdrop"
+      (click)="closeSidebar()"
+      aria-label="Cerrar navegación"
+    ></button>
+  }
+
+  <nav
+    id="primary-navigation"
+    class="shell__sidebar"
+    [class.shell__sidebar--open]="sidebarOpen()"
+    aria-label="Navegación principal"
+    (keydown.escape)="closeSidebar()"
+  >
+    <a class="shell__sidebar-brand" routerLink="/" (click)="closeSidebar()">
+      <span class="shell__brand-mark" aria-hidden="true">⟡</span>
+      <span class="shell__sidebar-brand-text">
+        <strong>Angular Atlas</strong>
+        <small>Base de conocimiento interactiva</small>
+      </span>
+    </a>
+
+    <ul class="shell__nav-list">
+      @for (link of navLinks; track link.path) {
+        <li>
+          <a
+            class="shell__nav-link"
+            [routerLink]="link.path"
+            routerLinkActive="shell__nav-link--active"
+            [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+            (click)="closeSidebar()"
+          >
+            <span class="shell__nav-link-label">{{ link.label }}</span>
+            <span class="shell__nav-link-description">{{ link.description }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <main class="shell__content" id="main-content">
+    <router-outlet />
+  </main>
+</div>
