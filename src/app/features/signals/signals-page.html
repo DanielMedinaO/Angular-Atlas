@@ -133,4 +133,76 @@ doubled(); // se recalcula solo cuando "count" cambia</code></pre>
     <figcaption>Código del explorador: signal(), computed(), linkedSignal() y effect()</figcaption>
     <pre tabindex="0"><code>{{ bookExplorerSnippet }}</code></pre>
   </figure>
+
+  <article class="signals-page__docs" aria-labelledby="communication-docs-title">
+    <h2 id="communication-docs-title">Comunicación entre componentes</h2>
+    <p>
+      Los datos viajan <strong>hacia abajo</strong> (padre → hijo) mediante entradas y los
+      eventos suben <strong>hacia arriba</strong> (hijo → padre) mediante salidas. El padre es
+      el dueño del estado; el hijo solo recibe valores y avisa de lo que el usuario pide.
+      Cuando ambos necesitan compartir un mismo valor editable, <code>model()</code> combina
+      los dos sentidos.
+    </p>
+    <ul>
+      <li><code>input()</code> / <code>input.required()</code>: dato de solo lectura, padre → hijo.</li>
+      <li><code>output()</code>: evento hijo → padre; el valor llega como <code>$event</code>.</li>
+      <li><code>model()</code>: valor bidireccional enlazado con <code>[(propiedad)]</code>.</li>
+    </ul>
+
+    <h3>input() e input.required()</h3>
+    <p>
+      <code>input()</code> crea un signal de solo lectura con valor por defecto.
+      <code>input.required()</code> no tiene valor inicial: el compilador exige que el padre
+      lo enlace, de modo que nunca se lee un dato inexistente.
+    </p>
+    <pre tabindex="0"><code>{{ inputApiSnippet }}</code></pre>
+
+    <h3>output() y $event</h3>
+    <p>
+      <code>output&lt;T&gt;()</code> declara un evento tipado. El hijo llama a
+      <code>emit()</code> y el padre lo escucha con <code>(evento)="metodo($event)"</code>,
+      donde <code>$event</code> es exactamente el valor emitido. El hijo no conoce la lista de
+      lectura: solo comunica una intención.
+    </p>
+    <pre tabindex="0"><code>{{ outputApiSnippet }}</code></pre>
+
+    <h3>model() y two-way binding</h3>
+    <p>
+      <code>model()</code> es un signal escribible que Angular expone también como entrada y
+      como salida (<code>favoriteChange</code>). Con <code>[(favorite)]="isFavorite"</code> el
+      padre pasa su signal y cualquier <code>set()</code> o <code>update()</code> del hijo lo
+      actualiza, y viceversa.
+    </p>
+    <pre tabindex="0"><code>{{ modelApiSnippet }}</code></pre>
+
+    <h3>Comparación con &#64;Input(), &#64;Output() y EventEmitter</h3>
+    <p>
+      Las APIs tradicionales siguen funcionando, pero usan propiedades mutables, requieren
+      sincronizar manualmente la salida con el estado y dependen de RxJS para emitir. Las
+      funciones modernas son signals: se integran con <code>computed()</code> y
+      <code>effect()</code>, validan en compilación las entradas obligatorias y reducen el
+      código repetitivo.
+    </p>
+    <pre tabindex="0"><code>{{ legacyCommunicationSnippet }}</code></pre>
+  </article>
+
+  <section class="signals-page__lab" aria-labelledby="communication-lab-title">
+    <div class="signals-page__lab-heading">
+      <span class="signals-page__lab-badge">Laboratorio</span>
+      <h2 id="communication-lab-title">Comunicación entre componentes</h2>
+    </div>
+    <p class="signals-page__lab-description">
+      Pulsa «Añadir a la lista de lectura» varias veces: el hijo emite el id con
+      <code>output()</code> y el padre lo agrega una sola vez. Alterna el favorito: el cambio
+      viaja por <code>model()</code> hasta el signal del padre.
+    </p>
+    <app-component-communication />
+  </section>
+
+  <figure class="signals-page__code">
+    <figcaption>
+      Código de los componentes: input.required(), output(), model() y two-way binding
+    </figcaption>
+    <pre tabindex="0"><code>{{ componentCommunicationSnippet }}</code></pre>
+  </figure>
 </section>

@@ -1,0 +1,54 @@
+:host {
+  display: block;
+}
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  height: 100%;
+  background: var(--atlas-navy);
+  color: var(--atlas-text-inverse);
+  border-radius: var(--atlas-radius-md);
+  padding: var(--atlas-space-md);
+  box-shadow: var(--atlas-shadow-md);
+}
+
+.book-card__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.book-card__author {
+  color: var(--atlas-text-inverse-muted);
+  font-size: 0.9rem;
+}
+
+.book-card__description {
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.book-card__add {
+  align-self: flex-start;
+  margin-top: var(--atlas-space-xs);
+  background: var(--atlas-accent-strong);
+  color: var(--atlas-text-inverse);
+  border: 1px solid transparent;
+  border-radius: var(--atlas-radius-sm);
+  padding: 0.6rem 1.1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: #086d60;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--atlas-text-inverse);
+    outline-offset: 2px;
+  }
+}

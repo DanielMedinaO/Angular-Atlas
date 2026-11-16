@@ -1,0 +1,10 @@
+<button
+  type="button"
+  class="favorite-toggle"
+  [class.favorite-toggle--active]="favorite()"
+  [attr.aria-pressed]="favorite()"
+  (click)="toggle()"
+>
+  <span class="favorite-toggle__icon" aria-hidden="true">{{ favorite() ? '★' : '☆' }}</span>
+  Favorito
+</button>

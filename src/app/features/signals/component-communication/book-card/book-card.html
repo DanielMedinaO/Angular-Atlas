@@ -1,0 +1,8 @@
+<article class="book-card" [attr.aria-labelledby]="'book-card-title-' + book().id">
+  <h4 class="book-card__title" [id]="'book-card-title-' + book().id">{{ book().title }}</h4>
+  <p class="book-card__author">{{ book().author }}</p>
+  <p class="book-card__description">{{ book().description }}</p>
+  <button type="button" class="book-card__add" (click)="requestAdd()">
+    Añadir a la lista de lectura
+  </button>
+</article>

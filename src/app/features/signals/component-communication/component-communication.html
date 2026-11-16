@@ -1,0 +1,46 @@
+<div class="communication">
+  <h3 class="communication__title">Biblioteca personal</h3>
+  <p class="communication__hint">
+    El padre pasa el libro con <code>[book]</code>, escucha <code>(addRequested)</code> y sincroniza
+    el favorito con <code>[(favorite)]</code>.
+  </p>
+
+  <div class="communication__layout">
+    <app-book-card [book]="book()" (addRequested)="addToReadingList($event)" />
+
+    <div class="communication__side">
+      <app-favorite-toggle [(favorite)]="isFavorite" />
+
+      <section class="communication__state" aria-labelledby="communication-state-title">
+        <h4 id="communication-state-title" class="communication__state-title">Estado del padre</h4>
+        <dl class="communication__metrics">
+          <div class="communication__metric">
+            <dt>Favorito</dt>
+            <dd>{{ isFavorite() ? 'Sí' : 'No' }}</dd>
+          </div>
+          <div class="communication__metric">
+            <dt>En la lista</dt>
+            <dd>{{ readingList().length }}</dd>
+          </div>
+        </dl>
+
+        @if (readingList().length > 0) {
+          <ul class="communication__list" aria-label="Lista de lectura">
+            @for (id of readingList(); track id) {
+              <li>
+                <code>{{ id }}</code>
+              </li>
+            }
+          </ul>
+          <button type="button" class="communication__clear" (click)="clearReadingList()">
+            Vaciar lista
+          </button>
+        } @else {
+          <p class="communication__empty">La lista de lectura está vacía.</p>
+        }
+
+        <p class="communication__status" role="status">{{ statusMessage() }}</p>
+      </section>
+    </div>
+  </div>
+</div>
