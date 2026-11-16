@@ -44,6 +44,21 @@ describe('App', () => {
     expect(compiled.querySelector('app-signals-page .signals-page__lab app-counter-demo')).toBeTruthy();
   });
 
+  it('should lazy load the Components page with documentation and the lifecycle lab together', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/components');
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(router.url).toBe('/components');
+    expect(compiled.querySelector('app-components-page .components-page__title')?.textContent).toContain(
+      'Componentes y ciclo de vida',
+    );
+    expect(compiled.querySelector('app-components-page .components-page__lab app-lifecycle-lab')).toBeTruthy();
+    expect(compiled.querySelector('.shell__nav-link--active')?.textContent).toContain('Componentes');
+  });
+
   it('should redirect unknown URLs to the home page', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);

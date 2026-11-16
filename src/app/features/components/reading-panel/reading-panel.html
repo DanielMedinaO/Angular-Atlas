@@ -1,0 +1,27 @@
+<section
+  #surface
+  class="reading-panel"
+  [class.reading-panel--compact]="density() === 'compact'"
+  [attr.aria-labelledby]="labelledBy()"
+  [attr.aria-label]="labelledBy() ? null : 'Panel de lectura'"
+>
+  <header class="reading-panel__header" [hidden]="!hasTitle()">
+    <ng-content select="[readingPanelTitle]" />
+  </header>
+
+  <div class="reading-panel__body">
+    <ng-content />
+  </div>
+
+  <footer class="reading-panel__status">
+    <span class="reading-panel__badge">Instancia #{{ instanceId() }}</span>
+    <span>
+      Título proyectado:
+      <strong>{{ hasTitle() ? 'sí' : 'no (undefined)' }}</strong>
+    </span>
+    <span>
+      Ancho inicial:
+      <strong>{{ widthLabel() }}</strong>
+    </span>
+  </footer>
+</section>

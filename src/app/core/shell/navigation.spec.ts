@@ -34,6 +34,7 @@ describe('NAV_GROUPS', () => {
 
   it('should find the group that owns an available path', () => {
     expect(findGroupIdByPath('/signals')).toBe('reactivity');
+    expect(findGroupIdByPath('/components')).toBe('foundations');
     expect(findGroupIdByPath('/')).toBe('start');
     expect(findGroupIdByPath('/unknown')).toBeUndefined();
   });

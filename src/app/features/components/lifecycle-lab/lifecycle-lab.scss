@@ -1,0 +1,283 @@
+:host {
+  display: block;
+}
+
+.lifecycle-lab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-md);
+  background: var(--atlas-surface);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  padding: var(--atlas-space-lg);
+  box-shadow: var(--atlas-shadow-sm);
+  container-type: inline-size;
+}
+
+.lifecycle-lab__controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--atlas-space-sm);
+}
+
+.lifecycle-lab__group {
+  --group-color: var(--atlas-accent-strong);
+  --group-bg: var(--atlas-accent-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xs);
+  min-width: 0;
+  background:
+    linear-gradient(135deg, var(--group-bg), var(--atlas-surface) 85%);
+  border: 1px solid color-mix(in srgb, var(--group-color) 45%, var(--atlas-border));
+  border-top: 3px solid var(--group-color);
+  border-radius: var(--atlas-radius-md);
+  padding: 0.65rem 0.75rem 0.75rem;
+  box-shadow: 0 2px 6px rgb(16 26 46 / 5%);
+  width: 100%;
+}
+
+.lifecycle-lab__group--lifecycle {
+  --group-color: var(--atlas-accent-strong);
+  --group-bg: var(--atlas-accent-soft);
+}
+
+.lifecycle-lab__group--props {
+  --group-color: #3b5bdb;
+  --group-bg: rgb(59 91 219 / 8%);
+}
+
+.lifecycle-lab__group-label {
+  color: var(--group-color);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.lifecycle-lab__group-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-space-xs);
+
+  .lifecycle-lab__button {
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+}
+
+.lifecycle-lab__button {
+  background: var(--atlas-surface);
+  color: var(--atlas-text);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+  padding: 0.55rem 0.6rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--atlas-accent-strong);
+    color: var(--atlas-accent-strong);
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--atlas-accent-strong);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: var(--atlas-text-muted);
+    background: var(--atlas-bg);
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--atlas-accent-soft);
+    border-color: var(--atlas-accent-strong);
+    color: var(--atlas-accent-strong);
+  }
+}
+
+.lifecycle-lab__button--primary:not(:disabled) {
+  background: var(--atlas-accent-strong);
+  border-color: var(--atlas-accent-strong);
+  color: var(--atlas-text-inverse);
+
+  &:hover {
+    color: var(--atlas-text-inverse);
+    filter: brightness(1.1);
+  }
+}
+
+.lifecycle-lab__button--danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #b42318;
+  border-color: #b42318;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: #912018;
+    border-color: #912018;
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline-color: #b42318;
+  }
+}
+
+.lifecycle-lab__icon {
+  flex: none;
+}
+
+.lifecycle-lab__stage {
+  min-height: 7rem;
+}
+
+.lifecycle-lab__placeholder,
+.lifecycle-lab__empty {
+  color: var(--atlas-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border: 1px dashed var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+  padding: var(--atlas-space-md);
+}
+
+.lifecycle-lab__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xs);
+}
+
+.lifecycle-lab__section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--atlas-space-xs) var(--atlas-space-sm);
+}
+
+.lifecycle-lab__subtitle {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-space-xs);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.lifecycle-lab__count {
+  background: var(--atlas-accent-soft);
+  color: var(--atlas-accent-strong);
+  border-radius: 999px;
+  padding: 0 0.55rem;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.lifecycle-lab__queries {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--atlas-space-xs);
+  margin: 0;
+}
+
+.lifecycle-lab__query {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: var(--atlas-bg);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+  padding: var(--atlas-space-xs) var(--atlas-space-sm);
+  min-width: 0;
+
+  dt {
+    font-size: 0.78rem;
+    color: var(--atlas-text-muted);
+  }
+
+  dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  code {
+    color: var(--atlas-accent-strong);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+}
+
+.lifecycle-lab__query code.lifecycle-lab__value--missing {
+  color: var(--atlas-text-muted);
+}
+
+.lifecycle-lab__log {
+  max-height: 20rem;
+  overflow-y: auto;
+  background: var(--atlas-bg);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+  padding: var(--atlas-space-xs);
+}
+
+.lifecycle-lab__events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lifecycle-lab__event {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.6rem;
+  background: var(--atlas-surface);
+  border-left: 4px solid hsl(var(--instance-hue) 60% 28%);
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.lifecycle-lab__sequence {
+  min-width: 1.5rem;
+  color: var(--atlas-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.lifecycle-lab__instance {
+  background: hsl(var(--instance-hue) 80% 93%);
+  color: hsl(var(--instance-hue) 60% 28%);
+  border-radius: 999px;
+  padding: 0 0.5rem;
+  font-weight: 700;
+}
+
+.lifecycle-lab__hook {
+  color: var(--atlas-accent-strong);
+  font-weight: 600;
+}
+
+.lifecycle-lab__detail {
+  flex: 1 1 14rem;
+  color: var(--atlas-text-muted);
+  overflow-wrap: anywhere;
+}

@@ -7,6 +7,12 @@ export const routes: Routes = [
     title: 'Angular Atlas',
   },
   {
+    path: 'components',
+    loadComponent: () =>
+      import('./features/components/components-page').then((m) => m.ComponentsPage),
+    title: 'Componentes y ciclo de vida · Angular Atlas',
+  },
+  {
     path: 'signals',
     loadComponent: () => import('./features/signals/signals-page').then((m) => m.SignalsPage),
     title: 'Signals · Angular Atlas',

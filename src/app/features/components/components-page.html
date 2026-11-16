@@ -1,0 +1,259 @@
+<section class="components-page">
+  <header class="components-page__header">
+    <p class="components-page__eyebrow">Fundamentos</p>
+    <h1 class="components-page__title">Componentes y ciclo de vida</h1>
+    <p class="components-page__lead">
+      Un componente nace, recibe datos, pinta su vista, reacciona a cambios y finalmente se
+      destruye. Conocer <strong>en qué momento</strong> ocurre cada paso te dice dónde colocar
+      cada tarea y qué APIs modernas (signals, consultas y <code>afterNextRender</code>)
+      reemplazan a los hooks de siempre.
+    </p>
+  </header>
+
+  <article class="components-page__docs">
+    <h2>El ciclo de vida de un vistazo</h2>
+    <p>
+      Angular ejecuta los hooks siempre en el mismo orden. Los marcados «una vez» no se repiten;
+      los «Checked» se disparan en cada ciclo de detección de cambios.
+    </p>
+    <div
+      class="components-page__table-wrapper"
+      role="region"
+      aria-label="Tabla del ciclo de vida"
+      tabindex="0"
+    >
+      <table class="components-page__table">
+        <caption>
+          Hooks del ciclo de vida en orden de ejecución
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Hook</th>
+            <th scope="col">Cuándo se ejecuta</th>
+            <th scope="col">Frecuencia</th>
+            <th scope="col">Uso típico</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of lifecycleRows; track row.hook) {
+            <tr>
+              <th scope="row">
+                <code>{{ row.hook }}</code>
+              </th>
+              <td>{{ row.when }}</td>
+              <td>{{ row.frequency }}</td>
+              <td>{{ row.use }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2>constructor frente a ngOnInit()</h2>
+    <p>
+      El <code>constructor</code> se ejecuta cuando Angular crea la instancia, antes de que el
+      padre asigne los inputs. Es el lugar para inyectar dependencias con <code>inject()</code>,
+      declarar signals y registrar callbacks. <code>ngOnInit()</code> se ejecuta una vez que los
+      inputs iniciales ya tienen valor: ahí va la lógica de arranque que depende de ellos.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>ReadingPanel: qué se puede hacer en cada momento</figcaption>
+      <pre tabindex="0"><code>{{ constructorVsOnInitSnippet }}</code></pre>
+    </figure>
+
+    <h2>ngOnChanges() y cambios de inputs</h2>
+    <p>
+      <code>ngOnChanges()</code> recibe un objeto <code>SimpleChanges</code> con el valor
+      anterior, el actual y si es el primer cambio. Se ejecuta antes de
+      <code>ngOnInit()</code> y después cada vez que el padre modifica un input. En el
+      laboratorio, el botón «Densidad» cambia un input y verás aparecer el evento.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>ReadingPanel: registrar cada cambio de input</figcaption>
+      <pre tabindex="0"><code>{{ onChangesSnippet }}</code></pre>
+    </figure>
+
+    <h2>ngAfterContentInit() y ngAfterViewInit()</h2>
+    <p>
+      Ambos se ejecutan una sola vez, pero miran hacia sitios distintos. El
+      <strong>contenido</strong> es lo que el padre escribe entre las etiquetas del componente;
+      la <strong>vista</strong> es la plantilla del propio componente. El contenido se inicializa
+      primero, por eso <code>ngAfterContentInit()</code> llega antes que
+      <code>ngAfterViewInit()</code>.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>ReadingPanel: consultas ya resueltas en cada hook</figcaption>
+      <pre tabindex="0"><code>{{ contentViewHooksSnippet }}</code></pre>
+    </figure>
+    <p>
+      <strong>¿Y ngAfterContentChecked y ngAfterViewChecked?</strong> Existen, pero se ejecutan
+      tras <em>cada</em> comprobación de la detección de cambios. Por eso el laboratorio no los
+      registra: llenarían el historial de ruido. Sirven para casos muy específicos; para casi
+      todo lo demás hay herramientas mejores.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>Hooks «Checked»: se repiten en cada ciclo</figcaption>
+      <pre tabindex="0"><code>{{ checkedHooksSnippet }}</code></pre>
+    </figure>
+
+    <h2>ngOnDestroy() y DestroyRef</h2>
+    <p>
+      Cuando el componente se retira (por ejemplo, porque un <code>&#64;if</code> pasa a
+      falso), Angular llama a <code>ngOnDestroy()</code>. <code>DestroyRef</code> ofrece lo
+      mismo sin implementar la interfaz: <code>onDestroy()</code> registra un callback junto al
+      código que crea el recurso, y funciona también en servicios y funciones.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>ReadingPanel: dos formas de limpiar</figcaption>
+      <pre tabindex="0"><code>{{ destroySnippet }}</code></pre>
+    </figure>
+  </article>
+
+  <section class="components-page__lab" aria-labelledby="lifecycle-lab-title">
+    <div class="components-page__lab-heading">
+      <span class="components-page__lab-badge">Laboratorio</span>
+      <h2 id="lifecycle-lab-title">Component Lifecycle</h2>
+    </div>
+    <p class="components-page__lab-description">
+      Crea y destruye un <code>ReadingPanel</code> con <code>&#64;if</code>, cambia su input,
+      oculta el título proyectado y observa el registro. Cada instancia tiene su propio número y
+      color, y el historial sigue visible aunque el panel ya no exista.
+    </p>
+    <app-lifecycle-lab />
+  </section>
+
+  <article class="components-page__docs">
+    <h2>Cómo se registran los eventos sin romper la detección de cambios</h2>
+    <p>
+      Los hooks se ejecutan <em>durante</em> la comprobación. Si un hook escribiera un signal
+      que la plantilla ya leyó, Angular tendría que volver a comprobar y, en desarrollo,
+      lanzaría <code>NG0100</code>. El servicio <code>LifecycleLog</code> evita el problema: los
+      hooks solo anotan en un buffer y la publicación en el signal ocurre en
+      <code>afterNextRender</code>, cuando las comprobaciones terminaron. Además se declara en
+      <code>providers</code> del laboratorio, de modo que sobrevive al panel hijo sin ser global.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>LifecycleLab: registro seguro y con alcance de laboratorio</figcaption>
+      <pre tabindex="0"><code>{{ lifecycleLogSnippet }}</code></pre>
+    </figure>
+
+    <h2>viewChild() y viewChildren()</h2>
+    <p>
+      Consultan la <strong>vista</strong> del componente: elementos con una variable de
+      plantilla, componentes o directivas declarados en su propia plantilla. Devuelven un
+      <strong>signal</strong>: <code>viewChild()</code> es <code>undefined</code> si no existe
+      (por ejemplo, dentro de un <code>&#64;if</code> falso) y <code>viewChildren()</code> una
+      lista de solo lectura. El laboratorio muestra ambos resultados en vivo.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>ReadingPanel y LifecycleLab: consultas de vista</figcaption>
+      <pre tabindex="0"><code>{{ viewQueriesSnippet }}</code></pre>
+    </figure>
+
+    <h2>contentChild() y contentChildren()</h2>
+    <p>
+      Consultan el <strong>contenido proyectado</strong>: lo que el padre coloca entre las
+      etiquetas del componente. Como es opcional, <code>contentChild()</code> puede devolver
+      <code>undefined</code> y el panel debe tratarlo: oculta la cabecera y usa un
+      <code>aria-label</code> alternativo. Al ocultar el título en el laboratorio, la consulta se
+      actualiza sola porque es un signal.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>ReadingPanel: consultas de contenido y valor ausente</figcaption>
+      <pre tabindex="0"><code>{{ contentQueriesSnippet }}</code></pre>
+    </figure>
+
+    <h3>viewChild frente a contentChild</h3>
+    <ul>
+      <li><strong>viewChild</strong> busca en la plantilla del propio componente.</li>
+      <li>
+        <strong>contentChild</strong> busca en lo que el padre proyecta con
+        <code>ng-content</code>.
+      </li>
+      <li>
+        Ambos son signals: se leen con paréntesis y se pueden usar en <code>computed()</code>.
+      </li>
+    </ul>
+
+    <h2>ng-content y proyección con múltiples slots</h2>
+    <p>
+      <code>ng-content</code> marca dónde se inserta el contenido del padre. Con
+      <code>select</code> defines slots con nombre (aquí, <code>[readingPanelTitle]</code>); lo
+      que no coincide con ningún selector va al slot por defecto. Los
+      <code>ng-content</code> <strong>nunca</strong> se colocan dentro de un
+      <code>&#64;if</code>: el contenido condicional vive en el padre, que decide si lo declara.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>ReadingPanel y LifecycleLab: dos slots y contenido condicional en el padre</figcaption>
+      <pre tabindex="0"><code>{{ projectionSnippet }}</code></pre>
+    </figure>
+
+    <h2>afterNextRender() y sus fases</h2>
+    <p>
+      <code>afterNextRender()</code> ejecuta código una vez después de que Angular actualizó el
+      DOM, y solo en el navegador (no en SSR). Acepta fases que ordenan lecturas y escrituras:
+      <code>earlyRead</code>, <code>write</code>, <code>mixedReadWrite</code> y
+      <code>read</code>. El panel mide su ancho en <code>read</code>, porque medir antes del
+      render daría un valor obsoleto. Es el uso justificado de <code>ElementRef</code> en este
+      ejemplo; el resto se resuelve con bindings.
+    </p>
+    <figure class="components-page__code">
+      <figcaption>ReadingPanel: medición inicial en la fase read</figcaption>
+      <pre tabindex="0"><code>{{ afterNextRenderSnippet }}</code></pre>
+    </figure>
+
+    <h2>Consultas modernas frente a &#64;ViewChild y &#64;ContentChild</h2>
+    <p>
+      Los decoradores siguen funcionando, pero las signal queries son la opción recomendada en
+      código nuevo.
+    </p>
+    <ul>
+      <li>
+        <strong>Reactividad:</strong> las signal queries se integran con
+        <code>computed()</code> y <code>effect()</code>; los decoradores exigen leerlos en
+        hooks o suscribirse a <code>QueryList.changes</code>.
+      </li>
+      <li>
+        <strong>Tipado:</strong> <code>.required()</code> expresa «siempre existe» y el resultado
+        opcional es <code>undefined</code> de forma explícita.
+      </li>
+      <li>
+        <strong>Zoneless:</strong> los signals notifican por sí mismos, sin depender de Zone.js.
+      </li>
+      <li>
+        <strong>Migración:</strong> <code>ng generate &#64;angular/core:signal-queries-migration</code>
+        convierte los decoradores automáticamente.
+      </li>
+    </ul>
+    <figure class="components-page__code">
+      <figcaption>Mismo caso con decoradores y con signal queries</figcaption>
+      <pre tabindex="0"><code>{{ legacyQueriesSnippet }}</code></pre>
+    </figure>
+  </article>
+
+  <article class="components-page__docs">
+    <h2>Ejercicios prácticos</h2>
+    <ol>
+      <li>
+        Crea dos paneles seguidos y compara los números de instancia: ¿qué eventos se repiten y
+        cuáles no?
+      </li>
+      <li>
+        Cambia la densidad antes y después de crear el panel. ¿En qué momento aparece
+        <code>ngOnChanges</code>?
+      </li>
+      <li>
+        Oculta el título y revisa el resultado de <code>contentChild()</code>. ¿Cambió el
+        registro? ¿Por qué no hay un nuevo evento de ciclo de vida?
+      </li>
+      <li>
+        Destruye el panel y observa el orden entre <code>ngOnDestroy</code> y
+        <code>DestroyRef.onDestroy</code>.
+      </li>
+      <li>
+        Reto: añade una directiva <code>ReadingPanelNote</code> y muestra en el pie del panel
+        cuántas notas proyectadas hay con <code>contentChildren()</code>.
+      </li>
+    </ol>
+  </article>
+</section>

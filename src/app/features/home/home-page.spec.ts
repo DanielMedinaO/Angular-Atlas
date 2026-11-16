@@ -37,7 +37,7 @@ describe('HomePage', () => {
 
     expect(titles).toEqual(TOPICS.map((topic) => topic.label));
     expect(titles).not.toContain('Inicio');
-    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/signals']);
-    expect(compiled.querySelectorAll('.topic-card__badge')).toHaveLength(TOPICS.length - 1);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/components', '/signals']);
+    expect(compiled.querySelectorAll('.topic-card__badge')).toHaveLength(TOPICS.length - 2);
   });
 });

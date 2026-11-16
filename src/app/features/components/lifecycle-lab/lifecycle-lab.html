@@ -1,0 +1,138 @@
+<div class="lifecycle-lab">
+  <div class="lifecycle-lab__controls">
+    <div
+      class="lifecycle-lab__group lifecycle-lab__group--lifecycle"
+      role="group"
+      aria-labelledby="lifecycle-group-instance"
+    >
+      <span id="lifecycle-group-instance" class="lifecycle-lab__group-label">Instancia</span>
+      <div class="lifecycle-lab__group-actions">
+        <button
+          type="button"
+          class="lifecycle-lab__button lifecycle-lab__button--primary"
+          [disabled]="activeInstanceId() !== null"
+          (click)="createPanel()"
+        >
+          Crear panel
+        </button>
+        <button
+          type="button"
+          class="lifecycle-lab__button"
+          [disabled]="activeInstanceId() === null"
+          (click)="destroyPanel()"
+        >
+          Destruir panel
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="lifecycle-lab__group lifecycle-lab__group--props"
+      role="group"
+      aria-labelledby="lifecycle-group-props"
+    >
+      <span id="lifecycle-group-props" class="lifecycle-lab__group-label">Contenido y entradas</span>
+      <div class="lifecycle-lab__group-actions">
+        <button
+          type="button"
+          class="lifecycle-lab__button"
+          [attr.aria-pressed]="showTitle()"
+          (click)="toggleTitle()"
+        >
+          Título proyectado: {{ showTitle() ? 'visible' : 'oculto' }}
+        </button>
+        <button type="button" class="lifecycle-lab__button" (click)="toggleDensity()">
+          Densidad (input): {{ density() === 'compact' ? 'compacta' : 'cómoda' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="lifecycle-lab__stage">
+    @if (activeInstanceId(); as id) {
+      <app-reading-panel [instanceId]="id" [density]="density()">
+        @if (showTitle()) {
+          <h3 readingPanelTitle>Lectura recomendada #{{ id }}</h3>
+        }
+        <p>
+          Este texto se proyecta en el slot principal. El título de arriba y este párrafo los
+          declara el padre; el panel solo decide dónde colocarlos.
+        </p>
+      </app-reading-panel>
+    } @else {
+      <p class="lifecycle-lab__placeholder">
+        No hay ningún panel. Pulsa «Crear panel» para instanciarlo y observar su ciclo de vida.
+      </p>
+    }
+  </div>
+
+  <section class="lifecycle-lab__section" aria-labelledby="lifecycle-queries-title">
+    <h3 id="lifecycle-queries-title" class="lifecycle-lab__subtitle">Resultado de las consultas</h3>
+    <dl class="lifecycle-lab__queries">
+      @for (result of queryResults(); track result.label) {
+        <div class="lifecycle-lab__query">
+          <dt>{{ result.label }}</dt>
+          <dd>
+            <code [class.lifecycle-lab__value--missing]="!result.found">{{ result.value }}</code>
+          </dd>
+        </div>
+      }
+    </dl>
+  </section>
+
+  <section class="lifecycle-lab__section" aria-labelledby="lifecycle-log-title">
+    <div class="lifecycle-lab__section-heading">
+      <h3 id="lifecycle-log-title" class="lifecycle-lab__subtitle">
+        Registro de eventos
+        <span class="lifecycle-lab__count">{{ entries().length }}</span>
+      </h3>
+      <button
+        type="button"
+        class="lifecycle-lab__button lifecycle-lab__button--danger"
+        (click)="clearLog()"
+      >
+        <svg
+          class="lifecycle-lab__icon"
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M3 6h18" />
+          <path d="M8 6V4h8v2" />
+          <path d="M19 6l-1 14H6L5 6" />
+          <path d="M10 11v6M14 11v6" />
+        </svg>
+        Limpiar historial
+      </button>
+    </div>
+    <div
+      class="lifecycle-lab__log"
+      role="log"
+      aria-labelledby="lifecycle-log-title"
+      tabindex="0"
+    >
+      @if (entries().length === 0) {
+        <p class="lifecycle-lab__empty">Aún no hay eventos. Crea un panel para empezar.</p>
+      } @else {
+        <ol class="lifecycle-lab__events">
+          @for (entry of entries(); track entry.sequence) {
+            <li class="lifecycle-lab__event" [style.--instance-hue]="hue(entry.instanceId)">
+              <span class="lifecycle-lab__sequence">{{ entry.sequence }}</span>
+              <span class="lifecycle-lab__instance">#{{ entry.instanceId }}</span>
+              <code class="lifecycle-lab__hook">{{ entry.hook }}</code>
+              <span class="lifecycle-lab__detail">{{ entry.detail }}</span>
+            </li>
+          }
+        </ol>
+      }
+    </div>
+  </section>
+</div>

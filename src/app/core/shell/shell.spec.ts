@@ -25,6 +25,7 @@ describe('ShellComponent', () => {
       providers: [
         provideRouter([
           { path: '', children: [] },
+          { path: 'components', children: [] },
           { path: 'signals', children: [] },
         ]),
       ],
@@ -140,9 +141,10 @@ describe('ShellComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const links = Array.from(compiled.querySelectorAll('.shell__nav-link'));
 
-    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/', '/signals']);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/', '/components', '/signals']);
     expect(links[0].textContent).toContain('Inicio');
-    expect(links[1].textContent).toContain('Signals y reactividad');
+    expect(links[1].textContent).toContain('Componentes');
+    expect(links[2].textContent).toContain('Signals y reactividad');
   });
 
   it('should show upcoming topics with a badge and without links', async () => {
@@ -156,7 +158,7 @@ describe('ShellComponent', () => {
     ).length;
 
     expect(upcoming).toHaveLength(upcomingCount);
-    expect(upcomingCount).toBe(10);
+    expect(upcomingCount).toBe(9);
     for (const item of upcoming) {
       expect(item.querySelector('.shell__nav-badge')?.textContent?.trim()).toBe('Próximamente');
       expect(item.querySelector('a')).toBeNull();
@@ -173,7 +175,7 @@ describe('ShellComponent', () => {
     await fixture.whenStable();
     await expandAllGroups(fixture);
 
-    const [home, signals] = Array.from(compiled.querySelectorAll('.shell__nav-link'));
+    const [home, , signals] = Array.from(compiled.querySelectorAll('.shell__nav-link'));
     expect(home.hasAttribute('aria-current')).toBe(false);
     expect(signals.getAttribute('aria-current')).toBe('page');
 
