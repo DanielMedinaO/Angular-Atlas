@@ -1,0 +1,75 @@
+<article class="explorer" aria-labelledby="explorer-title">
+  <h3 id="explorer-title" class="explorer__title">Explorador de libros</h3>
+  <p class="explorer__hint">
+    <code>searchTerm</code> y <code>category</code> son <code>signal()</code>;
+    <code>filteredBooks</code> es <code>computed()</code> y <code>selectedBook</code> es un
+    <code>linkedSignal()</code> que se ajusta solo cuando cambian los resultados.
+  </p>
+
+  <div class="explorer__filters">
+    <div class="explorer__field">
+      <label class="explorer__label" for="explorer-search">Buscar</label>
+      <input
+        id="explorer-search"
+        class="explorer__control"
+        type="search"
+        placeholder="Título, autor o tema…"
+        autocomplete="off"
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+      />
+    </div>
+    <div class="explorer__field">
+      <label class="explorer__label" for="explorer-category">Categoría</label>
+      <select id="explorer-category" class="explorer__control" (change)="onCategoryChange($event)">
+        @for (option of categories; track option) {
+          <option [value]="option" [selected]="option === category()">{{ option }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <p class="explorer__count" role="status" aria-live="polite">
+    <span class="explorer__count-value">{{ resultLabel() }}</span>
+  </p>
+
+  @if (resultCount() > 0) {
+    <div class="explorer__layout">
+      <ul class="explorer__list" aria-label="Resultados de la búsqueda">
+        @for (book of filteredBooks(); track book.id) {
+          <li>
+            <button
+              type="button"
+              class="explorer__item"
+              [class.explorer__item--selected]="book.id === selectedBook()?.id"
+              [attr.aria-pressed]="book.id === selectedBook()?.id"
+              (click)="select(book)"
+            >
+              <span class="explorer__item-title">{{ book.title }}</span>
+              <span class="explorer__item-meta">{{ book.author }} · {{ book.category }}</span>
+            </button>
+          </li>
+        }
+      </ul>
+
+      @if (selectedBook(); as book) {
+        <aside class="explorer__card" aria-labelledby="explorer-selected-title" aria-live="polite">
+          <span class="explorer__card-badge">{{ book.category }}</span>
+          <h4 id="explorer-selected-title" class="explorer__card-title">{{ book.title }}</h4>
+          <p class="explorer__card-author">{{ book.author }}</p>
+          <p class="explorer__card-description">{{ book.description }}</p>
+        </aside>
+      }
+    </div>
+  } @else {
+    <div class="explorer__empty">
+      <p class="explorer__empty-title">No se encontraron libros</p>
+      <p class="explorer__empty-text">
+        Ningún libro coincide con tu búsqueda. Prueba con otro término o cambia la categoría.
+      </p>
+      <button type="button" class="explorer__reset" (click)="resetFilters()">
+        Limpiar filtros
+      </button>
+    </div>
+  }
+</article>

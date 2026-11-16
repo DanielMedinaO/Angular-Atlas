@@ -1,3 +1,19 @@
+@mixin code-block {
+  background: var(--atlas-navy);
+  color: var(--atlas-text-inverse);
+  border-radius: var(--atlas-radius-sm);
+  padding: var(--atlas-space-md);
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+
+  code {
+    background: none;
+    color: inherit;
+    padding: 0;
+  }
+}
+
 :host {
   display: block;
 }
@@ -65,20 +81,33 @@
     font-size: 0.85em;
   }
 
-  pre {
-    background: var(--atlas-navy);
-    color: var(--atlas-text-inverse);
-    border-radius: var(--atlas-radius-sm);
-    padding: var(--atlas-space-md);
-    overflow-x: auto;
-    font-size: 0.85rem;
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding-left: var(--atlas-space-md);
+    color: var(--atlas-text-muted);
     line-height: 1.6;
+  }
 
-    code {
-      background: none;
-      color: inherit;
-      padding: 0;
-    }
+  pre {
+    @include code-block;
+  }
+}
+
+.signals-page__code {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xs);
+
+  figcaption {
+    color: var(--atlas-text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  pre {
+    @include code-block;
   }
 }
 

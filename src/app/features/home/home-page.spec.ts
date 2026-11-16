@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { TOPICS } from '../../core/shell/navigation';
 import { HomePage } from './home-page';
 
 describe('HomePage', () => {
@@ -25,15 +26,18 @@ describe('HomePage', () => {
     expect(cta?.getAttribute('href')).toBe('/signals');
   });
 
-  it('should render a topic card for every topic, linking only the available ones', async () => {
+  it('should render a card for every centralized topic, linking only the available ones', async () => {
     const fixture = TestBed.createComponent(HomePage);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    const cards = compiled.querySelectorAll('.topic-card');
-    const links = compiled.querySelectorAll('a.topic-card');
+    const titles = Array.from(compiled.querySelectorAll('.topic-card__title')).map((title) =>
+      title.textContent?.trim(),
+    );
+    const links = Array.from(compiled.querySelectorAll('a.topic-card'));
 
-    expect(cards.length).toBe(fixture.componentInstance['topics'].length);
-    expect(links).toHaveLength(1);
-    expect(links[0].getAttribute('href')).toBe('/signals');
+    expect(titles).toEqual(TOPICS.map((topic) => topic.label));
+    expect(titles).not.toContain('Inicio');
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/signals']);
+    expect(compiled.querySelectorAll('.topic-card__badge')).toHaveLength(TOPICS.length - 1);
   });
 });

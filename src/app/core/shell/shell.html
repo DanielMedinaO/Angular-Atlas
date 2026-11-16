@@ -1,6 +1,7 @@
-<div class="shell">
+<div class="shell" (keydown.escape)="closeSidebar()">
   <header class="shell__topbar">
     <button
+      #menuToggle
       type="button"
       class="shell__menu-toggle"
       (click)="toggleSidebar()"
@@ -22,16 +23,17 @@
       type="button"
       class="shell__backdrop"
       (click)="closeSidebar()"
-      aria-label="Cerrar navegación"
+      tabindex="-1"
+      aria-hidden="true"
     ></button>
   }
 
   <nav
+    #sidebar
     id="primary-navigation"
     class="shell__sidebar"
     [class.shell__sidebar--open]="sidebarOpen()"
     aria-label="Navegación principal"
-    (keydown.escape)="closeSidebar()"
   >
     <a class="shell__sidebar-brand" routerLink="/" (click)="closeSidebar()">
       <span class="shell__brand-mark" aria-hidden="true">⟡</span>
@@ -41,25 +43,51 @@
       </span>
     </a>
 
-    <ul class="shell__nav-list">
-      @for (link of navLinks; track link.path) {
-        <li>
-          <a
-            class="shell__nav-link"
-            [routerLink]="link.path"
-            routerLinkActive="shell__nav-link--active"
-            [routerLinkActiveOptions]="{ exact: link.path === '/' }"
-            (click)="closeSidebar()"
+    <div class="shell__nav-groups">
+      @for (group of navGroups; track group.id) {
+        <div class="shell__nav-group">
+          <button
+            type="button"
+            class="shell__nav-group-title shell__nav-group-toggle"
+            [id]="'nav-group-' + group.id"
+            [attr.aria-expanded]="isExpanded(group)"
+            (click)="toggleGroup(group)"
           >
-            <span class="shell__nav-link-label">{{ link.label }}</span>
-            <span class="shell__nav-link-description">{{ link.description }}</span>
-          </a>
-        </li>
+            {{ group.label }}
+            <span class="shell__nav-chevron" aria-hidden="true"></span>
+          </button>
+          @if (isExpanded(group)) {
+            <ul class="shell__nav-list" [attr.aria-labelledby]="'nav-group-' + group.id">
+              @for (item of group.items; track item.id) {
+                <li>
+                  @if (item.status === 'available') {
+                    <a
+                      class="shell__nav-link"
+                      [routerLink]="item.path"
+                      routerLinkActive="shell__nav-link--active"
+                      ariaCurrentWhenActive="page"
+                      [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+                      (click)="closeSidebar()"
+                    >
+                      <span class="shell__nav-link-label">{{ item.label }}</span>
+                      <span class="shell__nav-link-description">{{ item.description }}</span>
+                    </a>
+                  } @else {
+                    <div class="shell__nav-item shell__nav-item--upcoming">
+                      <span class="shell__nav-link-label">{{ item.label }}</span>
+                      <span class="shell__nav-badge">Próximamente</span>
+                    </div>
+                  }
+                </li>
+              }
+            </ul>
+          }
+        </div>
       }
-    </ul>
+    </div>
   </nav>
 
-  <main class="shell__content" id="main-content">
+  <main class="shell__content" id="main-content" [attr.inert]="sidebarOpen() ? '' : null">
     <router-outlet />
   </main>
 </div>

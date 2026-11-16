@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
 
@@ -23,5 +23,36 @@ describe('App', () => {
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.shell__brand')?.textContent).toContain('Angular Atlas');
+  });
+
+  it('should lazy load the Home page on the root route', async () => {
+    const fixture = TestBed.createComponent(App);
+    await TestBed.inject(Router).navigateByUrl('/');
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-home-page')).toBeTruthy();
+  });
+
+  it('should lazy load the Signals page with documentation and lab together', async () => {
+    const fixture = TestBed.createComponent(App);
+    await TestBed.inject(Router).navigateByUrl('/signals');
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-signals-page .signals-page__docs')).toBeTruthy();
+    expect(compiled.querySelector('app-signals-page .signals-page__lab app-counter-demo')).toBeTruthy();
+  });
+
+  it('should redirect unknown URLs to the home page', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/ruta/que/no-existe');
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(router.url).toBe('/');
+    expect(compiled.querySelector('app-home-page')).toBeTruthy();
   });
 });

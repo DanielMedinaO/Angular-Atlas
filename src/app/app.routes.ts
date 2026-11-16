@@ -11,4 +11,5 @@ export const routes: Routes = [
     loadComponent: () => import('./features/signals/signals-page').then((m) => m.SignalsPage),
     title: 'Signals · Angular Atlas',
   },
+  { path: '**', redirectTo: '' },
 ];

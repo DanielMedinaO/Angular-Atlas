@@ -12,16 +12,16 @@
   <section class="home-page__topics" aria-label="Temáticas disponibles">
     <h2 class="home-page__topics-title">Temáticas</h2>
     <div class="home-page__grid">
-      @for (topic of topics; track topic.title) {
-        @if (topic.path) {
+      @for (topic of topics; track topic.id) {
+        @if (topic.status === 'available') {
           <a class="topic-card" [routerLink]="topic.path">
-            <h3 class="topic-card__title">{{ topic.title }}</h3>
+            <h3 class="topic-card__title">{{ topic.label }}</h3>
             <p class="topic-card__description">{{ topic.description }}</p>
             <span class="topic-card__link">Ver contenido →</span>
           </a>
         } @else {
           <div class="topic-card topic-card--disabled">
-            <h3 class="topic-card__title">{{ topic.title }}</h3>
+            <h3 class="topic-card__title">{{ topic.label }}</h3>
             <p class="topic-card__description">{{ topic.description }}</p>
             <span class="topic-card__badge">Próximamente</span>
           </div>

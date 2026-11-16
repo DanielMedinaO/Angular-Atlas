@@ -15,7 +15,20 @@
       invocándolo como función, <code>count()</code>, y se actualiza con <code>set()</code> o
       <code>update()</code>, nunca mutando el valor directamente.
     </p>
-    <pre><code>const count = signal(0);
+    <ul>
+      <li>
+        <code>set(valor)</code> reemplaza el valor por uno nuevo, sin importar el anterior.
+      </li>
+      <li>
+        <code>update(fn)</code> recibe el valor actual y devuelve el siguiente; úsalo cuando el
+        nuevo estado depende del anterior.
+      </li>
+      <li>
+        Si el valor nuevo es igual al actual (<code>Object.is</code>), el signal no notifica a
+        sus consumidores.
+      </li>
+    </ul>
+    <pre tabindex="0"><code>const count = signal(0);
 
 count();         // 0
 count.set(5);     // reemplaza el valor
@@ -27,7 +40,14 @@ count.update(v =&gt; v + 1); // deriva el nuevo valor del anterior</code></pre>
       perezosa cada vez que alguna de sus dependencias cambia, manteniendo la lógica de
       derivación pura y predecible.
     </p>
-    <pre><code>const count = signal(0);
+    <p>
+      Las dependencias se descubren automáticamente: son los signals que se leen durante la
+      ejecución de la función. El resultado se guarda en caché y solo se recalcula cuando alguna
+      de esas dependencias cambia y alguien vuelve a leerlo. Además, las dependencias se
+      reevalúan en cada cálculo, por lo que las ramas condicionales que no se ejecutan no
+      generan dependencias.
+    </p>
+    <pre tabindex="0"><code>const count = signal(0);
 const doubled = computed(() =&gt; count() * 2);
 
 doubled(); // se recalcula solo cuando "count" cambia</code></pre>
@@ -44,4 +64,73 @@ doubled(); // se recalcula solo cuando "count" cambia</code></pre>
     </p>
     <app-counter-demo />
   </section>
+
+  <figure class="signals-page__code">
+    <figcaption>Código del contador: signal(), set(), update() y computed()</figcaption>
+    <pre tabindex="0"><code>{{ signalBasicsSnippet }}</code></pre>
+  </figure>
+
+  <article class="signals-page__docs">
+    <h2>linkedSignal(): derivado, pero escribible</h2>
+    <p>
+      <code>linkedSignal()</code> calcula su valor a partir de una fuente, igual que
+      <code>computed()</code>, pero además permite escribir en él con <code>set()</code> y
+      <code>update()</code>. Cuando la fuente cambia, el valor se recalcula y puede decidir si
+      conserva la selección anterior mediante el parámetro <code>previous</code>.
+    </p>
+    <p>
+      La diferencia con <code>computed()</code>: un <code>computed()</code> es de solo
+      lectura y siempre refleja su derivación; un <code>linkedSignal()</code> acepta una
+      sobrescritura manual que dura hasta que su fuente vuelve a cambiar. Es la herramienta
+      adecuada para estado local que depende de otro, como una selección dentro de una lista
+      filtrada.
+    </p>
+    <pre tabindex="0"><code>{{ linkedVsComputedSnippet }}</code></pre>
+
+    <h2>effect(): efectos secundarios, no estado</h2>
+    <p>
+      <code>effect()</code> ejecuta código cuando cambian los signals que lee. Su propósito es
+      sincronizar la aplicación con el exterior: persistir en <code>localStorage</code>,
+      escribir en el DOM manualmente, registrar analítica o trabajar con una librería de
+      terceros.
+    </p>
+    <p>
+      No debe usarse para copiar estado de un signal a otro: para eso existen
+      <code>computed()</code> y <code>linkedSignal()</code>, que son más simples y evitan
+      ciclos de actualización. En el explorador, un <code>effect()</code> guarda la categoría
+      y, al recargar, el valor se lee y se valida antes de usarse.
+    </p>
+
+    <h2>Signals frente a RxJS</h2>
+    <p>
+      Un signal representa un <strong>valor actual</strong>: siempre existe, se lee de forma
+      síncrona y Angular sabe qué vistas dependen de él. Un observable representa un
+      <strong>flujo de eventos en el tiempo</strong>: puede no emitir nunca, es asíncrono por
+      naturaleza y requiere suscripción.
+    </p>
+    <p>
+      Usa signals para el estado de la interfaz y RxJS para flujos asíncronos con operadores
+      como <code>debounceTime</code>, <code>switchMap</code> o peticiones HTTP cancelables.
+      <code>toSignal()</code> y <code>toObservable()</code> permiten combinarlos.
+    </p>
+    <pre tabindex="0"><code>{{ signalsVsRxjsSnippet }}</code></pre>
+  </article>
+
+  <section class="signals-page__lab" aria-labelledby="book-lab-title">
+    <div class="signals-page__lab-heading">
+      <span class="signals-page__lab-badge">Laboratorio</span>
+      <h2 id="book-lab-title">Explorador de libros</h2>
+    </div>
+    <p class="signals-page__lab-description">
+      Busca por texto y filtra por categoría. Selecciona un libro y cambia los filtros: la
+      selección se mantiene mientras el libro siga en los resultados, y si desaparece pasa al
+      primer resultado válido. La categoría se recuerda al recargar la página.
+    </p>
+    <app-book-explorer />
+  </section>
+
+  <figure class="signals-page__code">
+    <figcaption>Código del explorador: signal(), computed(), linkedSignal() y effect()</figcaption>
+    <pre tabindex="0"><code>{{ bookExplorerSnippet }}</code></pre>
+  </figure>
 </section>
