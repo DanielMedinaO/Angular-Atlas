@@ -1,59 +1,84 @@
-# AngularAtlas
+<div align="center">
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.6.
+# Angular Atlas
 
-## Development server
+### Aprende Angular construyendo, explorando y experimentando.
 
-To start a local development server, run:
+Una guía interactiva y en evolución para entender Angular moderno: conceptos claros, ejemplos ejecutables y espacio para practicar.
 
-```bash
-ng serve
-```
+[Explorar el proyecto](https://github.com/DanielMedinaO/Angular-Atlas) · [Reportar un problema](https://github.com/DanielMedinaO/Angular-Atlas/issues)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+![Angular 22](https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![Vitest](https://img.shields.io/badge/tests-Vitest-6E9F18?logo=vitest&logoColor=white)
 
-## Code scaffolding
+</div>
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## ¿Qué es Angular Atlas?
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Angular Atlas es una biblioteca de aprendizaje para desarrolladores que quieren comprender Angular con ejemplos, no solo leer sobre él. Cada tema busca combinar explicación, demostraciones que puedes probar y ejercicios prácticos.
 
-```bash
-ng generate --help
-```
+El proyecto está en desarrollo: puedes explorar los temas disponibles y seguir su evolución desde este repositorio.
 
-## Building
+## Contenido disponible
 
-To build the project run:
+| Tema | Qué encontrarás |
+| --- | --- |
+| **Componentes y ciclo de vida** | Composición de componentes, comunicación y un laboratorio para explorar su ciclo de vida. |
+| **Signals y reactividad** | Estado reactivo, un contador interactivo, un explorador de libros y comunicación entre componentes. |
 
-```bash
-ng build
-```
+Otros temas, como RxJS, formularios, routing y testing, están previstos para próximas entregas.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Empieza en local
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Necesitas [Node.js](https://nodejs.org/) y npm instalados.
 
 ```bash
-ng test
+# Clona el repositorio
+git clone https://github.com/DanielMedinaO/Angular-Atlas.git
+cd Angular-Atlas
+
+# Instala las dependencias
+npm install
+
+# Inicia la aplicación
+npm start
 ```
 
-## Running end-to-end tests
+Abre [http://localhost:4200](http://localhost:4200) para recorrer Angular Atlas. El servidor de desarrollo recarga la aplicación cuando guardas cambios.
 
-For end-to-end (e2e) testing, run:
+## Comandos útiles
 
-```bash
-ng e2e
+| Comando | Descripción |
+| --- | --- |
+| `npm start` | Inicia el servidor de desarrollo. |
+| `npm run build` | Genera la compilación de producción en `dist/`. |
+| `npm test` | Ejecuta las pruebas unitarias con Vitest. |
+
+## Tecnologías y enfoque
+
+- **Angular 22** y **TypeScript**.
+- Componentes standalone y rutas con carga diferida.
+- Signals para el estado reactivo local.
+- **Vitest** para las pruebas unitarias.
+- Diseño por funcionalidades, con demostraciones pequeñas e interactivas.
+
+## Estructura del proyecto
+
+```text
+src/app/
+├── core/       # Navegación y estructura compartida
+└── features/   # Inicio, componentes y Signals
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Contribuye
 
-## Additional Resources
+¿Tienes una idea para un tema, una mejora o encontraste un problema? [Abre una incidencia](https://github.com/DanielMedinaO/Angular-Atlas/issues) o envía un pull request. Las contribuciones que mejoran la claridad, los ejemplos y la accesibilidad son especialmente bienvenidas.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+<div align="center">
+  Hecho para aprender Angular, una idea a la vez.
+</div>
