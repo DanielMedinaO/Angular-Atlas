@@ -1,3 +1,5 @@
+@use '../../../styles/card';
+
 @mixin code-block {
   background: var(--atlas-navy);
   color: var(--atlas-text-inverse);
@@ -53,14 +55,11 @@
 }
 
 .components-page__docs {
+  @include card.surface;
   display: flex;
   flex-direction: column;
   gap: var(--atlas-space-sm);
-  background: var(--atlas-surface);
-  border: 1px solid var(--atlas-border);
-  border-radius: var(--atlas-radius-md);
   padding: var(--atlas-space-lg);
-  box-shadow: var(--atlas-shadow-sm);
 
   h2 {
     font-size: 1.15rem;
@@ -140,8 +139,8 @@
 }
 
 .components-page__lab-badge {
-  background: var(--atlas-accent-strong);
-  color: var(--atlas-text-inverse);
+  background: var(--atlas-accent-filled);
+  color: var(--atlas-on-accent);
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;

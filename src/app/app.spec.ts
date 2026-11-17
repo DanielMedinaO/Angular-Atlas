@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
+import { provideRouter, Router, withComponentInputBinding } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
 
@@ -7,7 +7,7 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter(routes)],
+      providers: [provideRouter(routes, withComponentInputBinding())],
     })
       .compileComponents();
   });
@@ -57,6 +57,24 @@ describe('App', () => {
     );
     expect(compiled.querySelector('app-components-page .components-page__lab app-lifecycle-lab')).toBeTruthy();
     expect(compiled.querySelector('.shell__nav-link--active')?.textContent).toContain('Componentes');
+  });
+
+  it('should lazy load the Routing page and keep it available for child routes', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/routing');
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(router.url).toBe('/routing/books');
+    expect(compiled.querySelector('app-routing-page .routing-page__title')?.textContent).toContain(
+      'Routing y Lazy Loading',
+    );
+    expect(compiled.querySelector('app-routing-page .routing-page__outlet router-outlet')).toBeTruthy();
+    expect(compiled.querySelector('app-books-catalog')).toBeTruthy();
+    expect(compiled.querySelector('.shell__nav-link--active')?.textContent).toContain(
+      'Routing y Lazy Loading',
+    );
   });
 
   it('should redirect unknown URLs to the home page', async () => {

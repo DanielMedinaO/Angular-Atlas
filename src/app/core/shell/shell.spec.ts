@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { NAV_GROUPS } from './navigation';
 import { ShellComponent } from './shell';
+import { ThemeService } from './theme';
 
 // The toggle is hidden by CSS on wide viewports and jsdom cannot focus hidden elements.
 function showMobileToggle(toggle: HTMLElement | null): void {
@@ -27,6 +28,7 @@ describe('ShellComponent', () => {
           { path: '', children: [] },
           { path: 'components', children: [] },
           { path: 'signals', children: [] },
+          { path: 'routing', children: [{ path: 'books', children: [] }] },
         ]),
       ],
     }).compileComponents();
@@ -35,6 +37,47 @@ describe('ShellComponent', () => {
   it('should create', () => {
     const fixture = TestBed.createComponent(ShellComponent);
     expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('should expose an accessible theme switch in the top bar', async () => {
+    const fixture = TestBed.createComponent(ShellComponent);
+    const themeService = TestBed.inject(ThemeService);
+    const initialTheme = themeService.theme();
+    const previous = localStorage.getItem('atlas.theme');
+    const previousAttribute = document.documentElement.getAttribute('data-theme');
+    try {
+      await fixture.whenStable();
+      const button = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
+        '.shell__theme-toggle',
+      )!;
+      expect(button.getAttribute('aria-label')).toBe(
+        initialTheme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro',
+      );
+      button.click();
+      await fixture.whenStable();
+      expect(themeService.theme()).toBe(initialTheme === 'dark' ? 'light' : 'dark');
+      expect(button.getAttribute('aria-label')).toBe(
+        initialTheme === 'dark' ? 'Cambiar a tema oscuro' : 'Cambiar a tema claro',
+      );
+    } finally {
+      if (previous === null) localStorage.removeItem('atlas.theme');
+      else localStorage.setItem('atlas.theme', previous);
+      if (previousAttribute === null) document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', previousAttribute);
+    }
+  });
+
+  it('should provide a keyboard skip link to the main content', async () => {
+    const fixture = TestBed.createComponent(ShellComponent);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('.shell__skip')?.getAttribute('href')).toBe('#main-content');
+    expect(compiled.querySelector('main')?.id).toBe('main-content');
+    const main = compiled.querySelector('main')!;
+    const focus = vi.spyOn(main, 'focus');
+    compiled.querySelector<HTMLAnchorElement>('.shell__skip')!.click();
+    expect(focus).toHaveBeenCalledOnce();
   });
 
   it('should render every group title as a collapsible toggle', async () => {
@@ -141,10 +184,16 @@ describe('ShellComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const links = Array.from(compiled.querySelectorAll('.shell__nav-link'));
 
-    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/', '/components', '/signals']);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '/',
+      '/components',
+      '/signals',
+      '/routing',
+    ]);
     expect(links[0].textContent).toContain('Inicio');
     expect(links[1].textContent).toContain('Componentes');
     expect(links[2].textContent).toContain('Signals y reactividad');
+    expect(links[3].textContent).toContain('Routing y Lazy Loading');
   });
 
   it('should show upcoming topics with a badge and without links', async () => {
@@ -158,7 +207,7 @@ describe('ShellComponent', () => {
     ).length;
 
     expect(upcoming).toHaveLength(upcomingCount);
-    expect(upcomingCount).toBe(9);
+    expect(upcomingCount).toBe(8);
     for (const item of upcoming) {
       expect(item.querySelector('.shell__nav-badge')?.textContent?.trim()).toBe('Próximamente');
       expect(item.querySelector('a')).toBeNull();
@@ -184,6 +233,21 @@ describe('ShellComponent', () => {
 
     expect(home.getAttribute('aria-current')).toBe('page');
     expect(signals.hasAttribute('aria-current')).toBe(false);
+  });
+
+  it('should keep the feature link active on a nested route', async () => {
+    const fixture = TestBed.createComponent(ShellComponent);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/routing/books');
+    await fixture.whenStable();
+    await expandAllGroups(fixture);
+
+    const activeLinks = Array.from(
+      (fixture.nativeElement as HTMLElement).querySelectorAll('.shell__nav-link--active'),
+    );
+    expect(activeLinks).toHaveLength(1);
+    expect(activeLinks[0].textContent).toContain('Routing y Lazy Loading');
   });
 
   it('should toggle the sidebar open state for mobile navigation', async () => {

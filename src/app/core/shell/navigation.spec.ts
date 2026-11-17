@@ -36,6 +36,7 @@ describe('NAV_GROUPS', () => {
     expect(findGroupIdByPath('/signals')).toBe('reactivity');
     expect(findGroupIdByPath('/components')).toBe('foundations');
     expect(findGroupIdByPath('/')).toBe('start');
+    expect(findGroupIdByPath('/routing/books/angular-in-depth')).toBe('application');
     expect(findGroupIdByPath('/unknown')).toBeUndefined();
   });
 });

@@ -39,3 +39,19 @@ Before implementing a requested feature:
 - Implement the smallest useful solution.
 - Include tests.
 - Explain the Angular concepts being applied.
+
+
+# Angular Atlas Project Instructions
+
+Angular Atlas is an interactive Angular learning platform.
+
+All new UI components must follow a shared design system.
+
+- Maintain consistent typography, colors and spacing.
+- Prefer reusable components and design tokens.
+- Follow the Angular Atlas UI skill for UI design work.
+- Do not introduce new UI libraries without approval.
+- Preserve existing educational content and behavior.
+- Ensure responsive and accessible design.
+- Never generate generic, unstyled interfaces.
+

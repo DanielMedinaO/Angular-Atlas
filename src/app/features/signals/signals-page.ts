@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { BookExplorer } from './book-explorer/book-explorer';
 import { ComponentCommunicationComponent } from './component-communication/component-communication';
 import { CounterDemoComponent } from './counter-demo/counter-demo';
@@ -16,7 +17,7 @@ import {
 
 @Component({
   selector: 'app-signals-page',
-  imports: [CounterDemoComponent, BookExplorer, ComponentCommunicationComponent],
+  imports: [CounterDemoComponent, BookExplorer, ComponentCommunicationComponent, RouterLink],
   templateUrl: './signals-page.html',
   styleUrl: './signals-page.scss',
 })

@@ -1,16 +1,15 @@
+@use '../../../../styles/card';
+
 :host {
   display: block;
 }
 
 .lifecycle-lab {
+  @include card.surface;
   display: flex;
   flex-direction: column;
   gap: var(--atlas-space-md);
-  background: var(--atlas-surface);
-  border: 1px solid var(--atlas-border);
-  border-radius: var(--atlas-radius-md);
   padding: var(--atlas-space-lg);
-  box-shadow: var(--atlas-shadow-sm);
   container-type: inline-size;
 }
 
@@ -43,7 +42,7 @@
 }
 
 .lifecycle-lab__group--props {
-  --group-color: #3b5bdb;
+  --group-color: var(--atlas-group-props);
   --group-bg: rgb(59 91 219 / 8%);
 }
 
@@ -110,12 +109,12 @@
 }
 
 .lifecycle-lab__button--primary:not(:disabled) {
-  background: var(--atlas-accent-strong);
-  border-color: var(--atlas-accent-strong);
-  color: var(--atlas-text-inverse);
+  background: var(--atlas-accent-filled);
+  border-color: var(--atlas-accent-filled);
+  color: var(--atlas-on-accent);
 
   &:hover {
-    color: var(--atlas-text-inverse);
+    color: var(--atlas-on-accent);
     filter: brightness(1.1);
   }
 }

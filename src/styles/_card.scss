@@ -1,0 +1,22 @@
+@mixin surface {
+  background: var(--atlas-card-surface);
+  border: 1px solid var(--atlas-card-border);
+  border-radius: var(--atlas-card-radius);
+  box-shadow: none;
+}
+
+@mixin interactive {
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--atlas-card-hover);
+    border-color: var(--atlas-card-border-hover);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}

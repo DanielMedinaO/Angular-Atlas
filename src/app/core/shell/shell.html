@@ -1,4 +1,5 @@
 <div class="shell" (keydown.escape)="closeSidebar()">
+  <a class="shell__skip" href="#main-content" (click)="skipToMain($event)">Saltar al contenido principal</a>
   <header class="shell__topbar">
     <button
       #menuToggle
@@ -16,6 +17,16 @@
       <span class="shell__brand-mark" aria-hidden="true">⟡</span>
       Angular Atlas
     </a>
+    <span class="shell__topbar-label">Guía interactiva de Angular</span>
+    <button
+      type="button"
+      class="shell__theme-toggle"
+      [attr.aria-label]="themeService.theme() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+      (click)="themeService.toggle()"
+    >
+      <span class="shell__theme-icon" aria-hidden="true">{{ themeService.theme() === 'dark' ? '☀' : '☾' }}</span>
+      <span>{{ themeService.theme() === 'dark' ? 'Claro' : 'Oscuro' }}</span>
+    </button>
   </header>
 
   @if (sidebarOpen()) {
@@ -87,7 +98,7 @@
     </div>
   </nav>
 
-  <main class="shell__content" id="main-content" [attr.inert]="sidebarOpen() ? '' : null">
+  <main #mainContent class="shell__content" id="main-content" tabindex="-1" [attr.inert]="sidebarOpen() ? '' : null">
     <router-outlet />
   </main>
 </div>

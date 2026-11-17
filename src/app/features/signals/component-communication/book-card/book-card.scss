@@ -1,17 +1,17 @@
+@use '../../../../../styles/card';
+
 :host {
   display: block;
 }
 
 .book-card {
+  @include card.surface;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   height: 100%;
-  background: var(--atlas-navy);
-  color: var(--atlas-text-inverse);
-  border-radius: var(--atlas-radius-md);
+  color: var(--atlas-text);
   padding: var(--atlas-space-md);
-  box-shadow: var(--atlas-shadow-md);
 }
 
 .book-card__title {
@@ -21,7 +21,7 @@
 }
 
 .book-card__author {
-  color: var(--atlas-text-inverse-muted);
+  color: var(--atlas-text-muted);
   font-size: 0.9rem;
 }
 
@@ -33,8 +33,8 @@
 .book-card__add {
   align-self: flex-start;
   margin-top: var(--atlas-space-xs);
-  background: var(--atlas-accent-strong);
-  color: var(--atlas-text-inverse);
+  background: var(--atlas-accent-filled);
+  color: var(--atlas-on-accent);
   border: 1px solid transparent;
   border-radius: var(--atlas-radius-sm);
   padding: 0.6rem 1.1rem;
@@ -44,11 +44,11 @@
   transition: background-color 0.15s ease;
 
   &:hover {
-    background: #086d60;
+    background: var(--atlas-accent-filled-hover);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--atlas-text-inverse);
+    outline: 2px solid var(--atlas-accent-strong);
     outline-offset: 2px;
   }
 }

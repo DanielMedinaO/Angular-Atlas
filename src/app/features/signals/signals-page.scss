@@ -1,8 +1,11 @@
+@use '../../../styles/card';
+
 @mixin code-block {
-  background: var(--atlas-navy);
-  color: var(--atlas-text-inverse);
-  border-radius: var(--atlas-radius-sm);
-  padding: var(--atlas-space-md);
+  background: var(--atlas-ui-code);
+  color: var(--atlas-ui-code-text);
+  border-radius: var(--atlas-ui-radius-sm);
+  padding: var(--atlas-ui-space-6);
+  font-family: var(--atlas-ui-mono);
   overflow-x: auto;
   font-size: 0.85rem;
   line-height: 1.6;
@@ -21,9 +24,30 @@
 .signals-page {
   display: flex;
   flex-direction: column;
-  gap: var(--atlas-space-xl);
-  max-width: 820px;
+  gap: var(--atlas-ui-space-8);
+  max-width: 920px;
   margin-inline: auto;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--atlas-ui-border);
+  border-radius: var(--atlas-ui-radius-lg);
+  background: var(--atlas-ui-bg);
+  color: var(--atlas-ui-text);
+  font-family: var(--atlas-ui-font);
+}
+
+.signals-page code,
+.signals-page pre {
+  font-family: var(--atlas-ui-mono);
+}
+
+app-book-explorer,
+app-component-communication {
+  color: var(--atlas-text);
+}
+
+.signals-page a {
+  color: var(--atlas-ui-accent);
+  font-weight: 600;
 }
 
 .signals-page__header {
@@ -33,7 +57,7 @@
 }
 
 .signals-page__eyebrow {
-  color: var(--atlas-accent-strong);
+  color: var(--atlas-ui-accent);
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -46,21 +70,26 @@
 }
 
 .signals-page__lead {
-  color: var(--atlas-text-muted);
+  color: var(--atlas-ui-muted);
   font-size: 1.05rem;
   line-height: 1.6;
   max-width: 60ch;
 }
 
+.signals-page__objective {
+  margin-top: var(--atlas-ui-space-3);
+  padding-left: var(--atlas-ui-space-4);
+  border-left: 3px solid var(--atlas-ui-accent);
+  color: var(--atlas-ui-muted);
+  line-height: 1.6;
+}
+
 .signals-page__docs {
+  @include card.surface;
   display: flex;
   flex-direction: column;
   gap: var(--atlas-space-sm);
-  background: var(--atlas-surface);
-  border: 1px solid var(--atlas-border);
-  border-radius: var(--atlas-radius-md);
-  padding: var(--atlas-space-lg);
-  box-shadow: var(--atlas-shadow-sm);
+  padding: clamp(1rem, 3vw, 2rem);
 
   h2 {
     font-size: 1.15rem;
@@ -75,13 +104,13 @@
   }
 
   p {
-    color: var(--atlas-text-muted);
+    color: var(--atlas-ui-muted);
     line-height: 1.6;
   }
 
   code {
-    background: var(--atlas-accent-soft);
-    color: var(--atlas-accent-strong);
+    background: var(--atlas-ui-accent-soft);
+    color: var(--atlas-ui-accent);
     padding: 0.1rem 0.35rem;
     border-radius: 4px;
     font-size: 0.85em;
@@ -92,7 +121,7 @@
     flex-direction: column;
     gap: 0.35rem;
     padding-left: var(--atlas-space-md);
-    color: var(--atlas-text-muted);
+    color: var(--atlas-ui-muted);
     line-height: 1.6;
   }
 
@@ -107,7 +136,7 @@
   gap: var(--atlas-space-xs);
 
   figcaption {
-    color: var(--atlas-text-muted);
+    color: var(--atlas-ui-muted);
     font-size: 0.85rem;
     font-weight: 600;
   }
@@ -121,15 +150,16 @@
   display: flex;
   flex-direction: column;
   gap: var(--atlas-space-md);
-  background: linear-gradient(180deg, var(--atlas-accent-soft), transparent 60%);
-  border: 1px dashed var(--atlas-accent-strong);
-  border-radius: var(--atlas-radius-lg);
-  padding: var(--atlas-space-lg);
+  background: var(--atlas-ui-surface-subtle);
+  border: 1px solid var(--atlas-ui-border);
+  border-radius: var(--atlas-ui-radius-lg);
+  padding: clamp(1rem, 3vw, 2rem);
 }
 
 .signals-page__lab-heading {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--atlas-space-sm);
 
   h2 {
@@ -139,8 +169,8 @@
 }
 
 .signals-page__lab-badge {
-  background: var(--atlas-accent-strong);
-  color: var(--atlas-text-inverse);
+  background: var(--atlas-ui-accent);
+  color: var(--atlas-ui-on-accent);
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -150,14 +180,20 @@
 }
 
 .signals-page__lab-description {
-  color: var(--atlas-text-muted);
+  color: var(--atlas-ui-muted);
   line-height: 1.6;
 
   code {
-    background: var(--atlas-surface);
-    color: var(--atlas-accent-strong);
+    background: var(--atlas-ui-surface);
+    color: var(--atlas-ui-accent);
     padding: 0.1rem 0.35rem;
     border-radius: 4px;
     font-size: 0.85em;
   }
+
+}
+
+.signals-page :focus-visible {
+  outline: 3px solid var(--atlas-ui-focus);
+  outline-offset: 2px;
 }

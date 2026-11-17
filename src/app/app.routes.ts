@@ -17,5 +17,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/signals/signals-page').then((m) => m.SignalsPage),
     title: 'Signals · Angular Atlas',
   },
+  {
+    path: 'routing',
+    loadChildren: () => import('./features/routing/routing.routes').then((m) => m.ROUTING_ROUTES),
+    title: 'Routing y Lazy Loading · Angular Atlas',
+  },
   { path: '**', redirectTo: '' },
 ];

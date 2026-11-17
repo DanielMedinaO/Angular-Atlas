@@ -1,16 +1,15 @@
+@use '../../../../styles/card';
+
 :host {
   display: block;
 }
 
 .communication {
-  background: var(--atlas-surface);
-  border: 1px solid var(--atlas-border);
-  border-radius: var(--atlas-radius-md);
+  @include card.surface;
   padding: var(--atlas-space-lg);
   display: flex;
   flex-direction: column;
   gap: var(--atlas-space-md);
-  box-shadow: var(--atlas-shadow-sm);
 }
 
 .communication__title {

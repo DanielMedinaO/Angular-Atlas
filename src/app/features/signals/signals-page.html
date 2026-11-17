@@ -1,10 +1,13 @@
-<section class="signals-page">
+<section class="signals-page w-full">
   <header class="signals-page__header">
     <p class="signals-page__eyebrow">Estado reactivo</p>
     <h1 class="signals-page__title">Signals</h1>
     <p class="signals-page__lead">
       Los <strong>signals</strong> son contenedores de valor que notifican a Angular cuándo
       cambian, permitiendo una detección de cambios granular sin depender de Zone.js.
+    </p>
+    <p class="signals-page__objective">
+      Objetivo: crear estado reactivo, derivar valores y observar los cambios en ejemplos reales.
     </p>
   </header>
 
@@ -205,4 +208,13 @@ doubled(); // se recalcula solo cuando "count" cambia</code></pre>
     </figcaption>
     <pre tabindex="0"><code>{{ componentCommunicationSnippet }}</code></pre>
   </figure>
+
+  <article class="signals-page__docs" aria-labelledby="signals-challenge-title">
+    <h2 id="signals-challenge-title">Practica lo aprendido</h2>
+    <p>
+      Modifica el contador para mostrar también el triple del valor usando
+      <code>computed()</code>. Comprueba que se actualiza al incrementar, disminuir y reiniciar.
+    </p>
+    <p>Continúa con <a routerLink="/components">componentes y ciclo de vida</a>.</p>
+  </article>
 </section>

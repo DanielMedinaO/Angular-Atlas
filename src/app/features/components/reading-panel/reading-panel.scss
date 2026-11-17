@@ -1,19 +1,24 @@
+@use '../../../../styles/card';
+
 :host {
   display: block;
-  --panel-accent: hsl(var(--instance-hue, 170) 60% 28%);
-  --panel-accent-soft: hsl(var(--instance-hue, 170) 80% 93%);
+  --panel-accent: light-dark(
+    hsl(var(--instance-hue, 170) 60% 28%),
+    hsl(var(--instance-hue, 170) 65% 75%)
+  );
+  --panel-accent-soft: light-dark(
+    hsl(var(--instance-hue, 170) 80% 93%),
+    hsl(var(--instance-hue, 170) 30% 20%)
+  );
 }
 
 .reading-panel {
+  @include card.surface;
   display: flex;
   flex-direction: column;
   gap: var(--atlas-space-sm);
-  background: var(--atlas-surface);
-  border: 1px solid var(--atlas-border);
   border-left: 6px solid var(--panel-accent);
-  border-radius: var(--atlas-radius-md);
   padding: var(--atlas-space-md);
-  box-shadow: var(--atlas-shadow-sm);
 }
 
 .reading-panel--compact {

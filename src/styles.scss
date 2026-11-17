@@ -1,21 +1,82 @@
-/* You can add global styles to this file, and also import other style files */
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$magenta-palette,
+        tertiary: mat.$violet-palette,
+      ),
+      typography: Inter,
+      density: 0,
+    )
+  );
+}
 
 :root {
   color-scheme: light;
 
+  // Shared visual tokens for the shell and learning content.
+  --atlas-ui-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --atlas-ui-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --atlas-ui-space-1: 0.25rem;
+  --atlas-ui-space-2: 0.5rem;
+  --atlas-ui-space-3: 0.75rem;
+  --atlas-ui-space-4: 1rem;
+  --atlas-ui-space-6: 1.5rem;
+  --atlas-ui-space-8: 2rem;
+  --atlas-ui-space-12: 3rem;
+  --atlas-ui-radius-sm: 0.5rem;
+  --atlas-ui-radius-md: 0.75rem;
+  --atlas-ui-radius-lg: 1rem;
+  --atlas-ui-bg: var(--atlas-bg);
+  --atlas-ui-surface: var(--atlas-surface);
+  --atlas-ui-surface-subtle: #f4f1f7;
+  --atlas-ui-border: var(--atlas-border);
+  --atlas-ui-text: var(--atlas-text);
+  --atlas-ui-muted: var(--atlas-text-muted);
+  --atlas-ui-accent: var(--atlas-accent-strong);
+  --atlas-ui-accent-hover: var(--atlas-accent-filled-hover);
+  --atlas-ui-accent-soft: var(--atlas-accent-soft);
+  --atlas-ui-on-accent: #ffffff;
+  --atlas-ui-focus: var(--atlas-accent-strong);
+  --atlas-ui-sidebar: #151316;
+  --atlas-ui-sidebar-elevated: #302833;
+  --atlas-ui-sidebar-text: #f8f6fa;
+  --atlas-ui-sidebar-muted: #c9becd;
+  --atlas-ui-sidebar-accent: #efb8ff;
+  --atlas-ui-code: #1b171e;
+  --atlas-ui-code-text: #f7f2fa;
+  --atlas-ui-shadow: none;
+
   // Palette
-  --atlas-navy: #101a2e;
-  --atlas-navy-elevated: #18253f;
-  --atlas-bg: #f7f9fc;
+  --atlas-navy: #1b171e;
+  --atlas-navy-elevated: #302833;
+  --atlas-bg: #faf9fb;
   --atlas-surface: #ffffff;
-  --atlas-border: #e3e8f0;
-  --atlas-accent: #0d9f8d;
-  --atlas-accent-strong: #097d6f;
-  --atlas-accent-soft: rgb(13 159 141 / 12%);
-  --atlas-text: #16233f;
-  --atlas-text-muted: #5b6b85;
-  --atlas-text-inverse: #eef2fa;
-  --atlas-text-inverse-muted: #9fb0cc;
+  --atlas-border: #ded8e2;
+  --atlas-accent: #a63bca;
+  --atlas-accent-strong: #6b248e;
+  --atlas-accent-filled: #6b248e;
+  --atlas-accent-filled-hover: #50196e;
+  --atlas-on-accent: #ffffff;
+  --atlas-group-props: #593ba9;
+  --atlas-accent-soft: #f3e7f8;
+  --atlas-text: #211b24;
+  --atlas-text-muted: #625968;
+  --atlas-text-inverse: #f7f2fa;
+  --atlas-text-inverse-muted: #cbc1d0;
+  --atlas-card-surface: var(--atlas-surface);
+  --atlas-card-border: var(--atlas-border);
+  --atlas-card-border-hover: #a569ba;
+  --atlas-card-hover: #faf5fc;
+  --atlas-card-radius: 12px;
 
   // Layout
   --atlas-sidebar-width: 260px;
@@ -39,6 +100,41 @@
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji';
   --atlas-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+}
+
+@mixin dark-theme {
+  color-scheme: dark;
+  --atlas-ui-surface-subtle: #201b22;
+  --atlas-ui-on-accent: #32133f;
+  --atlas-ui-sidebar: #0f0f11;
+  --atlas-ui-sidebar-elevated: #2e2632;
+  --atlas-ui-code: #0f0f11;
+  --atlas-bg: #0f0f11;
+  --atlas-surface: #181619;
+  --atlas-border: #514854;
+  --atlas-text: #f7f4f8;
+  --atlas-text-muted: #c8bfca;
+  --atlas-accent: #efaafa;
+  --atlas-accent-strong: #edb9fa;
+  --atlas-accent-soft: #35243c;
+  --atlas-accent-filled: #edb9fa;
+  --atlas-accent-filled-hover: #f6d4fd;
+  --atlas-on-accent: #32133f;
+  --atlas-group-props: #d4bdff;
+  --atlas-card-border-hover: #c99fd2;
+  --atlas-card-hover: #27212a;
+  --atlas-shadow-sm: 0 1px 2px rgb(0 0 0 / 20%);
+  --atlas-shadow-md: 0 8px 24px rgb(0 0 0 / 25%);
+}
+
+:root[data-theme='dark'] {
+  @include dark-theme;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    @include dark-theme;
+  }
 }
 
 *,

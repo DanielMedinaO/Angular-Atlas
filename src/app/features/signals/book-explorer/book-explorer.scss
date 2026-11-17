@@ -1,16 +1,15 @@
+@use '../../../../styles/card';
+
 :host {
   display: block;
 }
 
 .explorer {
-  background: var(--atlas-surface);
-  border: 1px solid var(--atlas-border);
-  border-radius: var(--atlas-radius-md);
+  @include card.surface;
   padding: var(--atlas-space-lg);
   display: flex;
   flex-direction: column;
   gap: var(--atlas-space-md);
-  box-shadow: var(--atlas-shadow-sm);
 }
 
 .explorer__title {
@@ -149,20 +148,18 @@
 }
 
 .explorer__card {
+  @include card.surface;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  background: var(--atlas-navy);
-  color: var(--atlas-text-inverse);
-  border-radius: var(--atlas-radius-md);
+  color: var(--atlas-text);
   padding: var(--atlas-space-md);
-  box-shadow: var(--atlas-shadow-md);
 }
 
 .explorer__card-badge {
   align-self: flex-start;
-  background: var(--atlas-accent-strong);
-  color: var(--atlas-text-inverse);
+  background: var(--atlas-accent-filled);
+  color: var(--atlas-on-accent);
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -177,7 +174,7 @@
 }
 
 .explorer__card-author {
-  color: var(--atlas-text-inverse-muted);
+  color: var(--atlas-text-muted);
   font-size: 0.9rem;
 }
 

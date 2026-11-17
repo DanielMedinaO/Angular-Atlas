@@ -13,6 +13,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter, map } from 'rxjs';
 import { findGroupIdByPath, NAV_GROUPS, NavGroup } from './navigation';
+import { ThemeService } from './theme';
 
 @Component({
   selector: 'app-shell',
@@ -24,6 +25,7 @@ export class ShellComponent {
   protected readonly navGroups: readonly NavGroup[] = NAV_GROUPS;
 
   protected readonly sidebarOpen = signal(false);
+  protected readonly themeService = inject(ThemeService);
 
   private readonly router = inject(Router);
   private readonly currentPath = toSignal(
@@ -50,6 +52,12 @@ export class ShellComponent {
   private readonly injector = inject(Injector);
   private readonly menuToggle = viewChild.required<ElementRef<HTMLButtonElement>>('menuToggle');
   private readonly sidebar = viewChild.required<ElementRef<HTMLElement>>('sidebar');
+  private readonly mainContent = viewChild.required<ElementRef<HTMLElement>>('mainContent');
+
+  protected skipToMain(event: MouseEvent): void {
+    event.preventDefault();
+    this.mainContent().nativeElement.focus();
+  }
 
   protected isExpanded(group: NavGroup): boolean {
     return this.expandedGroupIds().has(group.id);

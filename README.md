@@ -28,8 +28,9 @@ El proyecto está en desarrollo: puedes explorar los temas disponibles y seguir 
 | --- | --- |
 | **Componentes y ciclo de vida** | Composición de componentes, comunicación y un laboratorio para explorar su ciclo de vida. |
 | **Signals y reactividad** | Estado reactivo, un contador interactivo, un explorador de libros y comunicación entre componentes. |
+| **Routing y Lazy Loading** | Rutas anidadas, parámetros, guards, resolvers, eventos y estrategias de carga. |
 
-Otros temas, como RxJS, formularios, routing y testing, están previstos para próximas entregas.
+Otros temas, como RxJS, formularios y testing, están previstos para próximas entregas.
 
 ## Empieza en local
 
@@ -65,12 +66,20 @@ Abre [http://localhost:4200](http://localhost:4200) para recorrer Angular Atlas.
 - **Vitest** para las pruebas unitarias.
 - Diseño por funcionalidades, con demostraciones pequeñas e interactivas.
 
+La paleta de Angular Atlas se inspira en [angular.dev](https://angular.dev/): superficies neutras,
+acentos violeta y rosa, y tarjetas con bordes sutiles. Los tokens compartidos están en
+`src/styles.scss` y el tratamiento común de tarjetas en `src/styles/_card.scss`, junto con el tema
+Material 3 y las utilidades Tailwind ya instaladas. Los temas claro y oscuro se aplican al sitio.
+El botón de la barra superior
+guarda la elección en el navegador; si no existe una elección, se usa la preferencia del sistema.
+Inter y JetBrains Mono tienen fuentes de respaldo locales.
+
 ## Estructura del proyecto
 
 ```text
 src/app/
 ├── core/       # Navegación y estructura compartida
-└── features/   # Inicio, componentes y Signals
+└── features/   # Inicio, componentes, Signals y Routing
 ```
 
 ## Contribuye

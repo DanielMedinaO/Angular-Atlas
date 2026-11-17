@@ -34,10 +34,30 @@ describe('HomePage', () => {
       title.textContent?.trim(),
     );
     const links = Array.from(compiled.querySelectorAll('a.topic-card'));
+    const availableTopics = TOPICS.filter((topic) => topic.status === 'available');
 
     expect(titles).toEqual(TOPICS.map((topic) => topic.label));
     expect(titles).not.toContain('Inicio');
-    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/components', '/signals']);
-    expect(compiled.querySelectorAll('.topic-card__badge')).toHaveLength(TOPICS.length - 2);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(
+      availableTopics.map((topic) => ('path' in topic ? topic.path : undefined)),
+    );
+    expect(compiled.querySelectorAll('.topic-card__badge')).toHaveLength(
+      TOPICS.length - availableTopics.length,
+    );
+  });
+
+  it('should keep unavailable cards non-interactive and available cards as native links', async () => {
+    const fixture = TestBed.createComponent(HomePage);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    for (const card of compiled.querySelectorAll('.topic-card--disabled')) {
+      expect(card.tagName).toBe('DIV');
+      expect(card.querySelector('a, button')).toBeNull();
+    }
+    for (const card of compiled.querySelectorAll('a.topic-card')) {
+      expect(card.getAttribute('href')).toBeTruthy();
+      expect(card.querySelector('h3')).toBeTruthy();
+    }
   });
 });

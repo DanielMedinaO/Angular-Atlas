@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { SignalsPage } from './signals-page';
 
 describe('SignalsPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SignalsPage],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -19,6 +21,8 @@ describe('SignalsPage', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.querySelector('.signals-page__title')?.textContent).toContain('Signals');
+    expect(compiled.querySelector('.signals-page__objective')?.textContent).toContain('Objetivo');
+    expect(compiled.querySelector('#signals-challenge-title')?.textContent).toContain('Practica');
     expect(compiled.querySelector('.signals-page__lab')).toBeTruthy();
     expect(compiled.querySelector('app-counter-demo')).toBeTruthy();
   });

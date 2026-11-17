@@ -1,0 +1,156 @@
+<section class="routing-page" aria-labelledby="routing-title">
+  <header class="routing-page__header">
+    <p class="routing-page__eyebrow">Arquitectura de la aplicación</p>
+    <h1 id="routing-title" class="routing-page__title">Routing y Lazy Loading</h1>
+    <p class="routing-page__lead">
+      Angular Router convierte la URL en una vista. En esta página puedes recorrer rutas anidadas,
+      parámetros, guards, resolvers y carga diferida sin desmontar el shell ni esta documentación.
+    </p>
+  </header>
+
+  <article class="routing-page__docs">
+    <h2>Rutas anidadas y outlets</h2>
+    <p>
+      <code>ShellComponent</code> mantiene el layout global. <code>RoutingPage</code> también
+      permanece montada porque es el componente padre de las rutas hijas; solo cambia el contenido
+      de su <code>RouterOutlet</code>. El catálogo, el detalle y las notas comparten así el mismo
+      contexto y la documentación sigue visible.
+    </p>
+    <pre tabindex="0"><code>{{ routeLoadingSnippet }}</code></pre>
+
+    <h2>loadComponent() frente a loadChildren()</h2>
+    <table>
+      <caption>Elegir el límite de carga diferida</caption>
+      <thead>
+        <tr><th scope="col">API</th><th scope="col">Qué carga</th><th scope="col">Cuándo usarla</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">loadComponent()</th><td>Un componente standalone.</td><td>Una pantalla independiente y sencilla.</td></tr>
+        <tr><th scope="row">loadChildren()</th><td>Un conjunto de rutas.</td><td>Una funcionalidad con varias páginas y navegación propia.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Ambas APIs son lazy: el código se puede separar en chunks y solicitar al navegar. Las rutas
+      declaradas directamente en la configuración raíz son eager. Este feature usa
+      <code>loadChildren()</code> para mantener junto el grafo de rutas de Routing y cargar las
+      páginas hijas bajo demanda.
+    </p>
+
+    <h2>Router Playground</h2>
+    <p>
+      Las rutas de abajo son hijas de esta página. El filtro del catálogo se guarda en
+      <code>?category=Angular</code>, así que recargar o compartir esa URL restaura el mismo filtro.
+    </p>
+    <nav class="routing-page__playground-nav" aria-label="Rutas del Router Playground">
+      <a routerLink="/routing/books" routerLinkActive="routing-page__link--active">Catálogo</a>
+      <a routerLink="/routing/notes" routerLinkActive="routing-page__link--active">Notas</a>
+    </nav>
+    <section class="routing-page__outlet" aria-label="Contenido del Router Playground">
+      <router-outlet />
+    </section>
+  </article>
+
+  <article class="routing-page__docs">
+    <h2>Resolver: preparar datos antes de activar</h2>
+    <p>
+      Para el detalle, <code>bookResolver</code> busca el libro localmente antes de activar
+      <code>BookDetail</code>. El Router espera el resultado: el componente no se muestra en un
+      estado intermedio sin libro. Esto evita una vista incompleta, a cambio de retrasar su
+      activación hasta que la resolución termine. Un ID inexistente devuelve un
+      <code>RedirectCommand</code> al catálogo. No hay peticiones HTTP en este laboratorio.
+    </p>
+    <pre tabindex="0"><code>{{ resolverSnippet }}</code></pre>
+
+    <h2>Guards de navegación</h2>
+    <p>
+      Cambia las decisiones y prueba estas rutas controladas. La demostración no implementa
+      autenticación ni reemplaza la autorización del servidor.
+    </p>
+    <div class="routing-page__guard-controls">
+      <button
+        type="button"
+        [attr.aria-pressed]="guardDemo.activationAllowed()"
+        (click)="toggleActivationPermission()"
+      >
+        CanActivate: {{ guardDemo.activationAllowed() ? 'permitir' : 'bloquear' }}
+      </button>
+      <button type="button" (click)="navigateToDemo('/routing/demo/activate')">
+        Probar CanActivate
+      </button>
+      <button
+        type="button"
+        [attr.aria-pressed]="guardDemo.matchingAllowed()"
+        (click)="toggleMatchingPermission()"
+      >
+        CanMatch: {{ guardDemo.matchingAllowed() ? 'usar ruta principal' : 'usar alternativa' }}
+      </button>
+      <button type="button" (click)="navigateToDemo('/routing/demo/match')">
+        Probar CanMatch
+      </button>
+    </div>
+    <table>
+      <caption>Diferencias entre guards</caption>
+      <thead>
+        <tr><th scope="col">Guard</th><th scope="col">Decisión</th><th scope="col">Uso habitual</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">CanActivate</th><td>Permitir activar una ruta ya seleccionada.</td><td>Controlar el acceso a una vista.</td></tr>
+        <tr><th scope="row">CanMatch</th><td>Permitir que una configuración participe en el matching.</td><td>Elegir entre configuraciones o variantes de ruta.</td></tr>
+        <tr><th scope="row">CanDeactivate</th><td>Permitir abandonar la vista actual.</td><td>Advertir por cambios sin guardar.</td></tr>
+        <tr><th scope="row">Resolve</th><td>Preparar datos antes de activar.</td><td>Entregar datos listos a una vista.</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Un guard ejecutado en el navegador mejora la navegación, pero nunca sustituye la
+      autorización del backend. Si un guard necesita redirigir, devuelve un <code>UrlTree</code>
+      o <code>RedirectCommand</code>, en vez de iniciar otra navegación como efecto lateral.
+    </p>
+    <pre tabindex="0"><code>{{ guardsSnippet }}</code></pre>
+
+    <h2>CanDeactivate y cambios pendientes</h2>
+    <p>
+      El editor usa Signals para comparar el borrador con la última versión guardada. Su guard se
+      evalúa en cualquier navegación del Router, incluida la navegación del historial Atrás y
+      Adelante. El MVP usa <code>window.confirm</code>, un diálogo nativo que no permite adaptar
+      estilo, contenido ni gestión de foco. En producción puede reemplazarse por un diálogo
+      accesible con nombre, foco inicial, cierre por Escape definido y restauración del foco.
+    </p>
+
+    <h2>Preloading: decidir cuándo descargar</h2>
+    <table>
+      <caption>Comparación de carga y precarga</caption>
+      <thead>
+        <tr><th scope="col">Estrategia</th><th scope="col">Comportamiento</th><th scope="col">Coste</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Eager</th><td>Incluye la ruta en el bundle inicial.</td><td>Inicio inicial mayor; navegación posterior inmediata.</td></tr>
+        <tr><th scope="row">Lazy sin preloading</th><td>Descarga al visitar la ruta.</td><td>Bundle inicial menor; primera navegación espera el chunk.</td></tr>
+        <tr><th scope="row">NoPreloading</th><td>No descarga rutas lazy antes de visitarlas; es el comportamiento predeterminado.</td><td>Menor uso de red anticipado.</td></tr>
+        <tr><th scope="row">PreloadAllModules</th><td>Pre-carga rutas lazy tras la navegación inicial.</td><td>Interacciones posteriores más rápidas; más tráfico y uso de datos.</td></tr>
+        <tr><th scope="row">Estrategia personalizada</th><td>Pre-carga solo rutas marcadas.</td><td>Permite equilibrar importancia y coste.</td></tr>
+      </tbody>
+    </table>
+    <pre tabindex="0"><code>{{ preloadingSnippet }}</code></pre>
+    <p>
+      No activamos <code>PreloadAllModules</code> globalmente: primero conviene medir el tamaño de
+      los chunks y el patrón de uso. En DevTools, abre la pestaña Network y filtra por
+      <code>.js</code>; compara las solicitudes iniciales con las que aparecen al navegar y
+      comprueba en Sources o Coverage qué código pertenece a cada chunk.
+    </p>
+  </article>
+
+  <section class="routing-page__events" aria-labelledby="router-events-title">
+    <div>
+      <span class="routing-page__badge">Laboratorio</span>
+      <h2 id="router-events-title">Router Events</h2>
+      <p>Historial limitado a las últimas 12 fases relevantes de navegación.</p>
+    </div>
+    <ol aria-live="polite" aria-relevant="additions">
+      @for (event of routerEvents(); track $index) {
+        <li><code>{{ event }}</code></li>
+      } @empty {
+        <li>Los eventos aparecerán cuando navegues por el laboratorio.</li>
+      }
+    </ol>
+  </section>
+</section>

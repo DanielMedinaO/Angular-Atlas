@@ -89,7 +89,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         id: 'routing',
         label: 'Routing y Lazy Loading',
         description: 'Navegación y carga diferida',
-        status: 'upcoming',
+        status: 'available',
+        path: '/routing',
       },
       {
         id: 'forms',
@@ -140,6 +141,10 @@ export const TOPICS: readonly NavItem[] = NAV_ITEMS.filter((item) => item.id !==
 
 export function findGroupIdByPath(path: string): string | undefined {
   return NAV_GROUPS.find((group) =>
-    group.items.some((item) => item.status === 'available' && item.path === path),
+    group.items.some(
+      (item) =>
+        item.status === 'available' &&
+        (item.path === path || (item.path !== '/' && path.startsWith(`${item.path}/`))),
+    ),
   )?.id;
 }
