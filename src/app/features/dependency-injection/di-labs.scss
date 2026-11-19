@@ -1,0 +1,94 @@
+@use '../../../styles/card';
+
+:host {
+  display: block;
+}
+
+.di-lab-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--atlas-space-md);
+}
+
+.di-card,
+.di-route-panel {
+  @include card.surface;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--atlas-space-sm);
+  padding: var(--atlas-space-md);
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  p {
+    color: var(--atlas-text-muted);
+    line-height: 1.5;
+  }
+
+  output {
+    color: var(--atlas-accent-strong);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  button {
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-sm);
+    background: var(--atlas-surface);
+    color: var(--atlas-accent-strong);
+    padding: 0.5rem 0.75rem;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:hover,
+  button:focus-visible {
+    outline: 2px solid var(--atlas-accent-strong);
+    outline-offset: 2px;
+  }
+}
+
+.di-route-panel {
+  margin-top: var(--atlas-space-md);
+}
+
+.di-route-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-space-sm);
+  margin-block: var(--atlas-space-md);
+
+  a {
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-sm);
+    color: var(--atlas-accent-strong);
+    padding: 0.45rem 0.7rem;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus-visible {
+    outline: 2px solid var(--atlas-accent-strong);
+    outline-offset: 2px;
+  }
+
+  .di-route-link--active {
+    background: var(--atlas-accent-soft);
+    font-weight: 700;
+  }
+}
+
+.di-token-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--atlas-space-md);
+}
+
+.di-async-result {
+  min-height: 1.5em;
+  color: var(--atlas-text-muted);
+}

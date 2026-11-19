@@ -1,0 +1,208 @@
+<section class="di-page">
+  <header class="di-page__header">
+    <p class="di-page__eyebrow">Arquitectura de la aplicación</p>
+    <h1 class="di-page__title">Dependency Injection</h1>
+    <p class="di-page__lead">
+      La inyección de dependencias (DI) permite que Angular entregue a cada pieza de la aplicación
+      las colaboradoras que necesita, con un ciclo de vida y un alcance explícitos.
+    </p>
+  </header>
+
+  <article class="di-page__docs">
+    <h2>¿Qué problema resuelve?</h2>
+    <p>
+      Un componente que crea por su cuenta un catálogo, un logger o un cliente HTTP queda acoplado
+      a esa implementación y decide también cuándo crearla. DI separa ambas decisiones: el
+      consumidor declara qué necesita y un inyector resuelve qué instancia darle. Así varias partes
+      pueden compartir estado, cambiar implementaciones en pruebas o recibir valores de
+      configuración sin construir manualmente toda la cadena.
+    </p>
+
+    <h2>Crear con <code>new</code> o pedir con <code>inject()</code></h2>
+    <div class="di-page__comparison" role="region" aria-label="Comparación de creación e inyección" tabindex="0">
+      <table>
+        <caption>Quién se encarga de crear y compartir la dependencia</caption>
+        <thead>
+          <tr>
+            <th scope="col">Creación manual</th>
+            <th scope="col">Inyección de Angular</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>const catalog = new BookCatalog()</code></td>
+            <td><code>private readonly catalog = inject(BookCatalog)</code></td>
+          </tr>
+          <tr>
+            <td>Cada llamada puede crear una instancia nueva; hay que ensamblar a mano sus
+              dependencias y compartir la instancia.</td>
+            <td>El inyector elige una instancia según los providers y la jerarquía activa.</td>
+          </tr>
+          <tr>
+            <td>Útil para valores puros que no dependen del ciclo de vida de Angular.</td>
+            <td>Útil para servicios con dependencias, estado compartido, configuración o
+              sustituciones de prueba.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <figure class="di-page__code">
+      <figcaption>El consumidor describe la dependencia; no la construye</figcaption>
+      <pre tabindex="0"><code>import {{ '{' }} inject {{ '}' }} from '&#64;angular/core';
+
+class BookPanel {{ '{' }}
+  private readonly catalog = inject(BookCatalog);
+{{ '}' }}</code></pre>
+    </figure>
+
+    <h2>Declarar servicios</h2>
+    <p>
+      <code>&#64;Injectable({{ '{' }} providedIn: 'root' {{ '}' }})</code> es la forma conocida de
+      registrar un servicio en el inyector raíz. Angular 22 ofrece <code>&#64;Service()</code> como
+      API moderna con provisión automática equivalente para el caso común.
+    </p>
+    <figure class="di-page__code">
+      <figcaption>Dos APIs para servicios provistos automáticamente en root</figcaption>
+      <pre tabindex="0"><code>import {{ '{' }} Injectable, Service, signal {{ '}' }} from '&#64;angular/core';
+
+&#64;Injectable({{ '{' }} providedIn: 'root' {{ '}' }})
+class LegacyCatalogService {{ '{' }} {{ '}' }}
+
+&#64;Service()
+class ReadingListService {{ '{' }}
+  private readonly _books = signal&lt;readonly string[]&gt;([]);
+  readonly books = this._books.asReadonly();
+{{ '}' }}</code></pre>
+    </figure>
+    <p>
+      <code>&#64;Service({{ '{' }} autoProvided: false {{ '}' }})</code> mantiene la clase inyectable,
+      pero no la registra automáticamente. Entonces hay que proveerla explícitamente, por ejemplo
+      en <code>providers</code> de una ruta o de un componente. Es la opción de los contadores
+      scoped de este laboratorio.
+    </p>
+    <figure class="di-page__code">
+      <figcaption>Optar por provisión explícita en el provider de ruta</figcaption>
+      <pre tabindex="0"><code>&#64;Service({{ '{' }} autoProvided: false {{ '}' }})
+class RouteCounterService {{ '{' }} {{ '}' }}
+
+{{ '{' }}
+  path: 'library',
+  providers: [RouteCounterService],
+{{ '}' }}</code></pre>
+    </figure>
+
+    <h2>Árboles de inyectores y alcance</h2>
+    <p>
+      Angular combina dos jerarquías. Los <code>EnvironmentInjector</code> se organizan desde el
+      inyector raíz hacia providers de rutas y entornos; los <code>ElementInjector</code> aparecen
+      en elementos/componentes cuando declaran <code>providers</code>. Una búsqueda empieza cerca
+      del consumidor y avanza por sus ancestros; si no encuentra el token en el árbol de elementos,
+      continúa en el entorno. El provider más cercano gana.
+    </p>
+    <ul>
+      <li><strong>Root:</strong> un provider automático crea una instancia compartida por toda la
+        aplicación.</li>
+      <li><strong>Route:</strong> cada configuración de ruta crea un entorno descendiente; sus
+        componentes comparten ese provider, pero otra ruta con el mismo token obtiene otro.</li>
+      <li><strong>Component:</strong> un provider en el componente crea una instancia en su
+        inyector de elemento; cada instancia del componente recibe la suya.</li>
+    </ul>
+    <p>
+      La salida de una ruta no implica que su instancia se destruya inmediatamente: el Router puede
+      conservar su inyector asociado a la configuración. No uses la navegación como garantía de
+      limpieza; verifica explícitamente la política de vida útil que necesites.
+    </p>
+
+    <h2><code>InjectionToken</code> y estrategias de provider</h2>
+    <p>
+      Una interfaz TypeScript desaparece al compilar a JavaScript, así que no existe un objeto en
+      tiempo de ejecución que Angular pueda buscar. <code>InjectionToken&lt;T&gt;</code> sí es un
+      objeto real y conserva la ayuda de tipos para el valor esperado.
+    </p>
+    <figure class="di-page__code">
+      <figcaption>Cuatro formas de asociar un token con un valor</figcaption>
+      <pre tabindex="0"><code>const API_URL = new InjectionToken&lt;string&gt;('API_URL');
+const CLOCK = new InjectionToken&lt;Clock&gt;('CLOCK');
+
+providers: [
+  {{ '{' }} provide: API_URL, useValue: '/api' {{ '}' }},
+  {{ '{' }} provide: Logger, useClass: ConsoleLogger {{ '}' }},
+  {{ '{' }} provide: CLOCK, useFactory: () =&gt; new SystemClock() {{ '}' }},
+  {{ '{' }} provide: PublicLogger, useExisting: Logger {{ '}' }},
+]</code></pre>
+    </figure>
+    <ul>
+      <li><code>useValue</code>: entrega un valor existente, ideal para configuración.</li>
+      <li><code>useClass</code>: construye una implementación asociada al token.</li>
+      <li><code>useFactory</code>: calcula la dependencia, incluso a partir de otras dependencias.</li>
+      <li><code>useExisting</code>: crea un alias al mismo objeto ya registrado, no una copia.</li>
+    </ul>
+
+    <h2>Contexto de inyección y NG0203</h2>
+    <p>
+      <code>inject()</code> funciona durante la creación de una clase administrada por Angular,
+      por ejemplo en un inicializador de propiedad, constructor, factory de provider o dentro de
+      <code>runInInjectionContext()</code>. Un handler de clic ocurre después, sin ese contexto:
+      llamar ahí a <code>inject()</code> produce <code>NG0203</code>. Inyecta antes y usa la
+      referencia guardada desde el handler.
+    </p>
+
+    <h2>Servicios bajo demanda con <code>injectAsync()</code></h2>
+    <p>
+      <code>injectAsync()</code> devuelve una función que resuelve el servicio cuando se invoca.
+      El cargador usa un <code>import()</code> dinámico y el servicio debe tener provisión
+      automática (<code>&#64;Service()</code> o <code>providedIn: 'root'</code>). En Chrome DevTools,
+      abre Network, filtra por JS y presiona «Generar informe»: el chunk del exportador debe
+      aparecer solo tras la acción. No se debe importar estáticamente su clase desde esta página.
+    </p>
+  </article>
+
+  <section class="di-page__lab" aria-labelledby="root-lab-title">
+    <p class="di-page__eyebrow">Laboratorio 1 · Root</p>
+    <h2 id="root-lab-title">DI Scope Explorer</h2>
+    <p>
+      Dos secciones consumen el mismo servicio root. Incrementa desde una y observa el mismo Signal
+      desde la otra.
+    </p>
+    <app-root-counter-lab />
+  </section>
+
+  <section class="di-page__lab" aria-labelledby="route-lab-title">
+    <p class="di-page__eyebrow">Laboratorio 2 · Route</p>
+    <h2 id="route-lab-title">Una instancia por configuración de ruta</h2>
+    <p>
+      Cada ruta registra el servicio explícitamente. Sus dos consumidores comparten el contador;
+      library y admin usan instancias diferentes.
+    </p>
+    <app-route-counter-lab />
+    <router-outlet />
+  </section>
+
+  <section class="di-page__lab" aria-labelledby="component-lab-title">
+    <p class="di-page__eyebrow">Laboratorio 3 · Component</p>
+    <h2 id="component-lab-title">Una instancia por componente</h2>
+    <p>
+      El provider vive en cada componente contador. Incrementar una instancia no altera la otra.
+    </p>
+    <app-component-counter-lab />
+  </section>
+
+  <section class="di-page__lab" aria-labelledby="token-lab-title">
+    <p class="di-page__eyebrow">Laboratorio 4 · InjectionToken</p>
+    <h2 id="token-lab-title">Configuración por sección</h2>
+    <p>
+      El mismo token tipado recibe valores distintos desde el inyector de cada sección.
+    </p>
+    <app-injection-token-lab />
+  </section>
+
+  <section class="di-page__lab" aria-labelledby="async-lab-title">
+    <p class="di-page__eyebrow">Laboratorio 5 · Lazy service</p>
+    <h2 id="async-lab-title">Cargar el exportador cuando se necesite</h2>
+    <p>
+      El servicio se importa al presionar el botón. El estado muestra la carga, el resultado o un
+      error legible.
+    </p>
+    <app-inject-async-lab />
+  </section>
+</section>

@@ -22,5 +22,13 @@ export const routes: Routes = [
     loadChildren: () => import('./features/routing/routing.routes').then((m) => m.ROUTING_ROUTES),
     title: 'Routing y Lazy Loading · Angular Atlas',
   },
+  {
+    path: 'dependency-injection',
+    loadChildren: () =>
+      import('./features/dependency-injection/dependency-injection.routes').then(
+        (m) => m.DEPENDENCY_INJECTION_ROUTES,
+      ),
+    title: 'Dependency Injection · Angular Atlas',
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -1,0 +1,127 @@
+@use '../../../styles/card';
+
+:host {
+  display: block;
+}
+
+.di-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xl);
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.di-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xs);
+}
+
+.di-page__eyebrow {
+  color: var(--atlas-accent-strong);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.di-page__title {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  font-weight: 700;
+}
+
+.di-page__lead,
+.di-page__lab > p {
+  color: var(--atlas-text-muted);
+  line-height: 1.6;
+}
+
+.di-page__docs,
+.di-page__lab {
+  @include card.surface;
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-md);
+  padding: var(--atlas-space-lg);
+
+  h2 {
+    margin-top: var(--atlas-space-sm);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  p,
+  li {
+    color: var(--atlas-text-muted);
+    line-height: 1.6;
+  }
+
+  ul {
+    display: grid;
+    gap: var(--atlas-space-xs);
+    padding-left: var(--atlas-space-lg);
+  }
+
+  code {
+    border-radius: 4px;
+    background: var(--atlas-accent-soft);
+    color: var(--atlas-accent-strong);
+    padding: 0.1rem 0.35rem;
+    font-size: 0.85em;
+  }
+}
+
+.di-page__comparison {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  caption {
+    margin-bottom: var(--atlas-space-sm);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  th,
+  td {
+    border: 1px solid var(--atlas-border);
+    padding: 0.55rem;
+    vertical-align: top;
+  }
+
+  th {
+    font-weight: 600;
+  }
+}
+
+.di-page__code {
+  display: grid;
+  gap: var(--atlas-space-xs);
+
+  figcaption {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  pre {
+    overflow-x: auto;
+    border-radius: var(--atlas-radius-sm);
+    background: var(--atlas-navy);
+    color: var(--atlas-text-inverse);
+    padding: var(--atlas-space-md);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 640px) {
+  .di-page__docs,
+  .di-page__lab {
+    padding: var(--atlas-space-md);
+  }
+}
