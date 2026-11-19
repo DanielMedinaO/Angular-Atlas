@@ -93,8 +93,10 @@
 }
 
 .shell__brand-mark {
-  color: var(--atlas-ui-accent);
-  font-size: 1.1rem;
+  display: block;
+  width: 1.5em;
+  height: 1.5em;
+  object-fit: contain;
 }
 
 .shell__menu-toggle {
@@ -258,10 +260,6 @@
   padding: 0.5rem var(--atlas-space-sm);
   border-left: 3px solid transparent;
   color: var(--atlas-ui-sidebar-muted);
-}
-
-.shell__sidebar .shell__brand-mark {
-  color: var(--atlas-ui-sidebar-accent);
 }
 
 .shell__sidebar :focus-visible,
