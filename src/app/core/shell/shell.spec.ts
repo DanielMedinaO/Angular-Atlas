@@ -188,14 +188,16 @@ describe('ShellComponent', () => {
       '/',
       '/components',
       '/signals',
+      '/http',
       '/routing',
       '/dependency-injection',
     ]);
     expect(links[0].textContent).toContain('Inicio');
     expect(links[1].textContent).toContain('Componentes');
     expect(links[2].textContent).toContain('Signals y reactividad');
-    expect(links[3].textContent).toContain('Routing y Lazy Loading');
-    expect(links[4].textContent).toContain('Dependency Injection');
+    expect(links[3].textContent).toContain('HTTP y recursos');
+    expect(links[4].textContent).toContain('Routing y Lazy Loading');
+    expect(links[5].textContent).toContain('Dependency Injection');
   });
 
   it('should show upcoming topics with a badge and without links', async () => {
@@ -209,7 +211,7 @@ describe('ShellComponent', () => {
     ).length;
 
     expect(upcoming).toHaveLength(upcomingCount);
-    expect(upcomingCount).toBe(7);
+    expect(upcomingCount).toBe(6);
     for (const item of upcoming) {
       expect(item.querySelector('.shell__nav-badge')?.textContent?.trim()).toBe('Próximamente');
       expect(item.querySelector('a')).toBeNull();

@@ -1,0 +1,231 @@
+@use '../../../styles/card';
+
+:host {
+  display: block;
+}
+
+.http-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xl);
+  max-width: 960px;
+  margin-inline: auto;
+}
+
+.http-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-xs);
+}
+
+.http-page__eyebrow {
+  color: var(--atlas-accent-strong);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.http-page__title {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  font-weight: 700;
+}
+
+.http-page__lead,
+.http-page__docs > p,
+.http-page__lab > p {
+  color: var(--atlas-text-muted);
+  line-height: 1.6;
+}
+
+.http-page__docs,
+.http-page__lab {
+  @include card.surface;
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-space-md);
+  padding: var(--atlas-space-lg);
+
+  h2 {
+    margin-top: var(--atlas-space-sm);
+    font-size: 1.2rem;
+    font-weight: 650;
+  }
+
+  p,
+  li {
+    line-height: 1.6;
+  }
+
+  ul {
+    display: grid;
+    gap: var(--atlas-space-xs);
+    padding-left: var(--atlas-space-lg);
+  }
+
+  code {
+    border-radius: 4px;
+    background: var(--atlas-accent-soft);
+    color: var(--atlas-accent-strong);
+    padding: 0.1rem 0.35rem;
+    font-size: 0.85em;
+  }
+}
+
+.http-page__controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--atlas-space-xs);
+  max-width: 34rem;
+
+  input[type='search'],
+  input[type='text'] {
+    min-height: 2.75rem;
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-sm);
+    background: var(--atlas-surface);
+    color: var(--atlas-text);
+    padding: 0.55rem 0.75rem;
+  }
+}
+
+.http-page__field {
+  font-weight: 600;
+}
+
+.http-page__demo {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--atlas-space-xs);
+  margin-top: var(--atlas-space-xs);
+  line-height: 1.5;
+
+  input {
+    min-width: 1rem;
+    min-height: 1rem;
+    margin-top: 0.2rem;
+    accent-color: var(--atlas-accent-strong);
+  }
+}
+
+.http-page__demo-notice,
+.http-page__notice {
+  border-left: 4px solid var(--atlas-accent-strong);
+  background: var(--atlas-accent-soft);
+  padding: var(--atlas-space-sm) var(--atlas-space-md);
+}
+
+.http-page__results {
+  display: grid;
+  gap: var(--atlas-space-sm);
+
+  > p {
+    color: var(--atlas-text-muted);
+    line-height: 1.6;
+  }
+}
+
+.http-page__book,
+.http-page__resource-demo {
+  display: grid;
+  gap: var(--atlas-space-xs);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+  padding: var(--atlas-space-md);
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 650;
+  }
+
+  p {
+    color: var(--atlas-text-muted);
+  }
+}
+
+.http-page__error {
+  display: grid;
+  gap: var(--atlas-space-sm);
+  color: var(--atlas-danger, #a32626);
+  line-height: 1.6;
+
+  button {
+    justify-self: start;
+    border: 1px solid currentColor;
+    border-radius: var(--atlas-radius-sm);
+    background: transparent;
+    color: inherit;
+    padding: 0.45rem 0.7rem;
+    font: inherit;
+    cursor: pointer;
+  }
+}
+
+.http-page__code {
+  display: grid;
+  gap: var(--atlas-space-xs);
+
+  figcaption {
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  pre {
+    overflow-x: auto;
+    border-radius: var(--atlas-radius-sm);
+    background: var(--atlas-navy);
+    color: var(--atlas-text-inverse);
+    padding: var(--atlas-space-md);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+  }
+}
+
+.http-page__resource-demos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: var(--atlas-space-md);
+}
+
+.http-page__resource-demo {
+  align-content: start;
+
+  input {
+    min-height: 2.5rem;
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-sm);
+    background: var(--atlas-surface);
+    color: var(--atlas-text);
+    padding: 0.5rem 0.65rem;
+  }
+
+  pre {
+    overflow-x: auto;
+    border-radius: var(--atlas-radius-sm);
+    background: var(--atlas-navy);
+    color: var(--atlas-text-inverse);
+    padding: var(--atlas-space-sm);
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+}
+
+.http-page__comparison-note {
+  border-top: 1px solid var(--atlas-border);
+  padding-top: var(--atlas-space-md);
+}
+
+@media (max-width: 640px) {
+  .http-page__docs,
+  .http-page__lab {
+    padding: var(--atlas-space-md);
+  }
+}

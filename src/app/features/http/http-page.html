@@ -1,0 +1,331 @@
+<div class="http-page">
+  <header class="http-page__header">
+    <p class="http-page__eyebrow">Reactividad y datos</p>
+    <h1 class="http-page__title">HTTP y recursos reactivos</h1>
+    <p class="http-page__lead">
+      Consulta Open Library y compara Observables, Signals y recursos de Angular con laboratorios
+      ejecutables. Las peticiones reales usan solo los campos requeridos y un máximo de 10 libros.
+    </p>
+  </header>
+
+  <section class="http-page__docs" aria-labelledby="http-basics-title">
+    <h2 id="http-basics-title">HttpClient, GET y POST</h2>
+    <p>
+      <code>HttpClient</code> es el cliente HTTP inyectable de Angular. Sus métodos devuelven
+      Observables fríos: la petición comienza al suscribirse, cada suscripción puede iniciar una
+      nueva petición y desuscribirse cancela la petición en curso cuando el transporte lo permite.
+      La respuesta se tipa desde TypeScript, pero ese tipo genérico no valida el JSON recibido;
+      por eso el servicio de este laboratorio recibe <code>unknown</code> y normaliza la respuesta
+      en tiempo de ejecución.
+    </p>
+    <figure class="http-page__code">
+      <figcaption>GET de búsqueda y POST para una mutación</figcaption>
+      <pre tabindex="0"><code>http.get&lt;unknown&gt;('https://openlibrary.org/search.json', {{ '{' }}
+  params: {{ '{' }}
+    q: query,
+    fields: 'key,title,author_name,first_publish_year,cover_i',
+    limit: '10',
+  {{ '}' }},
+{{ '}' }});
+
+// POST cambia un recurso; el endpoint externo de este laboratorio es de solo lectura.
+http.post&lt;CreatedBook&gt;('/api/books', {{ '{' }} title: 'Nuevo libro' {{ '}' }});</code></pre>
+    </figure>
+
+    <h2>Observable, RxJS y Signals</h2>
+    <p>
+      <code>toObservable()</code> expone los cambios de un Signal como un flujo; aquí
+      <code>debounceTime(350)</code> agrupa la escritura, <code>distinctUntilChanged()</code>
+      evita repetir términos iguales y <code>switchMap()</code> cancela la búsqueda anterior cuando
+      llega la siguiente. <code>catchError()</code> conserva el error como un estado visible.
+      <code>toSignal()</code> adapta el último estado al template y gestiona la suscripción con el
+      ciclo de vida del componente.
+    </p>
+    <figure class="http-page__code">
+      <figcaption>El flujo que alimenta el primer laboratorio</figcaption>
+      <pre tabindex="0"><code>toObservable(searchTerm).pipe(
+  debounceTime(350),
+  distinctUntilChanged(),
+  switchMap((query) =&gt; booksApi.search(query).pipe(
+    catchError((error) =&gt; of({{ '{' }} status: 'error', error {{ '}' }})),
+  )),
+);
+const state = toSignal(search$, {{ '{' }} initialValue: {{ '{' }} status: 'idle' {{ '}' }} {{ '}' }});</code></pre>
+    </figure>
+    <ul>
+      <li><strong>idle:</strong> todavía no hay una búsqueda válida; se requieren dos caracteres.</li>
+      <li><strong>loading:</strong> la búsqueda remota está pendiente.</li>
+      <li><strong>success:</strong> se recibieron libros.</li>
+      <li><strong>empty:</strong> la API respondió correctamente sin coincidencias.</li>
+      <li><strong>error:</strong> falló la red, la API o la validación del JSON.</li>
+    </ul>
+  </section>
+
+  <section class="http-page__lab" aria-labelledby="rxjs-lab-title">
+    <h2 id="rxjs-lab-title">Laboratorio A · HttpClient + RxJS</h2>
+    <p>
+      Escribe al menos dos caracteres. La casilla cambia a fixtures inventados locales, claramente
+      separados de las respuestas de Open Library.
+    </p>
+    <div class="http-page__controls">
+      <label class="http-page__field" for="rx-search">Buscar libros</label>
+      <input
+        id="rx-search"
+        type="search"
+        autocomplete="off"
+        placeholder="Por ejemplo, angular"
+        [value]="rxSearchTerm()"
+        (input)="setRxSearchTerm($event)"
+      />
+      <label class="http-page__demo">
+        <input type="checkbox" [checked]="rxDemoMode()" (change)="setRxDemoMode($event)" />
+        Usar fixtures locales de demostración
+      </label>
+    </div>
+    @if (rxDemoMode()) {
+      <p class="http-page__demo-notice" role="status">
+        Modo demostración: estos libros son datos ficticios locales, no resultados reales de Open
+        Library.
+      </p>
+    }
+
+    @if (rxSearchState(); as state) {
+      <div class="http-page__results" aria-live="polite">
+        @switch (state.status) {
+          @case ('idle') {
+            <p role="status">Escribe al menos dos caracteres para comenzar la búsqueda.</p>
+          }
+          @case ('loading') {
+            <p role="status">Buscando libros…</p>
+          }
+          @case ('empty') {
+            <p role="status">La búsqueda terminó correctamente, pero no encontró libros.</p>
+          }
+          @case ('error') {
+            <p class="http-page__error" role="alert">{{ state.message }}</p>
+          }
+          @case ('success') {
+            @for (book of state.response.docs; track book.key) {
+              <article class="http-page__book">
+                <h3>{{ book.title }}</h3>
+                <p>{{ bookAuthors(book) }}</p>
+                @if (book.firstPublishYear !== null) {
+                  <p>Primera publicación: {{ book.firstPublishYear }}</p>
+                }
+                @if (book.coverId !== null) {
+                  <p>Identificador de portada: {{ book.coverId }}</p>
+                }
+              </article>
+            }
+          }
+        }
+      </div>
+    }
+
+    <figure class="http-page__code">
+      <figcaption>Implementación del laboratorio: señal, debounce, switchMap y errores explícitos</figcaption>
+      <pre tabindex="0"><code>toObservable(searchTerm).pipe(
+  debounceTime(350),
+  distinctUntilChanged(),
+  switchMap((query) =&gt; query.length &lt; 2
+    ? of(idleState)
+    : booksApi.search(query).pipe(
+        map(resultState),
+        startWith(loadingState),
+        catchError((error) =&gt; of({{ '{' }} status: 'error', message: describe(error) {{ '}' }})),
+      ),
+  ),
+);
+toSignal(search$, {{ '{' }} initialValue: idleState {{ '}' }});</code></pre>
+    </figure>
+  </section>
+
+  <section class="http-page__lab" aria-labelledby="resource-lab-title">
+    <h2 id="resource-lab-title">Laboratorio B · httpResource()</h2>
+    <p>
+      <code>HttpClient</code> devuelve Observables que se ejecutan al suscribirse; <code>httpResource()</code>
+      inicia y cancela peticiones reactivamente y expone estado mediante Signals. El término se
+      estabiliza durante 350 ms antes de activar la petición. Al leer el valor se comprueba primero
+      <code>hasValue()</code>: acceder a <code>value()</code> en estado de error lanza una excepción.
+    </p>
+    <div class="http-page__controls">
+      <label class="http-page__field" for="resource-search">Buscar libros</label>
+      <input
+        id="resource-search"
+        type="search"
+        autocomplete="off"
+        placeholder="Por ejemplo, angular"
+        [value]="resourceSearchTerm()"
+        (input)="setResourceSearchTerm($event)"
+      />
+      <label class="http-page__demo">
+        <input
+          type="checkbox"
+          [checked]="resourceDemoMode()"
+          (change)="setResourceDemoMode($event)"
+        />
+        Usar fixtures locales de demostración
+      </label>
+    </div>
+    @if (resourceDemoMode()) {
+      <p class="http-page__demo-notice" role="status">
+        Modo demostración: son fixtures locales ficticios; no se consultó Open Library.
+      </p>
+      @if (resourceSearchTerm().trim().length < 2) {
+        <p role="status">Escribe al menos dos caracteres para comenzar la búsqueda.</p>
+      } @else if (resourceDemoResponse(); as response) {
+        @if (response.docs.length === 0) {
+          <p role="status">No hay coincidencias en los fixtures locales.</p>
+        } @else {
+          @for (book of response.docs; track book.key) {
+            <article class="http-page__book">
+              <h3>{{ book.title }}</h3>
+              <p>{{ bookAuthors(book) }}</p>
+            </article>
+          }
+        }
+      }
+    } @else if (resourceSearchTerm().trim().length < 2) {
+      <p role="status">Escribe al menos dos caracteres para comenzar la búsqueda.</p>
+    } @else if (booksResource.isLoading()) {
+      <p role="status">Consultando Open Library…</p>
+    } @else if (booksResource.error()) {
+      <div class="http-page__error" role="alert">
+        <p>{{ resourceErrorMessage() }}</p>
+        <button type="button" (click)="retryResource()">Reintentar con reload()</button>
+      </div>
+    } @else if (booksResource.hasValue()) {
+      @if (booksResource.value().docs.length === 0) {
+        <p role="status">La búsqueda terminó correctamente, pero no encontró libros.</p>
+      } @else {
+        @for (book of booksResource.value().docs; track book.key) {
+          <article class="http-page__book">
+            <h3>{{ book.title }}</h3>
+            <p>{{ bookAuthors(book) }}</p>
+            @if (book.firstPublishYear !== null) {
+              <p>Primera publicación: {{ book.firstPublishYear }}</p>
+            }
+          </article>
+        }
+      }
+    }
+    <figure class="http-page__code">
+      <figcaption>httpResource con una solicitud reactiva y parsing de unknown</figcaption>
+      <pre tabindex="0"><code>httpResource&lt;OpenLibrarySearchResponse&gt;(
+  () =&gt; query().length &lt; 2
+    ? undefined
+    : {{ '{' }} url: searchUrl, params: {{ '{' }} q: query(), fields, limit: '10' {{ '}' }} {{ '}' }},
+  {{ '{' }} parse: normalizeOpenLibraryResponse {{ '}' }},
+);
+if (books.hasValue()) {{ '{' }}
+  render(books.value());
+{{ '}' }}
+books.reload();</code></pre>
+    </figure>
+    <p class="http-page__comparison-note">
+      El laboratorio A modela los cinco estados en un flujo y convierte el Observable con
+      <code>toSignal()</code>. El laboratorio B deriva la solicitud del Signal, y consulta
+      <code>isLoading()</code>, <code>error()</code>, <code>hasValue()</code>, <code>value()</code>
+      y <code>reload()</code> directamente en el recurso.
+    </p>
+  </section>
+
+  <section class="http-page__lab" aria-labelledby="other-resources-title">
+    <h2 id="other-resources-title">Laboratorio C · resource() y rxResource()</h2>
+    <p>
+      Son dos demostraciones separadas y locales. Cambia cada término para observar cómo sus
+      <code>params</code> vuelven a ejecutar el loader o el flujo Observable; no generan llamadas
+      HTTP.
+    </p>
+    <div class="http-page__resource-demos">
+      <article class="http-page__resource-demo">
+        <h3>resource() con params y loader</h3>
+        <label class="http-page__field" for="promise-term">Término del loader Promise</label>
+        <input
+          id="promise-term"
+          type="text"
+          [value]="promiseTerm()"
+          (input)="setPromiseTerm($event)"
+        />
+        @if (promiseResource.isLoading()) {
+          <p role="status">Cargando resource()…</p>
+        } @else if (promiseResource.hasValue()) {
+          <p role="status">{{ promiseResource.value() }}</p>
+        }
+        <pre tabindex="0"><code>resource({{ '{' }}
+  params: () =&gt; ({{ '{' }} term: term() {{ '}' }}),
+  loader: ({{ '{' }} params {{ '}' }}) =&gt; loadPromise(params.term),
+{{ '}' }});</code></pre>
+      </article>
+      <article class="http-page__resource-demo">
+        <h3>rxResource() con un Observable</h3>
+        <label class="http-page__field" for="observable-term">Término del flujo</label>
+        <input
+          id="observable-term"
+          type="text"
+          [value]="observableTerm()"
+          (input)="setObservableTerm($event)"
+        />
+        @if (observableResource.isLoading()) {
+          <p role="status">Cargando rxResource()…</p>
+        } @else if (observableResource.hasValue()) {
+          <p role="status">{{ observableResource.value() }}</p>
+        }
+        <pre tabindex="0"><code>rxResource({{ '{' }}
+  params: () =&gt; ({{ '{' }} term: term() {{ '}' }}),
+  stream: ({{ '{' }} params {{ '}' }}) =&gt; getData$(params.term),
+{{ '}' }});</code></pre>
+      </article>
+    </div>
+    <p>
+      Usa <code>resource()</code> cuando tu loader asíncrono trabaje naturalmente con Promise;
+      <code>rxResource()</code> cuando la fuente ya sea un Observable; y <code>httpResource()</code>
+      para peticiones HTTP con integración directa de HttpClient, opciones de solicitud e
+      interceptores. Para una acción de usuario que modifica datos, POST/PUT/PATCH/DELETE con
+      HttpClient y un flujo explícito suelen ser más adecuados: los recursos representan datos
+      reactivos de lectura y pueden volver a cargarse al cambiar sus parámetros.
+    </p>
+  </section>
+
+  <section class="http-page__docs" aria-labelledby="interceptors-title">
+    <h2 id="interceptors-title">Interceptores funcionales y DI</h2>
+    <p>
+      Un interceptor recibe una solicitud inmutable y una función que continúa la cadena. Puede
+      clonar la solicitud, observar la respuesta o gestionar errores antes de delegar al siguiente
+      interceptor. El orden de <code>withInterceptors([...])</code> define el orden de entrada; la
+      respuesta recorre la cadena de vuelta. Las funciones se ejecutan en el contexto de inyección
+      configurado, por lo que pueden usar <code>inject()</code> para servicios. Este logger registra
+      método, URL sin parámetros, estado y duración; no imprime cabeceras, cuerpos ni términos de
+      búsqueda.
+    </p>
+    <figure class="http-page__code">
+      <figcaption>Configuración raíz sin reemplazar otros providers</figcaption>
+      <pre tabindex="0"><code>provideHttpClient(withInterceptors([requestLoggingInterceptor]));</code></pre>
+    </figure>
+    <figure class="http-page__code">
+      <figcaption>Un interceptor observa la respuesta y registra metadatos no sensibles</figcaption>
+      <pre tabindex="0"><code>const requestLoggingInterceptor: HttpInterceptorFn = (request, next) =&gt; {{ '{' }}
+  const startedAt = Date.now();
+  let status: number | 'sin respuesta' = 'sin respuesta';
+  return next(request).pipe(
+    tap({{ '{' }}
+      next: (event) =&gt; {{ '{' }}
+        if (event instanceof HttpResponse) status = event.status;
+      {{ '}' }},
+      error: (error) =&gt; {{ '{' }}
+        if (error instanceof HttpErrorResponse) status = error.status;
+      {{ '}' }},
+    {{ '}' }}),
+    finalize(() =&gt; console.info('[Atlas HTTP]', {{ '{' }}
+      method: request.method, url: request.url, status, elapsedMs: Date.now() - startedAt,
+    {{ '}' }})),
+  );
+{{ '}' }};</code></pre>
+    </figure>
+    <p class="http-page__notice" role="note">
+      El navegador necesita que Open Library permita CORS. Si la API no está disponible o responde
+      con límites de uso, la interfaz muestra el error; no se usa un proxy ni un bypass. Activa
+      fixtures locales para explorar los estados sin red.
+    </p>
+  </section>
+</div>
