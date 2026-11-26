@@ -1,0 +1,38 @@
+.lab {
+  border: 1px solid var(--atlas-ui-border);
+  border-radius: var(--atlas-ui-radius-lg);
+  background: var(--atlas-ui-surface-subtle);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--atlas-ui-space-3);
+  padding: var(--atlas-ui-space-4);
+  border-block-end: 1px solid var(--atlas-ui-border);
+}
+
+.scenario {
+  display: grid;
+  flex: 0 1 auto;
+  gap: var(--atlas-ui-space-1);
+  min-inline-size: 0;
+}
+
+label {
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+select {
+  width: 100%;
+  min-width: 0;
+}
+
+.stage {
+  display: grid;
+  min-block-size: 15rem;
+  padding: var(--atlas-ui-space-4);
+}

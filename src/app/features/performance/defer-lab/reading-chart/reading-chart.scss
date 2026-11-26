@@ -1,0 +1,212 @@
+:host {
+  --reading-teal: #00675e;
+  --reading-blue: #2453a6;
+  display: block;
+  min-inline-size: 0;
+  container-type: inline-size;
+}
+
+:host-context([data-theme='dark']) {
+  --reading-teal: #67d5c4;
+  --reading-blue: #91baff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :host-context(:root:not([data-theme])) {
+    --reading-teal: #67d5c4;
+    --reading-blue: #91baff;
+  }
+}
+
+figure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-inline-size: 0;
+  gap: var(--atlas-ui-space-4);
+  padding: clamp(var(--atlas-ui-space-3), 3vw, var(--atlas-ui-space-6));
+  border: 1px solid var(--atlas-ui-border);
+  border-radius: var(--atlas-ui-radius-md);
+  background: var(--atlas-ui-surface);
+}
+
+@container (min-width: 32rem) {
+  figure {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  figure > :not(figcaption, .chart-controls) {
+    grid-column: 1 / -1;
+  }
+
+  .chart-controls {
+    align-self: end;
+  }
+}
+
+figcaption strong {
+  font-size: 1.125rem;
+}
+
+.chart-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-ui-space-2);
+  min-inline-size: 0;
+
+  label {
+    display: grid;
+    flex: 1 1 auto;
+    gap: var(--atlas-ui-space-1);
+    min-inline-size: 0;
+    font-size: 0.875rem;
+    font-weight: 650;
+  }
+}
+
+.distribution {
+  display: grid;
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--atlas-ui-space-4);
+}
+
+@container (min-width: 32rem) {
+  .distribution {
+    grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.8fr);
+  }
+}
+
+.data-note,
+.metric span {
+  color: var(--atlas-ui-muted);
+  font-size: 0.875rem;
+}
+
+.metrics {
+  display: grid;
+  gap: var(--atlas-ui-space-2);
+}
+
+.metric {
+  min-inline-size: 0;
+  padding: var(--atlas-ui-space-3);
+  border: 1px solid var(--atlas-ui-border);
+  border-radius: var(--atlas-ui-radius-sm);
+  background: var(--atlas-ui-surface-subtle);
+  --series-color: var(--atlas-accent-strong);
+
+  &[data-series='typescript'] {
+    --series-color: var(--reading-blue);
+  }
+
+  &[data-series='accessibility'] {
+    --series-color: var(--reading-teal);
+  }
+
+  dt {
+    display: flex;
+    align-items: center;
+    gap: var(--atlas-ui-space-2);
+    font-size: 0.875rem;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+
+    &::before {
+      flex: 0 0 0.75rem;
+      block-size: 0.75rem;
+      border-radius: 50%;
+      background: var(--series-color);
+      content: '';
+    }
+  }
+
+  dd {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--atlas-ui-space-1);
+    font-size: clamp(1.125rem, 2.5vw, 1.625rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  span {
+    font-weight: 400;
+  }
+
+  .share {
+    margin-inline-start: auto;
+    color: var(--series-color);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+}
+
+.plot {
+  position: relative;
+  min-inline-size: 0;
+  inline-size: min(100%, 22rem);
+  aspect-ratio: 1;
+  justify-self: center;
+
+  canvas {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.center-total {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  pointer-events: none;
+
+  strong {
+    font-size: clamp(1rem, 3vw, 1.75rem);
+    font-variant-numeric: tabular-nums;
+  }
+
+  span {
+    color: var(--atlas-ui-muted);
+    font-size: 0.8125rem;
+  }
+}
+
+details {
+  min-inline-size: 0;
+  border-block-start: 1px solid var(--atlas-ui-border);
+}
+
+summary {
+  padding-block: var(--atlas-ui-space-2);
+  color: var(--atlas-ui-accent);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.table-scroll {
+  overflow: auto;
+}
+
+table {
+  inline-size: 100%;
+  font-size: 0.875rem;
+  text-align: start;
+  font-variant-numeric: tabular-nums;
+}
+
+th,
+td {
+  padding: var(--atlas-ui-space-2);
+  border-block-end: 1px solid var(--atlas-ui-border);
+  text-align: start;
+}
+
+.pagination {
+  justify-content: flex-end;
+  margin-block-start: var(--atlas-ui-space-3);
+  font-size: 0.875rem;
+}

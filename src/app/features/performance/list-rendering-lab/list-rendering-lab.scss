@@ -1,0 +1,88 @@
+.catalog-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--atlas-ui-space-4);
+  padding: var(--atlas-ui-space-4);
+  border: 1px solid var(--atlas-ui-border);
+  border-radius: var(--atlas-ui-radius-lg);
+  background: var(--atlas-ui-surface-subtle);
+}
+
+.filter {
+  display: grid;
+  flex: 1 1 13rem;
+  gap: var(--atlas-ui-space-1);
+  min-inline-size: 0;
+}
+
+.filter label {
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.filter input {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.catalog-status {
+  margin-block-start: var(--atlas-ui-space-3);
+  color: var(--atlas-ui-muted);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.list-header {
+  display: grid;
+  gap: var(--atlas-ui-space-2);
+}
+
+.list-header h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--atlas-ui-space-1) var(--atlas-ui-space-3);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.list-header code {
+  color: var(--atlas-ui-accent);
+  font-family: var(--atlas-ui-mono);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.instance-count {
+  justify-self: start;
+  padding: var(--atlas-ui-space-1) var(--atlas-ui-space-2);
+  border-radius: var(--atlas-ui-radius-sm);
+  background: var(--atlas-ui-accent-soft);
+  color: var(--atlas-ui-accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.books {
+  display: grid;
+  gap: var(--atlas-ui-space-2);
+  margin: var(--atlas-ui-space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.books li {
+  margin: 0;
+}
+
+.empty {
+  padding: var(--atlas-ui-space-4);
+  border: 1px dashed var(--atlas-ui-border);
+  border-radius: var(--atlas-ui-radius-sm);
+  color: var(--atlas-ui-muted);
+  text-align: center;
+}

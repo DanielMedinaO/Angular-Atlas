@@ -1,0 +1,49 @@
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--atlas-ui-space-2);
+}
+
+button,
+select,
+input {
+  min-block-size: 2.75rem;
+  max-inline-size: 100%;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--atlas-text-muted);
+  border-radius: var(--atlas-radius-sm);
+  background: var(--atlas-surface);
+  color: var(--atlas-text);
+  font: inherit;
+}
+
+button {
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+button:not([aria-disabled='true']) {
+  cursor: pointer;
+}
+
+button:hover:not([aria-disabled='true']),
+button[aria-pressed='true'] {
+  border-color: var(--atlas-accent-strong);
+  background: var(--atlas-accent-soft);
+}
+
+button.primary {
+  border-color: var(--atlas-accent-filled);
+  background: var(--atlas-accent-filled);
+  color: var(--atlas-on-accent);
+
+  &:hover:not([aria-disabled='true']) {
+    border-color: var(--atlas-accent-filled-hover);
+    background: var(--atlas-accent-filled-hover);
+  }
+}
+
+button[aria-disabled='true'] {
+  color: var(--atlas-text-muted);
+}

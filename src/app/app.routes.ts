@@ -45,5 +45,13 @@ export const routes: Routes = [
     loadComponent: () => import('./features/testing/testing-page').then((m) => m.TestingPage),
     title: 'Testing con Vitest · Angular Atlas',
   },
+  {
+    path: 'performance',
+    loadComponent: () =>
+      import('./features/performance/performance-page/performance-page').then(
+        (m) => m.PerformancePage,
+      ),
+    title: 'Rendimiento y optimización · Angular Atlas',
+  },
   { path: '**', redirectTo: '' },
 ];

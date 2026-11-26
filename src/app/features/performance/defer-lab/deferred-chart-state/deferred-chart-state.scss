@@ -1,0 +1,90 @@
+:host {
+  display: grid;
+}
+
+.state {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--atlas-ui-space-2);
+  padding: var(--atlas-ui-space-4);
+  border: 1px dashed var(--atlas-ui-border);
+  border-radius: var(--atlas-ui-radius-md);
+  background: var(--atlas-ui-surface);
+  text-align: center;
+}
+
+.state-title {
+  font-weight: 700;
+  color: var(--atlas-ui-text);
+}
+
+.state-detail {
+  max-width: 38ch;
+  color: var(--atlas-ui-muted);
+  font-size: 0.875rem;
+}
+
+.preview {
+  display: flex;
+  align-items: end;
+  gap: 0.3rem;
+  height: 2.75rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--atlas-ui-radius-sm);
+  background: var(--atlas-ui-accent-soft);
+}
+
+.preview span {
+  display: block;
+  block-size: 45%;
+  inline-size: 0.5rem;
+  border-radius: 0.125rem;
+  background: var(--atlas-ui-accent);
+  opacity: 0.65;
+}
+
+.preview span:nth-child(2) {
+  block-size: 90%;
+}
+
+.preview span:nth-child(3) {
+  block-size: 65%;
+}
+
+.spinner,
+.error-symbol {
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 50%;
+}
+
+.spinner {
+  border: 3px solid var(--atlas-ui-accent-soft);
+  border-block-start-color: var(--atlas-ui-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .spinner {
+    animation: spin 0.9s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.state-error {
+  border-style: solid;
+  border-color: var(--mat-sys-error);
+}
+
+.error-symbol {
+  color: var(--mat-sys-on-error-container);
+  background: var(--mat-sys-error-container);
+  font-weight: 800;
+}

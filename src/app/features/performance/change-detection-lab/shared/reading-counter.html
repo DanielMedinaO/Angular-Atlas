@@ -1,0 +1,23 @@
+{{ recordEvaluation() }}
+<header class="counter-heading">
+  <h3>{{ strategy }}</h3>
+  <span class="strategy-mode">{{ strategyHint }}</span>
+</header>
+<dl class="reading-metrics" aria-live="polite" aria-atomic="true">
+  <div>
+    <dt>Lecturas</dt>
+    <dd>{{ readings() }}</dd>
+  </div>
+  <div>
+    <dt>Páginas</dt>
+    <dd>{{ pages() }}</dd>
+  </div>
+</dl>
+<p class="evaluation">
+  <span>Evaluaciones de plantilla</span>
+  <span #metric class="evaluation-value"></span>
+</p>
+<div class="actions">
+  <button class="primary" type="button" (click)="increment()">Sumar lectura</button>
+  <button type="button" (click)="incrementLater()">Sumar desde un temporizador</button>
+</div>

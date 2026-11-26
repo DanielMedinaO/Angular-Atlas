@@ -1,0 +1,208 @@
+<div class="performance-page">
+  <header>
+    <h1>Rendimiento y optimización</h1>
+    <p>
+      Explora qué vistas actualiza Angular, cómo reutiliza listas y cuándo solicita código
+      adicional.
+    </p>
+  </header>
+
+  <section aria-labelledby="change-detection">
+    <h2 id="change-detection">Laboratorio A · Change Detection Explorer</h2>
+    <p>
+      Change Detection evalúa bindings y aplica al DOM los cambios necesarios. Con Zone.js, Angular
+      puede iniciar la sincronización tras tareas asíncronas interceptadas. En Zoneless, Angular se
+      apoya en notificaciones como eventos de la plantilla, nuevos inputs, señales leídas por una
+      vista y <code>markForCheck()</code>. Un temporizador que solo escribe una propiedad ordinaria
+      carece por sí solo de esa notificación.
+    </p>
+    <p>
+      En Angular 22, OnPush permite omitir vistas limpias. Un nuevo input, un evento en su subárbol
+      o un cambio de una señal que la vista consume pueden hacer que participe. Eager comprueba la
+      vista cuando el recorrido alcanza su rama en un pase que la incluya. Eager no agenda por sí
+      solo un pase ni fuerza el recorrido de antepasados OnPush.
+    </p>
+    <app-change-detection-lab />
+    <p>
+      Suma una lectura en un hijo, prueba el temporizador y actualiza el padre. Compara qué
+      contadores avanzan. Ejecuta <code>npm start</code> para ver los contadores de desarrollo.
+      Estos registran evaluaciones de la plantilla, incluso pasadas adicionales de verificación si
+      se ejecutan. Una evaluación puede terminar sin cambios en el DOM. La instrumentación escribe
+      el diagnóstico tras el render sin modificar señales.
+    </p>
+    <p>
+      <code>computed()</code> conserva el resultado de su última evaluación y vuelve a calcularlo al
+      leerlo tras invalidar sus dependencias. Aquí el producto es simple. La misma técnica ayuda
+      cuando el cálculo cuesta más o se consulta varias veces.
+    </p>
+    <pre
+      role="region"
+      tabindex="0"
+      aria-label="Ejemplo de señales y estrategia Eager"
+    ><code><span class="code-keyword">readonly</span> readings = <span class="code-keyword">signal</span>(0);
+<span class="code-keyword">readonly</span> pages = <span class="code-keyword">computed</span>(() => this.readings() * 24);
+
+<span class="code-comment">// OnPush es el valor predeterminado de &#64;Component.
+// El otro hijo declara esta opción en su decorador.</span>
+changeDetection: ChangeDetectionStrategy.<span class="code-keyword">Eager</span></code></pre>
+    <p>
+      <a href="https://angular.dev/guide/zoneless">Guía de Angular Zoneless</a> ·
+      <a href="https://angular.dev/api/core/ChangeDetectionStrategy">API ChangeDetectionStrategy</a>
+    </p>
+  </section>
+
+  <section aria-labelledby="list-rendering">
+    <h2 id="list-rendering">Laboratorio B · List Rendering y &#64;for</h2>
+    <p>
+      Marca el primer título en ambas listas e invierte el orden. Con <code>track book.id</code>, la
+      marca sigue al libro. Con <code>track $index</code>, la marca sigue a la posición y puede
+      aparecer en otro título. Al invertir, Angular puede reutilizar las mismas instancias y sus
+      nodos en ambas listas. Comprueba los identificadores de instancia y los totales registrados en
+      <code>ngOnInit</code> y <code>ngOnDestroy</code>.
+    </p>
+    <app-list-rendering-lab />
+    <p>
+      Agrega o elimina un título y filtra por «Angular». Al agregar, el filtro se limpia para
+      mostrar el nuevo título. Si el filtro retira una vista, el estado local de esa instancia se
+      pierde al destruirla, incluso con una clave estable. Reserva
+      <code>$index</code> para colecciones estáticas o casos donde la posición sea la identidad.
+    </p>
+    <p>
+      Un filtrado o una ordenación costosa invocados directamente desde el template pueden repetirse
+      cada vez que se evalúa el binding. El catálogo usa <code>computed()</code> para reutilizar el
+      filtro mientras el catálogo y la consulta se mantengan.
+    </p>
+    <pre
+      role="region"
+      tabindex="0"
+      aria-label="Ejemplo de filtrado e identidad"
+    ><code>visibleBooks = <span class="code-keyword">computed</span>(() => filterBooks(this.books(), this.query()));
+
+<span class="code-comment">&lt;!-- Identidad del libro --&gt;</span>
+<span class="code-keyword">&#64;for</span> (book of visibleBooks(); <span class="code-keyword">track</span> book.id) &#123; … &#125;
+
+<span class="code-comment">&lt;!-- Identidad de la posición --&gt;</span>
+<span class="code-keyword">&#64;for</span> (book of visibleBooks(); <span class="code-keyword">track</span> $index) &#123; … &#125;</code></pre>
+  </section>
+
+  <section aria-labelledby="deferred-loading">
+    <h2 id="deferred-loading">Laboratorio C · &#64;defer</h2>
+    <app-performance-defer-lab />
+    <p>
+      Explora 365 días de lecturas simuladas en tres categorías. Cambia entre anillo y pastel para
+      comparar la proporción de cada categoría en el intervalo. Abre la tabla para consultar los
+      valores diarios. Chart.js viaja con el gráfico en el chunk diferido.
+    </p>
+    <p>
+      Descargar resuelve el código del componente. Renderizar crea la instancia y su vista cuando se
+      activa el bloque. <code>&#64;if</code> condiciona la vista. <code>&#64;defer</code> puede
+      además separar dependencias standalone que solo se referencian dentro de bloques diferidos.
+      <code>loadComponent</code> y <code>loadChildren</code> difieren un componente de ruta o una
+      configuración de rutas. <code>&#64;defer</code> difiere una sección de la vista ya navegada.
+    </p>
+    <ul>
+      <li>
+        <code>viewport</code> se activa cuando el elemento observado entra en la ventana visible.
+      </li>
+      <li><code>interaction</code> responde a clic o teclado en el elemento disparador.</li>
+      <li><code>hover</code> responde al puntero o al foco en el elemento disparador.</li>
+      <li><code>idle</code> espera una oportunidad de inactividad del navegador.</li>
+      <li>
+        <code>when</code> activa el bloque cuando una expresión se vuelve verdadera. La activación
+        es irreversible.
+      </li>
+    </ul>
+    <p>
+      Prefetch en idle puede reducir la espera después del clic. Consume ancho de banda y puede
+      competir con otras solicitudes, incluso si el gráfico nunca se abre. Ambos escenarios
+      comparten el código del gráfico. Recarga entre experimentos para reiniciar el módulo.
+    </p>
+    <pre
+      role="region"
+      tabindex="0"
+      aria-label="Ejemplo de defer con prefetch"
+    ><code><span class="code-comment">&lt;!-- #showChart identifica el botón disparador. --&gt;</span>
+<span class="code-keyword">&#64;defer</span> (on interaction(showChart); prefetch on idle) &#123;
+  &lt;app-performance-reading-chart /&gt;
+&#125; <span class="code-keyword">&#64;placeholder</span> &#123;
+  &lt;p&gt;Gráfico pendiente de interacción.&lt;/p&gt;
+&#125; <span class="code-keyword">&#64;loading</span> &#123;
+  &lt;p&gt;Cargando gráfico…&lt;/p&gt;
+&#125; <span class="code-keyword">&#64;error</span> &#123;
+  &lt;p&gt;No se pudo cargar el gráfico.&lt;/p&gt;
+&#125;</code></pre>
+    <ol>
+      <li>
+        Ejecuta <code>npm run build</code> y sirve <code>dist/angular-atlas/browser</code> con un
+        servidor estático con fallback a <code>index.html</code>. Abre <code>/performance</code>,
+        entra en Chrome DevTools → Network, activa <strong>Disable cache</strong> y filtra por JS.
+      </li>
+      <li>
+        Recarga la página con DevTools abierto. En Interacción, espera antes de pulsar «Mostrar
+        gráfico». Identifica la solicitud al pulsar usando <em>Initiator</em> y el nombre del chunk
+        en el build.
+      </li>
+      <li>
+        Recarga de nuevo, elige prefetch en idle y espera la solicitud. El placeholder debe seguir
+        visible hasta pulsar el botón. Con throttling puedes observar el estado de carga cuando la
+        petición sigue pendiente.
+      </li>
+    </ol>
+    <p><a href="https://angular.dev/guide/templates/defer">Guía de bloques diferibles</a></p>
+  </section>
+
+  <section aria-labelledby="profiling">
+    <h2 id="profiling">Laboratorio D · Performance Profiling</h2>
+    <ol>
+      <li>
+        <strong>Angular DevTools Profiler.</strong> Ejecuta <code>npm start</code>. Inicia una
+        grabación en Profiler, cambia el contador o filtra el catálogo y detén la captura.
+        Selecciona un ciclo para inspeccionar componentes y hooks. Repite la misma interacción antes
+        y después de mover un cálculo de la plantilla a <code>computed()</code>.
+      </li>
+      <li>
+        <strong>Chrome DevTools Performance.</strong> Graba una interacción aislada. En Main revisa
+        las tareas largas y los eventos de scripting, layout y pintura. Usa Bottom-up y Call tree
+        para localizar funciones de filtrado, ordenación o formateo que se repiten. Conserva los
+        mismos datos, configuración de CPU y pasos al comparar capturas.
+      </li>
+      <li>
+        <strong>Network.</strong> Examina el waterfall, Initiator, tamaño transferido y tamaño del
+        recurso. Separa la carga inicial, la navegación y la interacción. Las cifras de
+        transferencia del CLI son estimaciones y la red muestra el comportamiento del servidor
+        observado.
+      </li>
+      <li>
+        <strong>Bundles de producción.</strong> Ejecuta el comando de abajo y abre
+        <code>dist/angular-atlas/browser-stats.json</code> en el visualizador de esbuild.
+        Inspecciona <code>outputs</code>, sus imports dinámicos y <code>bytesInOutput</code> para
+        identificar entradas grandes sin sumar un chunk compartido más de una vez.
+      </li>
+      <li>
+        <strong>Build Budgets.</strong> En <code>angular.json</code>, configura
+        <code>architect.build.configurations.production.budgets</code>. Usa
+        <code>initial</code> para el arranque y <code>anyComponentStyle</code> para CSS por
+        componente. Fija una advertencia que deje margen sobre el tamaño medido y un error que
+        bloquee la regresión.
+      </li>
+    </ol>
+    <pre
+      role="region"
+      tabindex="0"
+      aria-label="Comando para generar estadísticas"
+    ><code>npx ng build --configuration production --stats-json</code></pre>
+    <p>
+      <a href="https://angular.dev/tools/devtools/profiler">Angular DevTools Profiler</a> ·
+      <a href="https://developer.chrome.com/docs/devtools/performance">Chrome Performance</a> ·
+      <a href="https://developer.chrome.com/docs/devtools/network/reference">Chrome Network</a> ·
+      <a href="https://angular.dev/tools/cli/build">Build y budgets</a> ·
+      <a href="https://esbuild.github.io/analyze/">Visualizador de esbuild</a>
+    </p>
+  </section>
+
+  <nav class="related" aria-label="Temas relacionados">
+    <a routerLink="/signals">Signals y reactividad</a>
+    <a routerLink="/routing">Routing y Lazy Loading</a>
+    <a routerLink="/testing">Testing con Vitest</a>
+  </nav>
+</div>

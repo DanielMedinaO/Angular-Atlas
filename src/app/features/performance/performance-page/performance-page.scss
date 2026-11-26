@@ -1,0 +1,87 @@
+@use '../../../../styles/card';
+
+:host {
+  display: block;
+}
+
+.performance-page {
+  display: grid;
+  gap: var(--atlas-space-xl);
+  max-width: 960px;
+  margin-inline: auto;
+  font-family: var(--atlas-ui-font);
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 650;
+}
+
+section {
+  @include card.surface;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--atlas-space-md);
+  padding: clamp(var(--atlas-space-sm), 4vw, var(--atlas-space-lg));
+}
+
+ul,
+ol {
+  padding-inline-start: var(--atlas-space-lg);
+}
+
+ul {
+  list-style: disc;
+}
+
+ol {
+  list-style: decimal;
+}
+
+a {
+  color: var(--atlas-accent-strong);
+  text-decoration: underline;
+}
+
+header p {
+  color: var(--atlas-text-muted);
+}
+
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-space-md);
+}
+
+code {
+  font-family: var(--atlas-ui-mono);
+  overflow-wrap: anywhere;
+}
+
+pre {
+  overflow: auto;
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+  padding: var(--atlas-space-md);
+  background: var(--atlas-ui-code);
+  color: var(--atlas-ui-code-text);
+  font-size: 0.875rem;
+
+  code {
+    overflow-wrap: normal;
+  }
+}
+
+.code-keyword {
+  color: var(--atlas-ui-sidebar-accent);
+}
+
+.code-comment {
+  color: var(--atlas-ui-sidebar-muted);
+}

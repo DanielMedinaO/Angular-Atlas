@@ -1,0 +1,46 @@
+:host {
+  display: grid;
+  gap: var(--atlas-ui-space-2);
+  padding: var(--atlas-ui-space-3);
+  border: 1px solid var(--atlas-ui-border);
+  border-inline-start-width: 0.25rem;
+  border-radius: var(--atlas-ui-radius-md);
+  background: var(--atlas-ui-surface);
+}
+
+:host(.is-marked) {
+  border-inline-start-color: var(--atlas-ui-accent);
+}
+
+.book-title {
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.book-identity {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-ui-space-1);
+  color: var(--atlas-ui-muted);
+  font-family: var(--atlas-ui-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.book-identity span {
+  padding: 0 var(--atlas-ui-space-2);
+  border: 1px solid var(--atlas-ui-border);
+  border-radius: var(--atlas-ui-radius-sm);
+  background: var(--atlas-ui-surface-subtle);
+}
+
+.actions button {
+  font-size: 0.875rem;
+}
+
+.marked-label {
+  align-self: center;
+  color: var(--atlas-ui-accent);
+  font-size: 0.75rem;
+  font-weight: 650;
+}

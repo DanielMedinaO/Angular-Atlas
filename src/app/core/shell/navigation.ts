@@ -124,7 +124,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         id: 'performance',
         label: 'Rendimiento y optimización',
         description: 'Aplicaciones rápidas y eficientes',
-        status: 'upcoming',
+        status: 'available',
+        path: '/performance',
       },
       {
         id: 'whats-new',

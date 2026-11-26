@@ -55,6 +55,16 @@ describe('Application routes', () => {
     expect(TestBed.inject(Title).getTitle()).toBe('Testing con Vitest · Angular Atlas');
   });
 
+  it('loads the lazy performance labs and keeps the graph deferred', async () => {
+    await harness.navigateByUrl('/performance');
+
+    expect(router.url).toBe('/performance');
+    expect(harness.routeNativeElement?.matches('app-performance-page')).toBe(true);
+    expect(harness.routeNativeElement?.querySelectorAll('section > h2')).toHaveLength(4);
+    expect(harness.routeNativeElement?.querySelector('app-performance-reading-chart')).toBeNull();
+    expect(TestBed.inject(Title).getTitle()).toBe('Rendimiento y optimización · Angular Atlas');
+  });
+
   it('navigates between pages while keeping a single active route at a time', async () => {
     await harness.navigateByUrl('/signals');
     expect(harness.routeNativeElement?.matches('app-signals-page')).toBe(true);

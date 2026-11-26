@@ -1,0 +1,99 @@
+<figure>
+  <figcaption>
+    <strong>Distribución de lecturas por categoría</strong>
+    <p class="data-note">Año 2025 · datos simulados</p>
+  </figcaption>
+  <div class="chart-controls">
+    <label>
+      Intervalo
+      <select #range (change)="period.set(+range.value)">
+        <option [value]="totalDays">Todo el año</option>
+        <option value="90">Últimos 90 días</option>
+        <option value="30">Últimos 30 días</option>
+      </select>
+    </label>
+    <label>
+      Tipo de gráfico
+      <select #type (change)="chartType.set(type.value === 'pie' ? 'pie' : 'doughnut')">
+        <option value="doughnut">Anillo</option>
+        <option value="pie">Pastel</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="distribution">
+    <div class="plot">
+      <canvas
+        #canvas
+        role="img"
+        [attr.aria-label]="
+          chartLabel() +
+          ' de la distribución de lecturas. El desglose por categoría está junto al gráfico.'
+        "
+      ></canvas>
+      @if (chartType() === 'doughnut') {
+        <p class="center-total" aria-hidden="true">
+          <strong>{{ number.format(total()) }}</strong>
+          <span>lecturas</span>
+        </p>
+      }
+    </div>
+    <dl class="metrics" aria-label="Lecturas acumuladas en el intervalo">
+      @for (metric of metrics(); track metric.key) {
+        <div class="metric" [attr.data-series]="metric.key">
+          <dt>{{ metric.label }}</dt>
+          <dd>
+            {{ number.format(metric.total) }} <span>lecturas</span>
+            <strong class="share">{{ percent.format(metric.total / total()) }}</strong>
+          </dd>
+        </div>
+      }
+    </dl>
+  </div>
+  <p class="data-note" role="status">
+    {{ period() }} días · {{ series.length }} categorías · {{ number.format(valueCount()) }} valores
+    diarios
+  </p>
+
+  <details>
+    <summary>Ver datos diarios</summary>
+    <div class="table-scroll" role="region" tabindex="0" aria-label="Tabla de lecturas diarias">
+      <table>
+        <caption class="sr-only">
+          Lecturas simuladas por día y categoría
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Fecha</th>
+            @for (item of series; track item.key) {
+              <th scope="col">{{ item.label }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.date) {
+            <tr>
+              <th scope="row">{{ row.date }}</th>
+              @for (value of row.values; track $index) {
+                <td>{{ value }}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="actions pagination">
+      <button type="button" [attr.aria-disabled]="page() === 0" (click)="changePage(-1)">
+        Anterior
+      </button>
+      <p role="status">Página {{ page() + 1 }} de {{ pageCount() }}</p>
+      <button
+        type="button"
+        [attr.aria-disabled]="page() === pageCount() - 1"
+        (click)="changePage(1)"
+      >
+        Siguiente
+      </button>
+    </div>
+  </details>
+</figure>

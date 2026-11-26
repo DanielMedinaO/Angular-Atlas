@@ -29,8 +29,9 @@ El proyecto está en desarrollo: puedes explorar los temas disponibles y seguir 
 | **Componentes y ciclo de vida** | Composición de componentes, comunicación y un laboratorio para explorar su ciclo de vida. |
 | **Signals y reactividad** | Estado reactivo, un contador interactivo, un explorador de libros y comunicación entre componentes. |
 | **Routing y Lazy Loading** | Rutas anidadas, parámetros, guards, resolvers, eventos y estrategias de carga. |
+| **Rendimiento y optimización** | Detección de cambios, identidad en listas, carga diferida y profiling en `/performance`. |
 
-Otros temas, como RxJS, formularios y testing, están previstos para próximas entregas.
+Otros temas, como RxJS, están previstos para próximas entregas.
 
 ## Empieza en local
 
@@ -57,6 +58,26 @@ Abre [http://localhost:4200](http://localhost:4200) para recorrer Angular Atlas.
 | `npm start` | Inicia el servidor de desarrollo. |
 | `npm run build` | Genera la compilación de producción en `dist/`. |
 | `npm test` | Ejecuta las pruebas unitarias con Vitest. |
+
+## Presupuestos de producción
+
+La línea base de la fase 9 (`5d04e5f`) produjo 336,07 kB iniciales y 92,51 kB de
+transferencia estimada por el CLI. Con `/performance`, el build produjo 345,80 kB iniciales y
+94,83 kB de transferencia estimada. El total de JS y CSS pasó de 706.450 a 927.189 bytes
+al sumar los archivos iniciales y lazy una sola vez. La página aporta un chunk lazy de
+45.848 bytes. El gráfico con Chart.js viaja en otro chunk de 165.480 bytes.
+
+El presupuesto `initial` de `angular.json` pasa de 500 kB / 1 MB a 400 kB de advertencia y
+450 kB de error. Con el build de la fase 9, esos límites dejan aproximadamente 54,20 kB para
+avisar de un crecimiento sostenido y 104,20 kB para bloquear una regresión mayor. Los límites
+de CSS por componente son 6 kB y 8 kB. El build pasó sin advertencias de tamaño y el CSS de
+Shell aporta cerca de 6 kB según el metarchivo, por lo que esos límites siguen siendo útiles.
+
+Genera `dist/angular-atlas/browser-stats.json` con
+`npx ng build --configuration production --stats-json` y consulta `outputs` para comprobar
+los tamaños y los imports dinámicos. En el build de la fase 9, el chunk compartido principal
+de Angular creció 9.251 bytes. Una compilación de control que omitió el laboratorio
+`@defer` situó casi todo ese aumento en el runtime compartido que habilita el bloque diferido.
 
 ## Tecnologías y enfoque
 
