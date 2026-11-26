@@ -53,5 +53,10 @@ export const routes: Routes = [
       ),
     title: 'Rendimiento y optimización · Angular Atlas',
   },
+  {
+    path: 'whats-new',
+    loadComponent: () => import('./features/whats-new/whats-new-page').then((m) => m.WhatsNewPage),
+    title: 'Novedades de Angular · Angular Atlas',
+  },
   { path: '**', redirectTo: '' },
 ];

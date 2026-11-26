@@ -1,0 +1,12 @@
+.example {
+  display: grid;
+  gap: var(--atlas-space-sm);
+  min-width: 0;
+  padding-block-start: var(--atlas-space-md);
+  border-block-start: 1px solid var(--atlas-border);
+}
+
+fieldset label {
+  display: inline-block;
+  margin-inline-end: var(--atlas-space-md);
+}

@@ -1,0 +1,59 @@
+@use '../../../styles/card';
+
+:host {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--atlas-space-xl);
+  max-width: 960px;
+  margin-inline: auto;
+  font: 1rem/1.6 var(--atlas-ui-font);
+}
+
+h1 {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+header p {
+  color: var(--atlas-text-muted);
+}
+
+section {
+  @include card.surface;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--atlas-space-md);
+  padding: clamp(var(--atlas-space-sm), 4vw, var(--atlas-space-lg));
+}
+
+ul,
+ol {
+  padding-inline-start: var(--atlas-space-lg);
+}
+
+li + li {
+  margin-block-start: var(--atlas-space-sm);
+}
+
+a {
+  color: var(--atlas-accent-strong);
+  text-decoration: underline;
+}
+
+code {
+  overflow-wrap: anywhere;
+  font-family: var(--atlas-ui-mono);
+}
+
+nav {
+  @include card.surface;
+  padding: var(--atlas-space-sm) var(--atlas-space-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-space-md);
+}

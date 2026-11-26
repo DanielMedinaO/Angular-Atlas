@@ -1,0 +1,53 @@
+<p>
+  Fichas verificadas el <time [attr.datetime]="verifiedAt">26 de noviembre de 2026</time> para
+  Angular 22.2.5. La versión de introducción indica cuándo apareció cada característica y el estado
+  corresponde a la versión auditada. El catálogo se actualiza al revisar los datos del proyecto.
+</p>
+
+<div class="filters">
+  <label>
+    Buscar características
+    <input type="search" #search (input)="query.set(search.value)" />
+  </label>
+  <label>
+    Estado
+    <select #state (change)="status.set(state.value)">
+      <option value="">Todos los estados</option>
+      @for (option of statusOptions; track option[0]) {
+        <option [value]="option[0]">{{ option[1] }}</option>
+      }
+    </select>
+  </label>
+  <label>
+    Versión de introducción
+    <select #introduced (change)="version.set(introduced.value)">
+      <option value="">Todas las versiones</option>
+      @for (item of versions; track item) {
+        <option [value]="item">{{ item }}</option>
+      }
+    </select>
+  </label>
+</div>
+
+<p role="status">{{ results().length }} resultados</p>
+<ul class="catalog">
+  @for (feature of results(); track feature.id) {
+    <li>
+      <article>
+        <h3>{{ feature.name }}</h3>
+        <p class="metadata">
+          v{{ feature.introducedIn }} · {{ statuses[feature.status] }} · {{ feature.category }}
+        </p>
+        <p>{{ feature.description }}</p>
+        <a [href]="feature.docsUrl">Documentación oficial de {{ feature.name }}</a>
+        @if (feature.atlasFragment; as fragment) {
+          <a [href]="'whats-new#' + fragment">Estudiada en Atlas · {{ feature.category }}</a>
+        } @else if (feature.atlasPath; as path) {
+          <a [routerLink]="path">Estudiada en Atlas · {{ feature.category }}</a>
+        }
+      </article>
+    </li>
+  } @empty {
+    <li>Prueba con otra palabra o cambia los filtros.</li>
+  }
+</ul>

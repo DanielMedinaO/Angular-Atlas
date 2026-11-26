@@ -1,0 +1,73 @@
+<h3>Versiones, soporte y compatibilidad</h3>
+<dl>
+  <dt><strong>Major</strong></dt>
+  <dd>Puede incluir cambios incompatibles. Planifica una versión mayor a la vez.</dd>
+  <dt><strong>Minor</strong></dt>
+  <dd>Incluye mejoras compatibles. Revisa también las dependencias pares.</dd>
+  <dt><strong>Patch</strong></dt>
+  <dd>Corrige errores conservando la compatibilidad de las APIs públicas estables.</dd>
+</dl>
+<p>
+  La política vigente prevé una versión mayor al año con 12 meses de soporte activo y otros 12 meses
+  de soporte a largo plazo (LTS). Durante LTS, Angular publica correcciones críticas y de seguridad
+  según su política. Las APIs obsoletas tienen un período de transición. Por ejemplo, cambia
+  <code>NgIf</code> por <code>&#64;if</code> y comprueba la fecha de retirada en el changelog.
+  <a href="https://angular.dev/reference/releases">Política de soporte y obsolescencia</a>.
+</p>
+<p>
+  Angular 22 admite Node.js <code>^22.22.3 || ^24.15.0 || ^26.0.0</code>, TypeScript
+  <code>&gt;=6.0.0 &lt;6.1.0</code> y RxJS <code>^6.5.3 || ^7.4.0</code>. La auditoría de Atlas del
+  26 de noviembre de 2026 encontró Node.js 24.20.0, TypeScript 6.0.3 y RxJS 7.8.2 con Angular 22.2.5
+  y CLI 22.2.6.
+  <a href="https://angular.dev/reference/versions">Matriz oficial de compatibilidad</a>.
+</p>
+
+<h3>Ensayo de actualización</h3>
+<p>
+  <code>ng version</code> muestra la instalación local. <code>ng update</code> sin paquetes permite
+  consultar actualizaciones disponibles. Los siguientes comandos son ejemplos para una terminal
+  local. Sustituye la versión objetivo tras consultar la guía.
+</p>
+<pre
+  tabindex="0"
+  role="region"
+  aria-label="Comandos de preparación y actualización"
+><code>git status --short
+npx ng version
+npm run build
+npx ng test --watch=false
+git switch -c mantenimiento/angular-22-3
+npx ng update
+npx ng update &#64;angular/core&#64;22.3 &#64;angular/cli&#64;22.3
+npx ng test --watch=false
+npx ng build --configuration production</code></pre>
+<p>
+  <code>ng update</code> puede ejecutar migraciones publicadas por los paquetes para adaptar código
+  y configuración. Revisa el diff y valida también Material, CDK y Aria. Aria 22.2.7 requiere CDK
+  22.2.7, por lo que cualquier cambio de CDK debe comprobarse junto con Aria.
+  <a href="https://angular.dev/update-guide">Guía de actualización por versiones</a> ·
+  <a href="https://angular.dev/cli/update">Referencia de ng update</a>.
+</p>
+
+<h3>Rollback con Git</h3>
+<p>
+  Guarda los cambios de la rama de ensayo antes de volver a la rama de origen con
+  <code>git switch -</code>. Si el cambio ya se compartió como un commit ordinario, crea un commit
+  inverso con <code>git revert &lt;commit-de-actualización&gt;</code>. Reinstala las dependencias de
+  la revisión restaurada y repite las validaciones. Para reproducir el árbol exacto usa
+  <code>npm ci</code> con un lockfile guardado para esa revisión. Atlas ignora actualmente
+  <code>package-lock.json</code>, así que conserva una copia del lockfile antes del ensayo.
+</p>
+
+<fieldset>
+  <legend><strong>Checklist de actualización</strong></legend>
+  @for (step of steps; track step) {
+    <div>
+      <label>
+        <input type="checkbox" [checked]="completed().has(step)" (change)="toggle(step)" />
+        {{ step }}
+      </label>
+    </div>
+  }
+</fieldset>
+<p role="status">{{ remaining() }} de {{ steps.length }} pasos pendientes</p>

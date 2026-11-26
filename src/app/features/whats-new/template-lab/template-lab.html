@@ -1,0 +1,120 @@
+@let currentState = readingState();
+
+<p>Prueba sintaxis disponible en Angular 22 con ejemplos que se ejecutan en esta página.</p>
+
+<div class="example">
+  <h3>Funciones flecha</h3>
+  <p>El listener pasa un callback breve a <code>signal.update()</code>.</p>
+  <pre
+    tabindex="0"
+    role="region"
+    aria-label="Código de función flecha"
+  ><code>{{ snippets.arrow }}</code></pre>
+  <div>
+    <button type="button" (click)="pages.update((total) => total + 1)">Sumar página</button>
+  </div>
+  <p role="status">{{ pages() }} {{ pages() === 1 ? 'página leída' : 'páginas leídas' }}</p>
+</div>
+
+<div class="example">
+  <h3>Spread y rest</h3>
+  <p>
+    Spread expande los elementos dentro del array y en la llamada. El parámetro rest de TypeScript
+    reúne esos argumentos en el método del componente.
+  </p>
+  <pre tabindex="0" role="region" aria-label="Código de spread y rest"><code>{{ snippets.spread }}
+
+{{ snippets.rest }}</code></pre>
+  <label
+    ><input type="checkbox" [checked]="extra()" (change)="extra.set(!extra())" /> Incluir Angular
+    Aria</label
+  >
+  <p role="status">{{ summarize(...[...topics, ...(extra() ? ['Angular Aria'] : [])]) }}</p>
+</div>
+
+<div class="example">
+  <h3>Casos agrupados y exhaustividad</h3>
+  <p>
+    El primer bloque comparte una salida entre dos estados. El segundo exige cubrir toda la unión en
+    compilación.
+  </p>
+  <fieldset>
+    <legend>Estado de lectura</legend>
+    @for (state of states; track state.value) {
+      <label>
+        <input
+          type="radio"
+          name="reading-state"
+          [checked]="readingState() === state.value"
+          (change)="readingState.set(state.value)"
+        />
+        {{ state.label }}
+      </label>
+    }
+  </fieldset>
+  <pre
+    tabindex="0"
+    role="region"
+    aria-label="Código de casos agrupados"
+  ><code>{{ snippets.grouped }}</code></pre>
+  <div role="status">
+    @switch (currentState) {
+      @case ('pendiente')
+      @case ('en curso') {
+        <p>Por completar</p>
+      }
+      @case ('terminada') {
+        <p>Lectura completada</p>
+      }
+    }
+  </div>
+  <pre
+    tabindex="0"
+    role="region"
+    aria-label="Código de comprobación exhaustiva"
+  ><code>{{ snippets.exhaustive }}</code></pre>
+  <div role="status">
+    @switch (currentState) {
+      @case ('pendiente') {
+        <p>Aún sin empezar</p>
+      }
+      @case ('en curso') {
+        <p>Lectura iniciada</p>
+      }
+      @case ('terminada') {
+        <p>Lectura archivada</p>
+      }
+      @default never;
+    }
+  </div>
+</div>
+
+<div class="example">
+  <h3>Comentarios en la etiqueta de apertura</h3>
+  <p>
+    Los comentarios junto al binding ayudan a explicar su intención. Angular omite ambos comentarios
+    al renderizar.
+  </p>
+  <pre
+    tabindex="0"
+    role="region"
+    aria-label="Código de comentarios en la etiqueta"
+  ><code>{{ snippets.comments }}</code></pre>
+  <label
+    ><input type="checkbox" [checked]="showNote()" (change)="showNote.set(!showNote())" /> Mostrar
+    nota</label
+  >
+  <p
+    // Conserva la nota en el DOM al ocultarla.
+    [hidden]="!showNote()"
+    /* Anuncia el texto cuando se muestra. */
+    role="status"
+  >
+    Revisa la documentación oficial.
+  </p>
+</div>
+
+<p>
+  Reto práctico. Añade un estado a la unión <code>ReadingState</code> y observa qué bloque señala el
+  compilador.
+</p>

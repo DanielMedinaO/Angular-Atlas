@@ -1,0 +1,23 @@
+[ngTabList] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-space-xs);
+}
+
+[ngTab][aria-selected='true'] {
+  border-color: var(--atlas-accent-strong);
+  background: var(--atlas-accent-soft);
+  font-weight: 700;
+}
+
+[ngTab][aria-disabled='true'] {
+  color: var(--atlas-text-muted);
+  cursor: not-allowed;
+}
+
+[ngTabPanel] {
+  margin-block-start: var(--atlas-space-sm);
+  padding: var(--atlas-space-md);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+}

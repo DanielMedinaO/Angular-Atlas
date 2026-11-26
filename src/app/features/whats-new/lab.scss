@@ -1,0 +1,45 @@
+:host {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--atlas-space-md);
+}
+
+h3 {
+  font-weight: 700;
+}
+
+a {
+  color: var(--atlas-accent-strong);
+  text-decoration: underline;
+}
+
+:where(a, button, input, select, pre, [tabindex]):focus-visible {
+  outline: 2px solid var(--atlas-ui-focus);
+  outline-offset: 2px;
+}
+
+:where(button, select, input[type='search']) {
+  min-height: 2.75rem;
+  border: 1px solid var(--atlas-text-muted);
+  border-radius: var(--atlas-radius-sm);
+  padding: var(--atlas-space-xs) var(--atlas-space-sm);
+  background: var(--atlas-surface);
+  color: var(--atlas-text);
+}
+
+button:not([aria-disabled='true']) {
+  cursor: pointer;
+}
+
+code {
+  font-family: var(--atlas-ui-mono);
+}
+
+pre {
+  overflow: auto;
+  padding: var(--atlas-space-md);
+  border-radius: var(--atlas-radius-sm);
+  background: var(--atlas-ui-code);
+  color: var(--atlas-ui-code-text);
+  font-size: 0.875rem;
+}

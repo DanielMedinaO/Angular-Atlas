@@ -1,0 +1,97 @@
+<header>
+  <h1>Novedades de Angular</h1>
+  <p>
+    Explora el estado de las APIs, prueba novedades de templates y accesibilidad y ensaya una
+    actualización de Angular.
+  </p>
+</header>
+
+<section aria-labelledby="release-radar">
+  <h2 id="release-radar">Laboratorio A · Angular Release Radar</h2>
+  <app-release-radar />
+  <p>
+    <a href="https://github.com/angular/angular/blob/main/CHANGELOG.md">Changelog de Angular</a>
+  </p>
+</section>
+
+<section aria-labelledby="templates">
+  <h2 id="templates" tabindex="-1">Laboratorio B · Novedades en templates</h2>
+  <app-template-lab />
+</section>
+
+<section aria-labelledby="aria">
+  <h2 id="aria" tabindex="-1">Laboratorio C · Angular Aria</h2>
+  <app-aria-lab />
+</section>
+
+<section aria-labelledby="maintenance">
+  <h2 id="maintenance">Laboratorio D · Actualizaciones de Angular</h2>
+  <app-maintenance-lab />
+</section>
+
+<section aria-labelledby="experimental">
+  <h2 id="experimental">APIs experimentales y roadmap</h2>
+  <ul>
+    <li>
+      <strong>Platform Navigation API.</strong> El Router puede delegar operaciones de navegación al
+      navegador. La disponibilidad y el comportamiento dependen del navegador.
+      <a href="https://angular.dev/api/router/withExperimentalPlatformNavigation"
+        >Referencia del Router</a
+      >.
+    </li>
+    <li>
+      <strong>WebMCP.</strong> Angular explora cómo declarar herramientas de una aplicación para
+      agentes del navegador. El estándar y las APIs pueden cambiar incluso entre versiones menores.
+      <a href="https://angular.dev/ai/webmcp">Guía de WebMCP</a>.
+    </li>
+    <li>
+      <strong>Recursos del Router.</strong> La vista previa de Angular 22.2 permite explorar
+      recursos asociados a rutas. Revisa la API y el roadmap antes de depender de ese contrato.
+      <a href="https://angular.dev/api/router/withRouterResources"
+        >Referencia de recursos del Router</a
+      >.
+    </li>
+  </ul>
+  <p>
+    Cualquier ensayo futuro puede vivir en una rama aislada con su propia configuración. El
+    <a href="https://angular.dev/roadmap">roadmap oficial</a> describe el trabajo en curso y las
+    prioridades del equipo.
+  </p>
+</section>
+
+<section aria-labelledby="agents">
+  <h2 id="agents">Herramientas de Angular para GitHub Copilot</h2>
+  <ol>
+    <li>
+      Abre el repositorio en VS Code con GitHub Copilot activado. Revisa <code>AGENTS.md</code> y
+      <code>.github/copilot-instructions.md</code> desde las personalizaciones del chat para
+      conservar las convenciones de Atlas y detectar reglas duplicadas.
+    </li>
+    <li>
+      La skill de Atlas cubre su interfaz. Para ampliar la cobertura con patrones oficiales de
+      signals, rutas y forms, revisa <code>angular-developer</code> en el repositorio oficial. Si el
+      equipo decide adoptarla, copia su carpeta revisada bajo <code>.github/skills</code>
+      y comprueba que Copilot la reconoce. Revisa la referencia de Angular que usa la skill para
+      evitar sugerencias para una versión posterior.
+      <a href="https://angular.dev/ai/agent-skills">Angular Agent Skills</a> ·
+      <a href="https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide"
+        >Personalizaciones de Copilot</a
+      >.
+    </li>
+    <li>
+      El CLI MCP ya está declarado en <code>.vscode/mcp.json</code>. Antes de iniciarlo desde
+      <code>MCP: List Servers</code>, revisa el comando y las herramientas disponibles. Para una
+      evaluación, usa la CLI local instalada con
+      <code>npm exec --offline -- ng mcp --read-only --local-only</code> como comando y argumentos
+      del servidor. Esos flags limitan las herramientas que el servidor registra. Revisa también los
+      permisos del agente, el acceso al repositorio y el uso de la red por parte de Copilot.
+      <a href="https://angular.dev/ai/mcp">Configuración oficial de CLI MCP</a>.
+    </li>
+  </ol>
+</section>
+
+<nav aria-label="Temas relacionados">
+  <a routerLink="/signals">Signals</a>
+  <a routerLink="/forms">Formularios y Signal Forms</a>
+  <a routerLink="/testing">Testing</a>
+</nav>

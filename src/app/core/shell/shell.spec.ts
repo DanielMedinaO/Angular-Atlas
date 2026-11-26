@@ -195,6 +195,7 @@ describe('ShellComponent', () => {
       '/dependency-injection',
       '/testing',
       '/performance',
+      '/whats-new',
     ]);
     expect(links[0].textContent).toContain('Inicio');
     expect(links[1].textContent).toContain('Componentes');
@@ -218,7 +219,7 @@ describe('ShellComponent', () => {
     ).length;
 
     expect(upcoming).toHaveLength(upcomingCount);
-    expect(upcomingCount).toBe(3);
+    expect(upcomingCount).toBe(2);
     for (const item of upcoming) {
       expect(item.querySelector('.shell__nav-badge')?.textContent?.trim()).toBe('Próximamente');
       expect(item.querySelector('a')).toBeNull();

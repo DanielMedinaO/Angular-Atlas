@@ -1,0 +1,29 @@
+.filters,
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--atlas-space-md);
+}
+
+label,
+article {
+  display: grid;
+  align-content: start;
+  gap: var(--atlas-space-xs);
+}
+
+.catalog {
+  padding: 0;
+  list-style: none;
+
+  article {
+    height: 100%;
+    padding: var(--atlas-space-md);
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-sm);
+  }
+}
+
+.metadata {
+  color: var(--atlas-text-muted);
+}
