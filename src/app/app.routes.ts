@@ -7,6 +7,14 @@ export const routes: Routes = [
     title: 'Angular Atlas',
   },
   {
+    path: 'fundamentals',
+    loadComponent: () =>
+      import('./features/fundamentals/fundamentals-page/fundamentals-page').then(
+        (m) => m.FundamentalsPage,
+      ),
+    title: 'Fundamentos de Angular · Angular Atlas',
+  },
+  {
     path: 'components',
     loadComponent: () =>
       import('./features/components/components-page').then((m) => m.ComponentsPage),

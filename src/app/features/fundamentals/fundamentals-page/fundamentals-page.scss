@@ -1,0 +1,66 @@
+@use '../../../../styles/card';
+
+:host {
+  display: block;
+}
+
+.fundamentals-page,
+.lesson,
+.lab {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--atlas-space-sm);
+}
+
+.fundamentals-page {
+  max-inline-size: 820px;
+  margin-inline: auto;
+  gap: var(--atlas-space-lg);
+}
+
+h1 {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  font-weight: 700;
+}
+
+h2,
+h3 {
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
+p {
+  color: var(--atlas-text-muted);
+  line-height: 1.6;
+}
+
+.lesson {
+  @include card.surface;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.lab {
+  padding: var(--atlas-space-sm);
+  background: var(--atlas-accent-soft);
+  border-radius: var(--atlas-radius-sm);
+}
+
+pre {
+  padding: var(--atlas-space-md);
+  overflow-x: auto;
+  border-radius: var(--atlas-radius-sm);
+  background: var(--atlas-ui-code);
+  color: var(--atlas-ui-code-text);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+a {
+  justify-self: start;
+  color: var(--atlas-accent-strong);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

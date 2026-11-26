@@ -1,0 +1,45 @@
+@use '../../performance/shared/lab-controls';
+
+:host {
+  display: grid;
+  gap: var(--atlas-space-sm);
+  min-inline-size: 0;
+}
+
+input[type='checkbox'] {
+  min-block-size: auto;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  accent-color: var(--atlas-accent-strong);
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+form,
+.book-list,
+.book-list li {
+  display: grid;
+  gap: var(--atlas-space-xs);
+}
+
+.book-list li,
+.reading-highlight {
+  padding: var(--atlas-space-sm);
+  border-inline-start: 3px solid var(--atlas-accent-strong);
+  background: var(--atlas-surface);
+}
+
+.book-list li {
+  overflow-wrap: anywhere;
+}
+
+dt {
+  font-weight: 650;
+}
+
+dd + dt {
+  margin-block-start: var(--atlas-space-xs);
+}

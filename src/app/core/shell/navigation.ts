@@ -45,7 +45,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         id: 'angular-basics',
         label: 'Fundamentos de Angular',
         description: 'Conceptos base del framework',
-        status: 'upcoming',
+        status: 'available',
+        path: '/fundamentals',
       },
       {
         id: 'components',

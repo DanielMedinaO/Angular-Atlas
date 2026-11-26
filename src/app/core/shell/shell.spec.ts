@@ -26,6 +26,7 @@ describe('ShellComponent', () => {
       providers: [
         provideRouter([
           { path: '', children: [] },
+          { path: 'fundamentals', children: [] },
           { path: 'components', children: [] },
           { path: 'signals', children: [] },
           { path: 'routing', children: [{ path: 'books', children: [] }] },
@@ -158,9 +159,9 @@ describe('ShellComponent', () => {
     );
     expect(groupTitles).toEqual(NAV_GROUPS.map((group) => group.label));
 
-    const labels = Array.from(compiled.querySelectorAll('.shell__nav-list .shell__nav-link-label')).map(
-      (label) => label.textContent?.trim(),
-    );
+    const labels = Array.from(
+      compiled.querySelectorAll('.shell__nav-list .shell__nav-link-label'),
+    ).map((label) => label.textContent?.trim());
     expect(labels).toEqual(NAV_GROUPS.flatMap((group) => group.items.map((item) => item.label)));
     expect(labels).toHaveLength(12);
   });
@@ -187,6 +188,7 @@ describe('ShellComponent', () => {
 
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
       '/',
+      '/fundamentals',
       '/components',
       '/signals',
       '/http',
@@ -197,15 +199,21 @@ describe('ShellComponent', () => {
       '/performance',
       '/whats-new',
     ]);
-    expect(links[0].textContent).toContain('Inicio');
-    expect(links[1].textContent).toContain('Componentes');
-    expect(links[2].textContent).toContain('Signals y reactividad');
-    expect(links[3].textContent).toContain('HTTP y recursos');
-    expect(links[4].textContent).toContain('Routing y Lazy Loading');
-    expect(links[5].textContent).toContain('Formularios y Signal Forms');
-    expect(links[6].textContent).toContain('Dependency Injection');
-    expect(links[7].textContent).toContain('Testing');
-    expect(links[8].textContent).toContain('Rendimiento y optimización');
+    expect(
+      links.map((link) => link.querySelector('.shell__nav-link-label')?.textContent?.trim()),
+    ).toEqual([
+      'Inicio',
+      'Fundamentos de Angular',
+      'Componentes',
+      'Signals y reactividad',
+      'HTTP y recursos',
+      'Routing y Lazy Loading',
+      'Formularios y Signal Forms',
+      'Dependency Injection',
+      'Testing',
+      'Rendimiento y optimización',
+      'Novedades de Angular',
+    ]);
   });
 
   it('should show upcoming topics with a badge and without links', async () => {
@@ -219,7 +227,7 @@ describe('ShellComponent', () => {
     ).length;
 
     expect(upcoming).toHaveLength(upcomingCount);
-    expect(upcomingCount).toBe(2);
+    expect(upcoming.map((item) => item.textContent)).toEqual([expect.stringContaining('RxJS')]);
     for (const item of upcoming) {
       expect(item.querySelector('.shell__nav-badge')?.textContent?.trim()).toBe('Próximamente');
       expect(item.querySelector('a')).toBeNull();
@@ -236,7 +244,8 @@ describe('ShellComponent', () => {
     await fixture.whenStable();
     await expandAllGroups(fixture);
 
-    const [home, , signals] = Array.from(compiled.querySelectorAll('.shell__nav-link'));
+    const home = compiled.querySelector('.shell__nav-link[href="/"]')!;
+    const signals = compiled.querySelector('.shell__nav-link[href="/signals"]')!;
     expect(home.hasAttribute('aria-current')).toBe(false);
     expect(signals.getAttribute('aria-current')).toBe('page');
 
@@ -322,7 +331,7 @@ describe('ShellComponent', () => {
     toggle?.click();
     await fixture.whenStable();
     await expandAllGroups(fixture);
-    compiled.querySelectorAll<HTMLAnchorElement>('.shell__nav-link')[1].click();
+    compiled.querySelector<HTMLAnchorElement>('.shell__nav-link[href="/fundamentals"]')!.click();
     await fixture.whenStable();
 
     expect(fixture.componentInstance['sidebarOpen']()).toBe(false);

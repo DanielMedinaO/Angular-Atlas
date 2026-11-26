@@ -1,0 +1,64 @@
+<div class="fundamentals-page">
+  <header>
+    <h1>Fundamentos de Angular</h1>
+    <p>Conceptos base del framework</p>
+  </header>
+
+  @for (lesson of lessons; track lesson.id) {
+    <section class="lesson" [attr.aria-labelledby]="lesson.id">
+      <h2 [id]="lesson.id">{{ lesson.title }}</h2>
+      <p>{{ lesson.description }}</p>
+      <pre
+        tabindex="0"
+        role="region"
+        [attr.aria-label]="'Ejemplo de código: ' + lesson.title"
+      ><code>{{ lesson.code }}</code></pre>
+      @if (lesson.link; as link) {
+        <a [routerLink]="link.path" [fragment]="link.fragment">{{ link.label }}</a>
+      }
+
+      @switch (lesson.id) {
+        @case ('event-binding') {
+          <div class="lab">
+            <h3>Laboratorio A · Binding Playground</h3>
+            <p>
+              Edita el título, cambia el contador y alterna el checkbox. Inspecciona el atributo
+              <code>data-count</code> del resultado.
+            </p>
+            <app-binding-playground />
+          </div>
+        }
+        @case ('control-flow') {
+          <div class="lab">
+            <h3>Laboratorio B · Control Flow</h3>
+            <p>
+              Filtra la colección y cambia el estado de un libro para ver qué rama renderiza
+              Angular.
+            </p>
+            <app-control-flow-lab />
+          </div>
+        }
+        @case ('pipes') {
+          <div class="lab">
+            <h3>Laboratorio C · Directivas y Pipes</h3>
+            <p>
+              La directiva aplica un borde al texto «Selección destacada». Cambia el número de
+              páginas para recalcular el tiempo de lectura.
+            </p>
+            <app-directives-pipes-lab />
+          </div>
+        }
+        @case ('templates') {
+          <div class="lab">
+            <h3>Laboratorio D · Templates</h3>
+            <p>
+              Escribe un nombre y actualiza el saludo para crear la vista con ese valor como
+              contexto.
+            </p>
+            <app-templates-lab />
+          </div>
+        }
+      }
+    </section>
+  }
+</div>

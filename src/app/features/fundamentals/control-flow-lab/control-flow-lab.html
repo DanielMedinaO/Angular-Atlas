@@ -1,0 +1,69 @@
+<div class="actions">
+  <label for="book-category">Filtrar por categoría</label>
+  <select id="book-category" #category [value]="filter()" (change)="setFilter(category.value)">
+    <option value="all">Todas</option>
+    <option value="ficcion">Ficción</option>
+    <option value="tecnica">Técnica</option>
+  </select>
+  <label class="actions">
+    <input
+      type="checkbox"
+      #details
+      [checked]="showDetails()"
+      (change)="showDetails.set(details.checked)"
+    />
+    Mostrar detalles
+  </label>
+</div>
+<form (submit)="addBook($event, title)">
+  <label for="new-book">Título del nuevo libro</label>
+  <div class="actions">
+    <input id="new-book" #title [formField]="draftForm.title" />
+    <button type="submit" [disabled]="!draftHasTitle()">Agregar libro</button>
+  </div>
+  <p>Se agrega a la categoría filtrada. Con «Todas», se agrega a Ficción.</p>
+</form>
+<p role="status">{{ visibleBooks().length }} libros visibles. {{ statusMessage() }}</p>
+<ul class="book-list">
+  @for (book of visibleBooks(); track book.id) {
+    <li>
+      <strong>{{ book.title }}</strong>
+      @if (showDetails()) {
+        <p>{{ categories[book.category] }}</p>
+      } @else {
+        <p>Categoría oculta</p>
+      }
+      <p aria-live="polite">
+        @switch (book.status) {
+          @case ('pending') {
+            Pendiente
+          }
+          @case ('reading') {
+            En lectura
+          }
+          @case ('finished') {
+            Terminado
+          }
+        }
+      </p>
+      <div class="actions">
+        <button
+          type="button"
+          (click)="changeStatus(book.id)"
+          [attr.aria-label]="'Cambiar estado de ' + book.title"
+        >
+          Cambiar estado
+        </button>
+        <button
+          type="button"
+          (click)="removeBook(book, title)"
+          [attr.aria-label]="'Eliminar ' + book.title"
+        >
+          Eliminar
+        </button>
+      </div>
+    </li>
+  } @empty {
+    <li>No hay libros en esta categoría.</li>
+  }
+</ul>
