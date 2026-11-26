@@ -9,7 +9,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
+import { Location, NgOptimizedImage } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter, map } from 'rxjs';
@@ -29,6 +29,11 @@ export class ShellComponent {
   protected readonly themeService = inject(ThemeService);
 
   private readonly router = inject(Router);
+  private readonly authorUrl = this.router.createUrlTree(['/'], { fragment: 'autor' });
+  protected readonly authorHref = inject(Location).prepareExternalUrl(
+    this.router.serializeUrl(this.authorUrl),
+  );
+  private authorScrollFrame?: number;
   private readonly currentPath = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -58,6 +63,58 @@ export class ShellComponent {
   protected skipToMain(event: MouseEvent): void {
     event.preventDefault();
     this.mainContent().nativeElement.focus();
+  }
+
+  protected async scrollToAuthor(event: MouseEvent): Promise<void> {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+      return;
+    }
+
+    event.preventDefault();
+    if (this.router.url !== this.router.serializeUrl(this.authorUrl)) {
+      const navigated = await this.router.navigateByUrl(this.authorUrl, { scroll: 'manual' });
+      if (!navigated) return;
+    }
+
+    const main = this.mainContent().nativeElement;
+    const viewport = main.ownerDocument.defaultView;
+    if (!viewport) return;
+    if (this.authorScrollFrame !== undefined) {
+      viewport.cancelAnimationFrame(this.authorScrollFrame);
+    }
+
+    this.authorScrollFrame = viewport.requestAnimationFrame(() => {
+      this.authorScrollFrame = undefined;
+      const footer = main.querySelector<HTMLElement>('#autor');
+      if (!footer) return;
+
+      footer.focus({ preventScroll: true });
+      const start = viewport.scrollY;
+      const distance = Math.min(
+        footer.getBoundingClientRect().top,
+        main.ownerDocument.documentElement.scrollHeight - viewport.innerHeight - start,
+      );
+      if (viewport.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        viewport.scrollTo({ top: start + distance });
+        return;
+      }
+      if (Math.abs(distance) < 1) return;
+
+      const duration = 1050;
+      const startTime = viewport.performance.now();
+      const animate = (now: number) => {
+        this.authorScrollFrame = undefined;
+        if (!footer.isConnected) return;
+
+        const progress = Math.min((now - startTime) / duration, 1);
+        const easedProgress = (1 - Math.cos(Math.PI * progress)) / 2;
+        viewport.scrollTo({ top: start + distance * easedProgress });
+        if (progress < 1) {
+          this.authorScrollFrame = viewport.requestAnimationFrame(animate);
+        }
+      };
+      this.authorScrollFrame = viewport.requestAnimationFrame(animate);
+    });
   }
 
   protected isExpanded(group: NavGroup): boolean {

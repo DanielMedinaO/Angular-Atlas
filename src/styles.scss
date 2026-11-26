@@ -5,6 +5,13 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+@font-face {
+  font-family: 'Pacifico';
+  src: url('./app/features/home/fonts/pacifico-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
 html {
   height: 100%;
   @include mat.theme(

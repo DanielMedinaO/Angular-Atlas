@@ -47,7 +47,8 @@
   display: flex;
   align-items: center;
   gap: var(--atlas-space-xs);
-  font-weight: 600;
+  font-family: 'Pacifico', cursive;
+  font-weight: 400;
   text-decoration: none;
   color: var(--atlas-ui-text);
 }
@@ -56,6 +57,50 @@
   margin-left: auto;
   color: var(--atlas-ui-muted);
   font-size: 0.8rem;
+}
+
+.shell__author-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  color: var(--atlas-ui-accent);
+  font-family: 'Pacifico', cursive;
+  font-size: 1rem;
+  font-weight: 400;
+  text-decoration: none;
+
+  &::before,
+  &::after {
+    position: absolute;
+    inset-block-end: 0.3rem;
+    inset-inline-start: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    content: '';
+  }
+
+  &::before {
+    width: 100%;
+    opacity: 0.25;
+  }
+
+  &::after {
+    width: 35%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &::after {
+      animation: author-loading-line 1.4s ease-in-out infinite alternate;
+    }
+  }
+}
+
+@keyframes author-loading-line {
+  to {
+    transform: translateX(185%);
+  }
 }
 
 .shell__theme-toggle,
@@ -285,9 +330,12 @@
 }
 
 .shell__content {
+  --atlas-content-padding-inline: var(--atlas-space-lg);
+  --atlas-content-padding-block: var(--atlas-space-xl);
+
   grid-area: content;
   min-width: 0;
-  padding: var(--atlas-space-xl) var(--atlas-space-lg);
+  padding: var(--atlas-content-padding-block) var(--atlas-content-padding-inline);
 }
 
 @media (max-width: 960px) {
@@ -327,7 +375,8 @@
   }
 
   .shell__content {
-    padding: var(--atlas-space-lg) var(--atlas-space-md);
+    --atlas-content-padding-inline: var(--atlas-space-md);
+    --atlas-content-padding-block: var(--atlas-space-lg);
   }
 }
 
@@ -346,6 +395,13 @@
   }
 
   .shell__content {
-    padding: var(--atlas-space-md) var(--atlas-space-sm);
+    --atlas-content-padding-inline: var(--atlas-space-sm);
+    --atlas-content-padding-block: var(--atlas-space-md);
+  }
+}
+
+@media (max-width: 380px) {
+  .shell__theme-toggle span:last-child {
+    display: none;
   }
 }
