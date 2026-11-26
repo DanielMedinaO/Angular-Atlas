@@ -2,113 +2,74 @@
 
 # Angular Atlas
 
-### Aprende Angular construyendo, explorando y experimentando.
+Guía interactiva en español para aprender Angular moderno con explicaciones, ejemplos de código y laboratorios que puedes probar en el navegador.
 
-Una guía interactiva y en evolución para entender Angular moderno: conceptos claros, ejemplos ejecutables y espacio para practicar.
-
-[Explorar el proyecto](https://github.com/DanielMedinaO/Angular-Atlas) · [Reportar un problema](https://github.com/DanielMedinaO/Angular-Atlas/issues)
+**[Abrir Angular Atlas en Vercel](https://angular-atlas-five.vercel.app/)**
 
 ![Angular 22](https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![TypeScript 6](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
 ![Vitest](https://img.shields.io/badge/tests-Vitest-6E9F18?logo=vitest&logoColor=white)
 
 </div>
 
----
+## Temáticas
 
-## ¿Qué es Angular Atlas?
-
-Angular Atlas es una biblioteca de aprendizaje para desarrolladores que quieren comprender Angular con ejemplos, no solo leer sobre él. Cada tema busca combinar explicación, demostraciones que puedes probar y ejercicios prácticos.
-
-El proyecto está en desarrollo: puedes explorar los temas disponibles y seguir su evolución desde este repositorio.
-
-## Contenido disponible
+Angular Atlas reúne 11 temáticas. Puedes empezar por Fundamentos o ir directamente al tema que quieras practicar.
 
 | Tema | Qué encontrarás |
 | --- | --- |
-| **Componentes y ciclo de vida** | Composición de componentes, comunicación y un laboratorio para explorar su ciclo de vida. |
-| **Signals y reactividad** | Estado reactivo, un contador interactivo, un explorador de libros y comunicación entre componentes. |
-| **Routing y Lazy Loading** | Rutas anidadas, parámetros, guards, resolvers, eventos y estrategias de carga. |
-| **Rendimiento y optimización** | Detección de cambios, identidad en listas, carga diferida y profiling en `/performance`. |
+| **Fundamentos de Angular** | Binding, control de flujo, directivas, pipes y plantillas con laboratorios interactivos. |
+| **Componentes y ciclo de vida** | Hooks, consultas de vista y contenido, proyección con `ng-content` y un laboratorio para observar el ciclo de vida. |
+| **Signals** | Estado reactivo con `signal()`, `computed()`, `linkedSignal()` y `effect()`. Comunicación entre componentes con `input()`, `output()` y `model()`. |
+| **Routing y Lazy Loading** | Rutas anidadas, parámetros, guards, resolvers, precarga y eventos de navegación. |
+| **Inyección de dependencias** | Alcance de servicios por aplicación, ruta y componente, configuración con `InjectionToken` y carga bajo demanda con `injectAsync()`. |
+| **RxJS** | Observables fríos y calientes, Subjects, operadores y su integración con Angular. |
+| **HTTP y recursos reactivos** | Peticiones con `HttpClient`, interceptores funcionales y laboratorios con `httpResource()`, `resource()` y `rxResource()`. |
+| **Formularios y Signal Forms** | Laboratorio de registro de libros, ejemplos de Reactive Forms y Signal Forms, validación asíncrona y campos dinámicos. |
+| **Testing con Vitest** | Pruebas de componentes, Signals, servicios, HTTP, rutas y formularios, con ejemplos de mocks, asincronía y cobertura. |
+| **Rendimiento y optimización** | Detección de cambios, seguimiento de elementos con `@for`, carga diferida con `@defer` y análisis de rendimiento. |
+| **Novedades de Angular** | Explorador de versiones, novedades en plantillas, Angular Aria, actualizaciones y APIs experimentales. |
 
-Otros temas, como RxJS, están previstos para próximas entregas.
+## Desarrollo local
 
-## Empieza en local
-
-Necesitas [Node.js](https://nodejs.org/) y npm instalados.
+Usa la versión de Node.js indicada en `.nvmrc` (24.20.0). El proyecto declara npm 12.0.2 en `package.json`.
 
 ```bash
-# Clona el repositorio
 git clone https://github.com/DanielMedinaO/Angular-Atlas.git
 cd Angular-Atlas
-
-# Instala las dependencias
-npm install
-
-# Inicia la aplicación
+npm ci
 npm start
 ```
 
-Abre [http://localhost:4200](http://localhost:4200) para recorrer Angular Atlas. El servidor de desarrollo recarga la aplicación cuando guardas cambios.
-
-## Comandos útiles
+El servidor de desarrollo recarga la aplicación al guardar cambios. [Abrir en localhost](http://localhost:4200/).
 
 | Comando | Descripción |
 | --- | --- |
 | `npm start` | Inicia el servidor de desarrollo. |
-| `npm run build` | Genera la compilación de producción en `dist/`. |
+| `npm run build` | Compila la aplicación para producción en `dist/angular-atlas/browser/`. |
 | `npm test` | Ejecuta las pruebas unitarias con Vitest. |
+| `npm test -- --coverage` | Ejecuta las pruebas y genera el reporte de cobertura. |
 
-## Presupuestos de producción
+## Tecnologías y estructura
 
-La línea base de la fase 9 (`5d04e5f`) produjo 336,07 kB iniciales y 92,51 kB de
-transferencia estimada por el CLI. Con `/performance`, el build produjo 345,80 kB iniciales y
-94,83 kB de transferencia estimada. El total de JS y CSS pasó de 706.450 a 927.189 bytes
-al sumar los archivos iniciales y lazy una sola vez. La página aporta un chunk lazy de
-45.848 bytes. El gráfico con Chart.js viaja en otro chunk de 165.480 bytes.
-
-El presupuesto `initial` de `angular.json` pasa de 500 kB / 1 MB a 400 kB de advertencia y
-450 kB de error. Con el build de la fase 9, esos límites dejan aproximadamente 54,20 kB para
-avisar de un crecimiento sostenido y 104,20 kB para bloquear una regresión mayor. Los límites
-de CSS por componente son 6 kB y 8 kB. El build pasó sin advertencias de tamaño y el CSS de
-Shell aporta cerca de 6 kB según el metarchivo, por lo que esos límites siguen siendo útiles.
-
-Genera `dist/angular-atlas/browser-stats.json` con
-`npx ng build --configuration production --stats-json` y consulta `outputs` para comprobar
-los tamaños y los imports dinámicos. En el build de la fase 9, el chunk compartido principal
-de Angular creció 9.251 bytes. Una compilación de control que omitió el laboratorio
-`@defer` situó casi todo ese aumento en el runtime compartido que habilita el bloque diferido.
-
-## Tecnologías y enfoque
-
-- **Angular 22** y **TypeScript**.
-- Componentes standalone y rutas con carga diferida.
-- Signals para el estado reactivo local.
-- **Vitest** para las pruebas unitarias.
-- Diseño por funcionalidades, con demostraciones pequeñas e interactivas.
-
-La paleta de Angular Atlas se inspira en [angular.dev](https://angular.dev/): superficies neutras,
-acentos violeta y rosa, y tarjetas con bordes sutiles. Los tokens compartidos están en
-`src/styles.scss` y el tratamiento común de tarjetas en `src/styles/_card.scss`, junto con el tema
-Material 3 y las utilidades Tailwind ya instaladas. Los temas claro y oscuro se aplican al sitio.
-El botón de la barra superior
-guarda la elección en el navegador; si no existe una elección, se usa la preferencia del sistema.
-Inter y JetBrains Mono tienen fuentes de respaldo locales.
-
-## Estructura del proyecto
+- **Angular 22 y TypeScript 6** con componentes standalone, Signals y carga diferida por ruta.
+- **Angular Material 3, Angular Aria, Tailwind CSS y SCSS** para la interfaz. La aplicación sigue la preferencia del sistema para el tema claro u oscuro y guarda en el navegador la elección manual.
+- **RxJS y Chart.js** en los laboratorios de reactividad y visualización.
 
 ```text
-src/app/
-├── core/       # Navegación y estructura compartida
-└── features/   # Inicio, componentes, Signals y Routing
+src/
+├── app/
+│   ├── core/        # Navegación y estructura compartida
+│   └── features/    # Inicio y secciones temáticas
+├── styles/          # Estilos compartidos
+├── styles.scss      # Tokens y estilos globales
+└── tailwind.css     # Punto de entrada de Tailwind CSS
+public/
+└── atlas-data/      # Datos estáticos de los laboratorios
 ```
 
-## Contribuye
+La compilación de producción tiene un presupuesto inicial de 400 kB para advertencias y 450 kB para errores. Los estilos por componente tienen límites de 6 kB y 8 kB, respectivamente. Para inspeccionar los tamaños de los archivos y las importaciones dinámicas, ejecuta `npm run build -- --stats-json`.
 
-¿Tienes una idea para un tema, una mejora o encontraste un problema? [Abre una incidencia](https://github.com/DanielMedinaO/Angular-Atlas/issues) o envía un pull request. Las contribuciones que mejoran la claridad, los ejemplos y la accesibilidad son especialmente bienvenidas.
+## Contribuciones
 
----
-
-<div align="center">
-  Hecho para aprender Angular, una idea a la vez.
-</div>
+Para proponer una mejora o reportar un problema, abre una incidencia o envía un pull request. [Incidencias de Angular Atlas](https://github.com/DanielMedinaO/Angular-Atlas/issues).
