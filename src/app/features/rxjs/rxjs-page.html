@@ -1,0 +1,152 @@
+<div class="rxjs-page">
+  <header>
+    <h1>RxJS en profundidad</h1>
+    <p>Observa cómo se crean, combinan y cancelan los flujos asíncronos en Angular.</p>
+  </header>
+
+  <section aria-labelledby="rxjs-foundations">
+    <h2 id="rxjs-foundations">Fundamentos de RxJS</h2>
+    <dl>
+      <dt>Observable</dt>
+      <dd>
+        Representa una fuente de valores durante el tiempo. Puede emitir de forma síncrona o
+        asíncrona.
+      </dd>
+      <dt>Observer</dt>
+      <dd>
+        Recibe <code>next</code> por cada valor, <code>error</code> si el flujo falla o
+        <code>complete</code> si termina con éxito. Tras una notificación terminal se cierra la
+        suscripción.
+      </dd>
+      <dt>Subscription</dt>
+      <dd>
+        Es el vínculo devuelto por <code>subscribe()</code>. Usa <code>unsubscribe()</code> para
+        liberar sus recursos cuando ya no necesitas el flujo.
+      </dd>
+    </dl>
+    <h3>Creación y composición</h3>
+    <ul>
+      <li>
+        <code>new Observable()</code> permite definir un productor y devolver su función de
+        limpieza.
+      </li>
+      <li>
+        <code>of()</code> emite cada argumento y completa. Un array pasado como argumento se emite
+        como un solo valor.
+      </li>
+      <li>
+        <code>from()</code> convierte una fuente compatible, como un iterable o una Promise, en un
+        Observable. Con un array emite sus elementos por separado.
+      </li>
+      <li>
+        <code>interval()</code> emite una secuencia periódica a partir de cero.
+        <code>take()</code> puede limitarla.
+      </li>
+      <li>
+        <code>fromEvent()</code> escucha eventos de una fuente como un elemento DOM y retira el
+        listener al cancelar.
+      </li>
+    </ul>
+    <p>
+      <code>pipe()</code> aplica operadores en orden y devuelve un Observable derivado. En
+      <code>values$</code>, primero filtra el 1 y luego transforma el 2 y el 3 en 20 y 30. El
+      ejemplo de <code>fromEvent()</code> supone que <code>button</code> referencia un botón del
+      DOM.
+    </p>
+    <pre
+      tabindex="0"
+      aria-label="Código de creación y composición de Observables"
+    ><code>{{ creation }}</code></pre>
+    <h3>Observables fríos y calientes</h3>
+    <p>
+      Una fuente fría inicia una ejecución por suscripción. Dos suscriptores a
+      <code>interval()</code> tienen relojes independientes. Una fuente caliente comparte la
+      producción con sus observadores. En los eventos del DOM, cada suscripción registra su
+      listener, pero el clic ocurre de forma independiente a esos listeners. Los Subjects permiten
+      distribuir una emisión a varios observadores.
+    </p>
+    <h3>Promise, Observable y Signal</h3>
+    <dl>
+      <dt>Promise</dt>
+      <dd>
+        Representa un resultado único o un rechazo, normalmente de una operación ya iniciada. Úsala
+        con <code>await</code> cuando basta con un resultado. La cancelación depende de la API que
+        inició el trabajo, como una que acepte <code>AbortSignal</code>.
+      </dd>
+      <dt>Observable</dt>
+      <dd>
+        Representa cero o más valores y permite cancelar la suscripción. Úsalo cuando necesitas
+        combinar eventos, aplicar operadores de tiempo o reemplazar una operación por otra.
+      </dd>
+      <dt>Signal</dt>
+      <dd>
+        Expone un valor actual mediante una lectura síncrona. Úsalo para estado de interfaz y
+        valores derivados, como el total de un carrito. Usa la interoperabilidad de Angular cuando
+        necesites conectar ese estado con un flujo.
+      </dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="rxjs-timeline">
+    <h2 id="rxjs-timeline">Laboratorio A · Observable Timeline</h2>
+    <p>
+      Inicia el flujo y observa sus notificaciones. La pausa detiene el reloj interno y conserva la
+      suscripción y el conteo. Al reanudar, el reloj inicia otro intervalo. El flujo completa tras
+      12 emisiones o al pulsar Completar.
+    </p>
+    <p>
+      Completar entrega <code>complete</code> al Observer. Cancelar llama a
+      <code>unsubscribe()</code> y libera el reloj sin entregar <code>complete</code>. Un error
+      también libera el reloj y llega al callback <code>error</code>.
+    </p>
+    <app-rxjs-timeline />
+  </section>
+
+  <section aria-labelledby="rxjs-subjects">
+    <h2 id="rxjs-subjects">Laboratorio B · Subject Explorer</h2>
+    <p>
+      Emite dos valores y agrega otro suscriptor. Cada suscriptor se conecta a los tres tipos en el
+      mismo momento. Cada sesión admite hasta ocho suscriptores y conserva sus últimos 12 valores
+      por tipo. Reinicia los Subjects para iniciar otra sesión.
+    </p>
+    <ul>
+      <li><code>Subject</code> entrega emisiones nuevas a sus suscriptores activos.</li>
+      <li>
+        <code>BehaviorSubject</code> necesita un valor inicial (aquí, 0) y entrega el valor actual
+        inmediatamente al suscribirse a la fuente activa.
+      </li>
+      <li>
+        <code>ReplaySubject</code> entrega el historial del búfer al suscribirse. Aquí guarda hasta
+        dos emisiones, en el orden original, y comienza vacío.
+      </li>
+    </ul>
+    <app-rxjs-subjects />
+  </section>
+
+  <section aria-labelledby="rxjs-flattening">
+    <h2 id="rxjs-flattening">Laboratorio C · RxJS Operator Playground</h2>
+    <p>
+      Los cuatro operadores reciben el mismo flujo A, B y C. Cambia las pausas entre eventos y
+      compara el orden de los resultados y de las finalizaciones. Con los intervalos iniciales,
+      <code>switchMap</code> entrega C, <code>concatMap</code> entrega A → B → C,
+      <code>mergeMap</code> entrega C → B → A y <code>exhaustMap</code> entrega A.
+    </p>
+    <app-rxjs-operators />
+    <p>
+      Usa <code>switchMap</code> para búsquedas donde importa la consulta más reciente,
+      <code>concatMap</code> para escrituras ordenadas, <code>mergeMap</code> para tareas
+      independientes y <code>exhaustMap</code> para evitar envíos repetidos mientras sigue activo el
+      anterior.
+    </p>
+  </section>
+
+  <section aria-labelledby="rxjs-common">
+    <h2 id="rxjs-common">Laboratorio D · Operadores comunes</h2>
+    <app-rxjs-common />
+  </section>
+
+  <section aria-labelledby="rxjs-angular">
+    <h2 id="rxjs-angular">Laboratorio E · RxJS y Angular</h2>
+    <app-rxjs-angular />
+  </section>
+</div>

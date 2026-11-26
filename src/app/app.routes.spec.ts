@@ -43,6 +43,19 @@ describe('Application routes', () => {
     expect(TestBed.inject(Title).getTitle()).toBe('Angular Atlas');
   });
 
+  it('loads the RxJS guide with its five labs and HTTP link', async () => {
+    await harness.navigateByUrl('/rxjs');
+
+    expect(router.url).toBe('/rxjs');
+    const page = harness.routeNativeElement;
+    expect(page?.matches('app-rxjs-page')).toBe(true);
+    for (const lab of ['timeline', 'subjects', 'operators', 'common', 'angular']) {
+      expect(page?.querySelector(`app-rxjs-${lab}`)).not.toBeNull();
+    }
+    expect(page?.querySelector('a[href="/http#rxjs-lab-title"]')).not.toBeNull();
+    expect(TestBed.inject(Title).getTitle()).toBe('RxJS · Angular Atlas');
+  });
+
   it('loads the lazy Testing page and sets its title', async () => {
     await harness.navigateByUrl('/testing');
 

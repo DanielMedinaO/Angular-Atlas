@@ -29,6 +29,7 @@ describe('ShellComponent', () => {
           { path: 'fundamentals', children: [] },
           { path: 'components', children: [] },
           { path: 'signals', children: [] },
+          { path: 'rxjs', children: [] },
           { path: 'routing', children: [{ path: 'books', children: [] }] },
           { path: 'forms', children: [] },
         ]),
@@ -191,6 +192,7 @@ describe('ShellComponent', () => {
       '/fundamentals',
       '/components',
       '/signals',
+      '/rxjs',
       '/http',
       '/routing',
       '/forms',
@@ -206,6 +208,7 @@ describe('ShellComponent', () => {
       'Fundamentos de Angular',
       'Componentes',
       'Signals y reactividad',
+      'RxJS',
       'HTTP y recursos',
       'Routing y Lazy Loading',
       'Formularios y Signal Forms',
@@ -227,7 +230,6 @@ describe('ShellComponent', () => {
     ).length;
 
     expect(upcoming).toHaveLength(upcomingCount);
-    expect(upcoming.map((item) => item.textContent)).toEqual([expect.stringContaining('RxJS')]);
     for (const item of upcoming) {
       expect(item.querySelector('.shell__nav-badge')?.textContent?.trim()).toBe('Próximamente');
       expect(item.querySelector('a')).toBeNull();

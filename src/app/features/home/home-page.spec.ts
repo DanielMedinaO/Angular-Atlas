@@ -46,6 +46,16 @@ describe('HomePage', () => {
     );
   });
 
+  it('links to Fundamentos and RxJS from the home page', async () => {
+    const fixture = TestBed.createComponent(HomePage);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('a.topic-card[href="/fundamentals"] h3')?.textContent).toContain(
+      'Fundamentos de Angular',
+    );
+    expect(compiled.querySelector('a.topic-card[href="/rxjs"] h3')?.textContent).toContain('RxJS');
+  });
+
   it('should keep unavailable cards non-interactive and available cards as native links', async () => {
     const fixture = TestBed.createComponent(HomePage);
     await fixture.whenStable();

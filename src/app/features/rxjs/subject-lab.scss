@@ -1,0 +1,158 @@
+@use '../testing/lab' as controls;
+
+:host {
+  display: block;
+  container-type: inline-size;
+}
+
+.lab,
+.console,
+.subscribers,
+.panel {
+  display: grid;
+  gap: var(--atlas-space-sm);
+  min-width: 0;
+}
+
+.console,
+.panel {
+  padding: var(--atlas-space-md);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+}
+
+.console {
+  background: linear-gradient(145deg, var(--atlas-accent-soft), var(--atlas-surface) 75%);
+}
+
+.toolbar,
+.actions,
+.panel header,
+.identity,
+.values {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--atlas-space-xs);
+}
+
+.toolbar,
+.panel header {
+  justify-content: space-between;
+}
+
+.next-value {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-space-xs);
+  color: var(--atlas-text-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.next-value strong,
+.values li {
+  display: grid;
+  place-items: center;
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  padding-inline: 0.35rem;
+  border: 1px solid var(--atlas-border);
+  border-radius: 4px;
+  background: var(--atlas-surface);
+  color: var(--atlas-accent-strong);
+  font: 650 0.875rem / 1.4 var(--atlas-ui-mono);
+}
+
+button {
+  @include controls.lab-button;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--atlas-space-xs);
+  min-height: 2.75rem;
+  min-width: 0;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+button.primary {
+  @include controls.lab-button-primary;
+}
+
+button[aria-disabled='true'],
+button[aria-disabled='true']:hover {
+  border-color: var(--atlas-border);
+  background: var(--atlas-ui-surface-subtle);
+  color: var(--atlas-text-muted);
+  cursor: not-allowed;
+}
+
+.status,
+.empty {
+  color: var(--atlas-text-muted);
+  font-size: 0.875rem;
+}
+
+.panel {
+  background: var(--atlas-surface);
+  box-shadow: var(--atlas-shadow-sm);
+}
+
+h3,
+dt {
+  font-weight: 650;
+}
+
+.state {
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  background: var(--atlas-ui-surface-subtle);
+  color: var(--atlas-text-muted);
+  font-size: 0.8125rem;
+}
+
+.state.active {
+  background: var(--atlas-accent-soft);
+  color: var(--atlas-accent-strong);
+}
+
+.channels {
+  display: grid;
+  gap: var(--atlas-space-xs);
+}
+
+.channel {
+  display: grid;
+  align-content: start;
+  gap: var(--atlas-space-xs);
+  min-width: 0;
+  padding: var(--atlas-space-xs);
+  border: 1px solid var(--atlas-border);
+  border-radius: 4px;
+  background: var(--atlas-bg);
+}
+
+.channel code {
+  color: var(--atlas-accent-strong);
+  font: 650 0.875rem / 1.4 var(--atlas-ui-mono);
+  overflow-wrap: anywhere;
+}
+
+@container (min-width: 36rem) {
+  .channels {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container (max-width: 34rem) {
+  .actions {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .actions .primary {
+    grid-column: 1 / -1;
+  }
+}

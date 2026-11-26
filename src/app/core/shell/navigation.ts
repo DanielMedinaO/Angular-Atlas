@@ -72,7 +72,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         id: 'rxjs',
         label: 'RxJS',
         description: 'Flujos asíncronos con observables',
-        status: 'upcoming',
+        status: 'available',
+        path: '/rxjs',
       },
       {
         id: 'http',

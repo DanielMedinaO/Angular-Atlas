@@ -1,0 +1,213 @@
+@use '../testing/lab' as controls;
+
+:host {
+  display: block;
+  container-type: inline-size;
+}
+
+.lab,
+.console,
+.panel,
+.workspace {
+  display: grid;
+  gap: var(--atlas-space-sm);
+  min-width: 0;
+}
+
+.console,
+.panel {
+  padding: var(--atlas-space-md);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  background: var(--atlas-surface);
+}
+
+.console {
+  background: linear-gradient(145deg, var(--atlas-accent-soft), var(--atlas-surface) 75%);
+}
+
+.panel {
+  align-content: start;
+  box-shadow: var(--atlas-shadow-sm);
+}
+
+.toolbar,
+.actions,
+.timeline {
+  @include controls.lab-actions;
+}
+
+.toolbar {
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+button,
+select,
+input {
+  @include controls.lab-button;
+  min-height: 2.75rem;
+  min-width: 0;
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+button {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--atlas-space-xs);
+  font-size: 0.875rem;
+}
+
+button.primary {
+  @include controls.lab-button-primary;
+}
+
+button[aria-disabled='true'],
+button[aria-disabled='true']:hover {
+  border-color: var(--atlas-border);
+  background: var(--atlas-ui-surface-subtle);
+  color: var(--atlas-text-muted);
+  cursor: not-allowed;
+}
+
+label {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--atlas-text-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.picker {
+  min-width: min(100%, 12rem);
+}
+
+input {
+  width: min(100%, 26rem);
+  cursor: text;
+}
+
+h3,
+dt,
+figcaption strong {
+  font-weight: 650;
+}
+
+h3,
+code {
+  overflow-wrap: anywhere;
+}
+
+.tag,
+.timeline li {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background: var(--atlas-accent-soft);
+  color: var(--atlas-accent-strong);
+  overflow-wrap: anywhere;
+  font: 0.8125rem / 1.5 var(--atlas-ui-mono);
+}
+
+.timeline {
+  gap: var(--atlas-space-xs);
+}
+
+.timeline li span {
+  color: var(--atlas-text-muted);
+}
+
+.readout,
+.clock-output,
+.output,
+pre,
+.metrics > div {
+  min-width: 0;
+  border: 1px solid var(--atlas-border);
+  border-radius: 4px;
+  padding: var(--atlas-space-xs) var(--atlas-space-sm);
+  background: var(--atlas-bg);
+  overflow-wrap: anywhere;
+}
+
+.output,
+.metrics {
+  display: grid;
+  gap: var(--atlas-space-xs);
+}
+
+.metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.metrics dt {
+  color: var(--atlas-text-muted);
+  font-size: 0.8125rem;
+}
+
+.metrics dd {
+  color: var(--atlas-accent-strong);
+  font: 650 1.25rem / 1.5 var(--atlas-ui-mono);
+}
+
+.log {
+  list-style: decimal;
+  padding-inline-start: 1.5rem;
+  font: 0.8125rem / 1.6 var(--atlas-ui-mono);
+}
+
+pre {
+  overflow: auto;
+  font-size: 0.875rem;
+}
+
+a {
+  color: var(--atlas-accent-strong);
+  text-decoration: underline;
+}
+
+a:focus-visible,
+pre:focus-visible {
+  outline: 3px solid var(--atlas-accent-strong);
+  outline-offset: 2px;
+}
+
+@container (min-width: 38rem) {
+  .workspace {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+}
+
+@container (min-width: 47rem) {
+  .interop {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bridge {
+    grid-column: 1 / -1;
+  }
+}
+
+@container (max-width: 34rem) {
+  .toolbar > .actions,
+  .timeline-actions {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toolbar > .actions button,
+  .timeline-actions button {
+    justify-self: stretch;
+  }
+
+  .timeline-actions .primary {
+    grid-column: 1 / -1;
+  }
+
+  .picker {
+    width: 100%;
+  }
+}

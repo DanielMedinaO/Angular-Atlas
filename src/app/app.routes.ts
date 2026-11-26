@@ -39,6 +39,11 @@ export const routes: Routes = [
     title: 'Dependency Injection · Angular Atlas',
   },
   {
+    path: 'rxjs',
+    loadComponent: () => import('./features/rxjs/rxjs-page').then((m) => m.RxjsPage),
+    title: 'RxJS · Angular Atlas',
+  },
+  {
     path: 'http',
     loadChildren: () => import('./features/http/http.routes').then((m) => m.HTTP_ROUTES),
     title: 'HTTP y recursos · Angular Atlas',
