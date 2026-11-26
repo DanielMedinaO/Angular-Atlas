@@ -1,0 +1,53 @@
+@use '../lab';
+
+:host {
+  display: block;
+}
+
+.recommendations {
+  @include lab.lab-surface;
+}
+
+.recommendations__hint {
+  @include lab.lab-muted;
+}
+
+code {
+  @include lab.lab-code;
+}
+
+.recommendations__actions {
+  @include lab.lab-actions;
+}
+
+button {
+  @include lab.lab-button;
+}
+
+.recommendations__list {
+  display: grid;
+  gap: var(--atlas-space-sm);
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--atlas-space-sm);
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-sm);
+    padding: var(--atlas-space-sm) var(--atlas-space-md);
+  }
+}
+
+.recommendations__read {
+  color: var(--atlas-accent-strong);
+  font-weight: 700;
+}
+
+.recommendations__error {
+  @include lab.lab-danger-text;
+  font-weight: 600;
+}

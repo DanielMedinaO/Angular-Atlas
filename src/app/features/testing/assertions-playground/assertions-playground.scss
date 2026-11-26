@@ -1,0 +1,99 @@
+@use '../lab';
+
+:host {
+  display: block;
+}
+
+.assertions {
+  @include lab.lab-surface;
+}
+
+.assertions__notice {
+  @include lab.lab-muted;
+  border-left: 4px solid var(--atlas-accent-strong);
+  background: var(--atlas-accent-soft);
+  padding: var(--atlas-space-sm) var(--atlas-space-md);
+  color: var(--atlas-text);
+}
+
+.assertions__counter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--atlas-space-sm);
+}
+
+.assertions__value {
+  min-width: 3rem;
+  font-family: var(--atlas-font-mono);
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.assertions__actions {
+  @include lab.lab-actions;
+}
+
+button {
+  @include lab.lab-button;
+}
+
+.assertions__run {
+  @include lab.lab-button-primary;
+}
+
+.assertions__summary {
+  @include lab.lab-muted;
+}
+
+.assertions__stale {
+  @include lab.lab-danger-text;
+  font-weight: 600;
+}
+
+.assertions__table-wrap {
+  overflow-x: auto;
+
+  &:focus-visible {
+    outline: 3px solid var(--atlas-accent-strong);
+    outline-offset: 2px;
+  }
+}
+
+table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--atlas-border);
+  padding: 0.55rem;
+  vertical-align: top;
+}
+
+code {
+  @include lab.lab-code;
+}
+
+.assertions__verdict {
+  display: inline-block;
+  min-width: 3.5rem;
+  border: 2px solid currentcolor;
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.assertions__verdict--pass {
+  color: var(--atlas-accent-strong);
+}
+
+.assertions__verdict--fail {
+  @include lab.lab-danger-text;
+}

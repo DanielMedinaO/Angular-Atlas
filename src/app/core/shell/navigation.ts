@@ -117,7 +117,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         id: 'testing',
         label: 'Testing',
         description: 'Pruebas unitarias y de componentes',
-        status: 'upcoming',
+        status: 'available',
+        path: '/testing',
       },
       {
         id: 'performance',

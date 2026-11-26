@@ -1,0 +1,210 @@
+<div class="testing-page">
+  <header>
+    <h1>Testing con Vitest</h1>
+    <p>Prueba comportamientos de Angular 22 con Vitest, TestBed y laboratorios de Angular Atlas.</p>
+  </header>
+
+  <section aria-labelledby="testing-basics">
+    <h2 id="testing-basics">Qué probar y con qué herramienta</h2>
+    <ul>
+      <li>
+        <strong>Unitaria:</strong> verifica una pieza aislada, como la comparación de dos números.
+      </li>
+      <li>
+        <strong>Integración:</strong> verifica piezas que colaboran, como una ruta, su resolver y el
+        componente que presenta el libro.
+      </li>
+      <li>
+        <strong>End-to-end:</strong> recorre el flujo completo en la aplicación desplegada o en un
+        entorno equivalente, desde guardar un libro hasta volver a consultarlo.
+      </li>
+    </ul>
+    <p>
+      Jasmine ofrece una API de pruebas y Karma ejecuta la suite en navegadores. El runner Vitest
+      del CLI de Angular usa Node y jsdom por defecto. Los spies se crean con
+      <code>vi.spyOn()</code> o <code>vi.fn()</code>.
+    </p>
+    <p>
+      <code>describe()</code> agrupa casos, <code>it()</code> declara un comportamiento y
+      <code>expect()</code> verifica el resultado. <code>beforeEach()</code> prepara cada caso y
+      <code>afterEach()</code> limpia sus recursos.
+    </p>
+    <figure>
+      <figcaption>Arrange, Act, Assert y matchers frecuentes</figcaption>
+      <pre tabindex="0" aria-label="Ejemplo de matchers"><code>{{ examples.matchers }}</code></pre>
+    </figure>
+  </section>
+
+  <section aria-labelledby="testing-a">
+    <h2 id="testing-a">Laboratorio A · Assertions</h2>
+    <app-assertions-playground />
+    <p>
+      Prueba el contador con 0, 3 y 4. Compara qué pasa con los límites estricto e inclusivo.
+      <code>assertions.spec.ts</code> verifica la lógica de la simulación con Vitest.
+    </p>
+  </section>
+
+  <section aria-labelledby="testing-b">
+    <h2 id="testing-b">Laboratorio B · Componentes y Signals</h2>
+    <app-seat-picker />
+    <p>
+      <code>TestBed</code> prepara el entorno de Angular y crea el componente standalone.
+      <code>ComponentFixture</code> da acceso al componente y a su DOM.
+      <code>detectChanges()</code> fuerza una actualización y <code>whenStable()</code> espera el
+      trabajo pendiente que Angular registra.
+    </p>
+    <p>
+      En <code>seat-picker.spec.ts</code>, la cantidad renderizada refleja el <code>signal()</code>.
+      El precio y los asientos restantes verifican <code>computed()</code>. Prueba en el laboratorio
+      el estado inicial, el aforo completo y el reinicio.
+    </p>
+    <figure>
+      <figcaption>Un clic actualiza la cantidad y el total</figcaption>
+      <pre
+        tabindex="0"
+        aria-label="Prueba de un componente standalone"
+      ><code>{{ examples.component }}</code></pre>
+    </figure>
+  </section>
+
+  <section aria-labelledby="testing-c">
+    <h2 id="testing-c">Laboratorio C · Dependency Injection y mocks</h2>
+    <app-recommendations-lab />
+    <p>
+      Angular resuelve el token del servicio a través del inyector. <code>useValue</code> sustituye
+      su implementación en la prueba. <code>vi.fn()</code> permite programar resultados y comprobar
+      llamadas. <code>vi.spyOn()</code> observa o sustituye un método de una instancia existente.
+    </p>
+    <figure>
+      <figcaption>Dependencia controlada con un mock tipado</figcaption>
+      <pre
+        tabindex="0"
+        aria-label="Prueba con un servicio simulado"
+      ><code>{{ examples.mock }}</code></pre>
+    </figure>
+  </section>
+
+  <section aria-labelledby="testing-d">
+    <h2 id="testing-d">Laboratorio D · HTTP</h2>
+    <p>
+      En el <a routerLink="/http">laboratorio HTTP</a>, compara una búsqueda vacía con una búsqueda
+      válida y cambia el término rápidamente. Para reproducir esos estados en la suite,
+      <code>HttpTestingController</code> captura la petición de <code>BooksApiService</code> y
+      recibe la respuesta que le indica el test.
+    </p>
+    <p>
+      Configura <code>provideHttpClient()</code> antes de <code>provideHttpClientTesting()</code>.
+      En <code>books-api.service.spec.ts</code>, <code>flush()</code> simula datos, un resultado
+      vacío o respuestas 404 y 500. <code>error(new ProgressEvent('error'))</code> simula un fallo
+      de red con estado 0. Al cambiar de consulta, la prueba de <code>switchMap()</code> comprueba
+      que la anterior queda cancelada.
+    </p>
+    <figure>
+      <figcaption>Capturar un GET y devolver una respuesta controlada</figcaption>
+      <pre
+        tabindex="0"
+        aria-label="Prueba HTTP sin acceso a la red"
+      ><code>{{ examples.http }}</code></pre>
+    </figure>
+  </section>
+
+  <section aria-labelledby="testing-e">
+    <h2 id="testing-e">Laboratorio E · Router</h2>
+    <p>
+      Abre el
+      <a routerLink="/routing/books" [queryParams]="{ category: 'Angular' }"
+        >catálogo filtrado por Angular</a
+      >, abre un libro y luego prueba salir del
+      <a routerLink="/routing/notes">editor de notas</a> con cambios pendientes.
+    </p>
+    <p>
+      <code>provideRouter()</code> instala la configuración real.
+      <code>RouterTestingHarness</code> navega y expone el DOM de la ruta. En las pruebas de
+      routing, <code>CanMatch</code> selecciona una ruta alternativa,
+      <code>CanActivate</code> permite o bloquea la entrada y <code>CanDeactivate</code> consulta un
+      doble de confirmación. El resolver usa el parámetro <code>:id</code> para cargar el libro o
+      redirigir al catálogo.
+    </p>
+    <figure>
+      <figcaption>Navegación con query parameters y redirección</figcaption>
+      <pre
+        tabindex="0"
+        aria-label="Prueba del Router con el harness"
+      ><code>{{ examples.router }}</code></pre>
+    </figure>
+  </section>
+
+  <section aria-labelledby="testing-f">
+    <h2 id="testing-f">Laboratorio F · Formularios</h2>
+    <p>
+      En <a routerLink="/forms">Formularios</a>, compara las pestañas Reactive Forms y Signal Forms.
+      Escribe un título corto, sal del campo y luego intenta guardar dos veces. Prueba también el
+      ISBN registrado <code>978-0-13-235088-4</code>.
+    </p>
+    <p>
+      En Reactive Forms, consulta <code>control.invalid</code>, <code>control.dirty</code> y
+      <code>control.touched</code>. En Signal Forms, lee <code>field().invalid()</code>,
+      <code>field().dirty()</code> y <code>field().touched()</code>. El evento
+      <code>input</code> aplica la edición del usuario y <code>blur</code> marca el campo como
+      tocado. <code>forms-page.spec.ts</code> prueba validación, envío, concurrencia y errores.
+    </p>
+    <figure>
+      <figcaption>Ejercicio de validación aislada para ambos tipos de formulario</figcaption>
+      <pre
+        tabindex="0"
+        aria-label="Prueba de validación de formularios"
+      ><code>{{ examples.forms }}</code></pre>
+    </figure>
+  </section>
+
+  <section aria-labelledby="testing-async">
+    <h2 id="testing-async">Asincronía con Angular Zoneless</h2>
+    <p>
+      Usa <code>async</code> y <code>await</code> para promesas. Simula una respuesta rechazada con
+      <code>mockRejectedValue()</code> y usa una promesa controlada para verificar un estado
+      pendiente. Para un debounce, avanza el reloj virtual de Vitest y verifica cuándo se invoca el
+      callback.
+    </p>
+    <figure>
+      <figcaption>Reloj virtual para código con debounce</figcaption>
+      <pre
+        tabindex="0"
+        aria-label="Prueba asíncrona con temporizadores virtuales"
+      ><code>{{ examples.async }}</code></pre>
+    </figure>
+    <p>
+      Restaura spies y temporizadores en <code>afterEach()</code>. Si el reloj virtual intercepta el
+      planificador de Angular, avanza las tareas correspondientes antes de esperar la estabilidad.
+      Simula las dependencias externas y comprueba cambios visibles, errores y límites.
+    </p>
+  </section>
+
+  <section aria-labelledby="testing-coverage">
+    <h2 id="testing-coverage">Cobertura</h2>
+    <p>
+      Ejecuta estos comandos en el proyecto. El informe de cobertura se genera desde la suite del
+      CLI.
+    </p>
+    <pre tabindex="0" aria-label="Comandos de Vitest y cobertura"><code>npx ng test --watch=false
+npx ng test --watch=false --coverage</code></pre>
+    <ul>
+      <li><strong>Líneas y sentencias:</strong> muestran qué partes del código se ejecutaron.</li>
+      <li><strong>Funciones:</strong> muestran qué funciones se invocaron.</li>
+      <li>
+        <strong>Ramas:</strong> muestran qué caminos de una decisión se tomaron, como éxito, lista
+        vacía y error.
+      </li>
+    </ul>
+    <p>
+      Una línea ejecutada puede carecer de una comprobación de su resultado. Abre el informe HTML y
+      prioriza las ramas sin probar que afecten al usuario, como una navegación bloqueada o un fallo
+      al guardar.
+    </p>
+    <p>
+      Consulta las guías oficiales de
+      <a href="https://angular.dev/guide/testing">Testing de Angular</a>,
+      <a href="https://angular.dev/guide/forms/signals/testing">Signal Forms</a> y
+      <a href="https://angular.dev/guide/testing/code-coverage">cobertura</a>.
+    </p>
+  </section>
+</div>

@@ -1,0 +1,49 @@
+@use '../lab';
+
+:host {
+  display: block;
+}
+
+.seats {
+  @include lab.lab-surface;
+}
+
+.seats__hint,
+.seats__message {
+  @include lab.lab-muted;
+}
+
+.seats__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: var(--atlas-space-sm);
+
+  div {
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-sm);
+    padding: var(--atlas-space-sm);
+  }
+
+  dt {
+    color: var(--atlas-text-muted);
+    font-size: 0.85rem;
+  }
+
+  dd {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+}
+
+.seats__actions {
+  @include lab.lab-actions;
+}
+
+button {
+  @include lab.lab-button;
+}
+
+.seats__message {
+  color: var(--atlas-text);
+  font-weight: 600;
+}

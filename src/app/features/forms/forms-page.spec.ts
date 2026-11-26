@@ -44,6 +44,47 @@ async function createPage() {
 }
 
 describe('FormsPage', () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it.each(['reactive', 'signal'])(
+    'tracks dirty and touched independently in the %s form',
+    async (kind) => {
+      const { fixture, page } = await createPage();
+      page.querySelector<HTMLButtonElement>(`#${kind}-tab`)!.click();
+      await fixture.whenStable();
+      const input = page.querySelector<HTMLInputElement>(`#${kind}-title`)!;
+      const status = () => page.querySelector(`#${kind}-panel`)?.textContent;
+
+      expect(status()).toContain('dirty: false');
+      expect(status()).toContain('touched: false');
+      input.value = 'Angular Atlas';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await fixture.whenStable();
+
+      expect(status()).toContain('dirty: true');
+      expect(status()).toContain('touched: false');
+      input.dispatchEvent(new Event('blur'));
+      await fixture.whenStable();
+      expect(status()).toContain('touched: true');
+    },
+  );
+
+  it.each(['reactive', 'signal'])('shows a failed save in the %s form', async (kind) => {
+    const { fixture, page, repository } = await createPage();
+    const save = vi.spyOn(repository, 'save').mockRejectedValueOnce(new Error('Save failed'));
+    page.querySelector<HTMLButtonElement>(`#${kind}-tab`)!.click();
+    await fixture.whenStable();
+    setInput(page, `${kind}-title`, 'Angular Atlas');
+    setInput(page, `${kind}-author`, 'Ada Lovelace');
+
+    submit(page, `#${kind}-panel form`);
+    await fixture.whenStable();
+
+    expect(save).toHaveBeenCalledOnce();
+    expect(page.textContent).toContain('No se pudo guardar el libro.');
+    expect(repository.books()).toHaveLength(0);
+  });
+
   it('renders the documentation, both independent labs, and the comparison tabs', async () => {
     const { fixture, page } = await createPage();
 

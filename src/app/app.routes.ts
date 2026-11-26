@@ -40,5 +40,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/forms/forms-page').then((m) => m.FormsPage),
     title: 'Formularios y Signal Forms · Angular Atlas',
   },
+  {
+    path: 'testing',
+    loadComponent: () => import('./features/testing/testing-page').then((m) => m.TestingPage),
+    title: 'Testing con Vitest · Angular Atlas',
+  },
   { path: '**', redirectTo: '' },
 ];

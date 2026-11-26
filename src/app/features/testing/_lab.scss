@@ -1,0 +1,68 @@
+@mixin lab-surface {
+  display: grid;
+  gap: var(--atlas-space-md);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+  background: var(--atlas-surface);
+  padding: var(--atlas-space-md);
+}
+
+@mixin lab-button {
+  min-height: 2.5rem;
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-sm);
+  background: var(--atlas-surface);
+  color: var(--atlas-text);
+  padding: 0.5rem 0.85rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: var(--atlas-accent-strong);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--atlas-accent-strong);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+@mixin lab-button-primary {
+  border-color: var(--atlas-accent-filled);
+  background: var(--atlas-accent-filled);
+  color: var(--atlas-on-accent);
+
+  &:hover:not(:disabled) {
+    background: var(--atlas-accent-filled-hover);
+  }
+}
+
+@mixin lab-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--atlas-space-sm);
+}
+
+@mixin lab-code {
+  border-radius: 4px;
+  background: var(--atlas-accent-soft);
+  color: var(--atlas-accent-strong);
+  padding: 0.1rem 0.35rem;
+  font-size: 0.85em;
+}
+
+@mixin lab-muted {
+  color: var(--atlas-text-muted);
+  line-height: 1.6;
+}
+
+@mixin lab-danger-text {
+  color: light-dark(#a32626, #ffb4b4);
+}
