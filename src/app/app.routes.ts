@@ -35,5 +35,10 @@ export const routes: Routes = [
     loadChildren: () => import('./features/http/http.routes').then((m) => m.HTTP_ROUTES),
     title: 'HTTP y recursos · Angular Atlas',
   },
+  {
+    path: 'forms',
+    loadComponent: () => import('./features/forms/forms-page').then((m) => m.FormsPage),
+    title: 'Formularios y Signal Forms · Angular Atlas',
+  },
   { path: '**', redirectTo: '' },
 ];

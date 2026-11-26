@@ -44,6 +44,28 @@ describe('App', () => {
     expect(compiled.querySelector('app-signals-page .signals-page__lab app-counter-demo')).toBeTruthy();
   });
 
+  it('should lazy load the Forms page and enable its sidebar navigation item', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/forms');
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(router.url).toBe('/forms');
+    expect(compiled.querySelector('app-forms-page .forms-page__title')?.textContent).toContain(
+      'Formularios',
+    );
+    expect(compiled.querySelector('app-forms-page #reactive-panel form')).toBeTruthy();
+    expect(compiled.querySelector('app-forms-page #signal-panel form')).toBeTruthy();
+    expect(compiled.querySelector('.shell__nav-link--active')?.textContent).toContain(
+      'Formularios y Signal Forms',
+    );
+    compiled.querySelector<HTMLButtonElement>('#signal-tab')!.click();
+    fixture.detectChanges();
+    expect(compiled.querySelector('app-forms-page #signal-panel form')).toBeTruthy();
+  });
+
   it('should lazy load the Components page with documentation and the lifecycle lab together', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);

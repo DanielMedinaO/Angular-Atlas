@@ -1,0 +1,201 @@
+<div class="forms-page__panel-copy">
+  <h3>Modelo basado en Signal Forms</h3>
+  <p>
+    <code>form()</code> crea un <code>FieldTree</code> sobre el modelo signal. El esquema declara
+    las reglas; <code>FormField</code> enlaza entradas y <code>FormRoot</code> delega el envío en
+    <code>submission.action</code>.
+  </p>
+</div>
+
+<form [formRoot]="bookForm" novalidate>
+  <div class="forms-page__field">
+    <label for="signal-title">Título del libro <span aria-hidden="true">*</span></label>
+    <input id="signal-title" type="text" [formField]="bookForm.title" autocomplete="off" />
+    @for (error of errors(bookForm.title); track error) {
+      <p class="forms-page__error" role="alert">{{ error }}</p>
+    }
+  </div>
+
+  <div class="forms-page__field">
+    <label for="signal-author">Autor <span aria-hidden="true">*</span></label>
+    <input id="signal-author" type="text" [formField]="bookForm.author" autocomplete="off" />
+    @for (error of errors(bookForm.author); track error) {
+      <p class="forms-page__error" role="alert">{{ error }}</p>
+    }
+  </div>
+
+  <div class="forms-page__field-grid">
+    <div class="forms-page__field">
+      <label for="signal-category">Categoría <span aria-hidden="true">*</span></label>
+      <select id="signal-category" [formField]="bookForm.category">
+        <option value="architecture">Arquitectura</option>
+        <option value="angular">Angular</option>
+        <option value="typescript">TypeScript</option>
+        <option value="other">Otra</option>
+      </select>
+    </div>
+    <div class="forms-page__field">
+      <label for="signal-year">Año de publicación <span aria-hidden="true">*</span></label>
+      <input id="signal-year" type="number" [formField]="bookForm.year" />
+      @for (error of errors(bookForm.year); track error) {
+        <p class="forms-page__error" role="alert">{{ error }}</p>
+      }
+    </div>
+  </div>
+
+  <div class="forms-page__field">
+    <label for="signal-description">Descripción (opcional)</label>
+    <textarea id="signal-description" [formField]="bookForm.description" rows="3"></textarea>
+  </div>
+
+  <div class="forms-page__field">
+    <label for="signal-isbn">ISBN (opcional)</label>
+    <input id="signal-isbn" type="text" [formField]="bookForm.isbn" autocomplete="off" />
+    @if (bookForm.isbn().pending()) {
+      <p class="forms-page__pending" role="status">Comprobando ISBN en el repositorio local…</p>
+    }
+    @for (error of errors(bookForm.isbn); track error) {
+      <p class="forms-page__error" role="alert">{{ error }}</p>
+    }
+  </div>
+
+  <fieldset class="forms-page__dynamic">
+    <legend>Autores adicionales</legend>
+    <p>Agrega coautores. Cada campo nuevo también es obligatorio.</p>
+    @for (author of model().additionalAuthors; track authorIds()[$index]; let index = $index) {
+      <div class="forms-page__dynamic-row">
+        <div class="forms-page__field">
+          <label [for]="'signal-additional-author-' + index">Autor adicional {{ index + 1 }}</label>
+          <input
+            [id]="'signal-additional-author-' + index"
+            type="text"
+            [formField]="bookForm.additionalAuthors[index]"
+          />
+          @for (error of errors(bookForm.additionalAuthors[index]); track error) {
+            <p class="forms-page__error" role="alert">{{ error }}</p>
+          }
+        </div>
+        <button
+          type="button"
+          class="forms-page__button forms-page__button--quiet"
+          [attr.aria-label]="'Eliminar autor adicional ' + (index + 1)"
+          (click)="removeAuthor(index)"
+        >
+          Eliminar
+        </button>
+      </div>
+    }
+    @for (error of errors(bookForm.additionalAuthors); track error) {
+      <p class="forms-page__error" role="alert">{{ error }}</p>
+    }
+    <button
+      type="button"
+      class="forms-page__button forms-page__button--quiet"
+      (click)="addAuthor()"
+    >
+      Agregar autor
+    </button>
+  </fieldset>
+
+  <div class="forms-page__state" aria-label="Estado del formulario Signal Forms">
+    <span>
+      Estado:
+      <strong>{{
+        bookForm().valid() ? 'VALID' : bookForm().pending() ? 'PENDING' : 'INVALID'
+      }}</strong>
+    </span>
+    <span>touched: {{ bookForm().touched() }}</span>
+    <span>dirty: {{ bookForm().dirty() }}</span>
+    <span>valid: {{ bookForm().valid() }}</span>
+    <span>invalid: {{ bookForm().invalid() }}</span>
+    <span>pending: {{ bookForm().pending() }}</span>
+    <span>submitting: {{ bookForm().submitting() }}</span>
+  </div>
+
+  <details class="forms-page__values">
+    <summary>Valores actuales del formulario</summary>
+    <pre>{{ model() | json }}</pre>
+  </details>
+
+  <div class="forms-page__actions">
+    @if (bookForm().pending()) {
+      <p class="forms-page__pending" role="status">
+        El formulario está esperando una validación asíncrona.
+      </p>
+    } @else if (bookForm().invalid()) {
+      <span class="forms-page__status-pill">Formulario incompleto</span>
+    } @else {
+      <span class="forms-page__status-pill forms-page__status-pill--valid">Formulario válido</span>
+    }
+    <button
+      type="submit"
+      class="forms-page__button forms-page__button--primary"
+      [disabled]="bookForm().pending() || bookForm().submitting()"
+    >
+      {{ bookForm().submitting() ? 'Guardando…' : 'Guardar libro' }}
+    </button>
+  </div>
+  @if (result()) {
+    <p class="forms-page__result" role="status">{{ result() }}</p>
+  }
+</form>
+
+<div class="forms-page__field-states">
+  <h4>Estado individual de los campos</h4>
+  <dl>
+    <div>
+      <dt>Título</dt>
+      <dd>
+        touched {{ bookForm.title().touched() }} · dirty {{ bookForm.title().dirty() }} · valid
+        {{ bookForm.title().valid() }} · invalid {{ bookForm.title().invalid() }}
+      </dd>
+    </div>
+    <div>
+      <dt>Autor</dt>
+      <dd>
+        touched {{ bookForm.author().touched() }} · dirty {{ bookForm.author().dirty() }} · valid
+        {{ bookForm.author().valid() }} · invalid {{ bookForm.author().invalid() }}
+      </dd>
+    </div>
+    <div>
+      <dt>Categoría</dt>
+      <dd>
+        touched {{ bookForm.category().touched() }} · dirty {{ bookForm.category().dirty() }} ·
+        valid {{ bookForm.category().valid() }} · invalid {{ bookForm.category().invalid() }}
+      </dd>
+    </div>
+    <div>
+      <dt>Año</dt>
+      <dd>
+        touched {{ bookForm.year().touched() }} · dirty {{ bookForm.year().dirty() }} · valid
+        {{ bookForm.year().valid() }} · invalid {{ bookForm.year().invalid() }}
+      </dd>
+    </div>
+    <div>
+      <dt>Descripción</dt>
+      <dd>
+        touched {{ bookForm.description().touched() }} · dirty
+        {{ bookForm.description().dirty() }} · valid {{ bookForm.description().valid() }} · invalid
+        {{ bookForm.description().invalid() }}
+      </dd>
+    </div>
+    <div>
+      <dt>ISBN</dt>
+      <dd>
+        touched {{ bookForm.isbn().touched() }} · dirty {{ bookForm.isbn().dirty() }} · valid
+        {{ bookForm.isbn().valid() }} · pending {{ bookForm.isbn().pending() }}
+      </dd>
+    </div>
+    @for (author of model().additionalAuthors; track authorIds()[$index]; let index = $index) {
+      <div>
+        <dt>Autor adicional {{ index + 1 }}</dt>
+        <dd>
+          touched {{ bookForm.additionalAuthors[index]().touched() }} · dirty
+          {{ bookForm.additionalAuthors[index]().dirty() }} · valid
+          {{ bookForm.additionalAuthors[index]().valid() }} · invalid
+          {{ bookForm.additionalAuthors[index]().invalid() }}
+        </dd>
+      </div>
+    }
+  </dl>
+</div>

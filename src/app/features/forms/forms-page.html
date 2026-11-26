@@ -1,0 +1,268 @@
+<div class="forms-page">
+  <header class="forms-page__header">
+    <p class="forms-page__eyebrow">Arquitectura de la aplicación</p>
+    <h1 class="forms-page__title">Formularios y Signal Forms</h1>
+    <p class="forms-page__lead">
+      Compara formularios reactivos tipados con la API estable de Signal Forms de Angular 22. Ambos
+      laboratorios aplican las mismas reglas, validan ISBN contra un repositorio local y guardan
+      únicamente en memoria.
+    </p>
+    <ul class="forms-page__objectives">
+      <li>Modelar y validar datos con Reactive Forms y Signal Forms.</li>
+      <li>Observar estados síncronos y validaciones asíncronas.</li>
+      <li>Gestionar colecciones de campos y envíos sin duplicados.</li>
+    </ul>
+  </header>
+
+  <section class="forms-page__lab" aria-labelledby="book-lab-title">
+    <div class="forms-page__lab-heading">
+      <div>
+        <p class="forms-page__eyebrow">Laboratorio 07</p>
+        <h2 id="book-lab-title">Registro de libros</h2>
+        <p>Selecciona un enfoque y completa el formulario interactivo.</p>
+      </div>
+      <span class="forms-page__badge">Persistencia local de demostración</span>
+    </div>
+
+    <div
+      class="forms-page__tabs"
+      role="tablist"
+      aria-label="Enfoque del formulario"
+      (keydown)="onTabKeydown($event)"
+    >
+      <button
+        id="reactive-tab"
+        type="button"
+        role="tab"
+        aria-controls="reactive-panel"
+        [attr.aria-selected]="activeTab() === 'reactive'"
+        [attr.tabindex]="activeTab() === 'reactive' ? 0 : -1"
+        [class.forms-page__tab--active]="activeTab() === 'reactive'"
+        (click)="setActiveTab('reactive')"
+      >
+        Reactive Forms
+      </button>
+      <button
+        id="signal-tab"
+        type="button"
+        role="tab"
+        aria-controls="signal-panel"
+        [attr.aria-selected]="activeTab() === 'signal'"
+        [attr.tabindex]="activeTab() === 'signal' ? 0 : -1"
+        [class.forms-page__tab--active]="activeTab() === 'signal'"
+        (click)="setActiveTab('signal')"
+      >
+        Signal Forms
+      </button>
+    </div>
+
+    <!-- Ambos laboratorios permanecen montados: cada uno conserva su propio estado al cambiar de pestaña. -->
+    <section
+      id="reactive-panel"
+      role="tabpanel"
+      aria-labelledby="reactive-tab"
+      class="forms-page__panel"
+      [hidden]="activeTab() !== 'reactive'"
+    >
+      <app-reactive-form-lab />
+    </section>
+    <section
+      id="signal-panel"
+      role="tabpanel"
+      aria-labelledby="signal-tab"
+      class="forms-page__panel"
+      [hidden]="activeTab() !== 'signal'"
+    >
+      <app-signal-form-lab />
+    </section>
+
+    <p class="forms-page__disclaimer">
+      Esta demostración simula validaciones y guardado local; no llama a Open Library ni a un
+      servidor. En producción, el backend debe volver a validar ISBN, permisos y reglas de negocio.
+    </p>
+  </section>
+
+  <section class="forms-page__saved" aria-labelledby="saved-books-title">
+    <div>
+      <p class="forms-page__eyebrow">Repositorio en memoria</p>
+      <h2 id="saved-books-title">Libros registrados en esta sesión</h2>
+    </div>
+    @if (registeredBooks().length === 0) {
+      <p class="forms-page__empty">
+        Todavía no hay libros registrados. Guarda un libro desde cualquiera de los dos laboratorios.
+      </p>
+    } @else {
+      <ul class="forms-page__book-list">
+        @for (book of registeredBooks(); track book.id) {
+          <li>
+            <strong>{{ book.title }}</strong>
+            <span>{{ book.authors.join(', ') }} · {{ book.year }} · {{ book.category }}</span>
+            @if (book.isbn) {
+              <small>ISBN {{ book.isbn }}</small>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <section class="forms-page__docs" aria-labelledby="forms-concepts-title">
+    <h2 id="forms-concepts-title">Conceptos y ejemplos</h2>
+
+    <article>
+      <h3>1. Reactive Forms: estado explícito</h3>
+      <p>
+        <code>FormControl</code> representa un valor, validadores y estados de interacción.
+        <code>FormGroup</code> compone controles tipados y <code>FormArray</code> administra
+        colecciones. El componente conserva la fuente de verdad; el template enlaza con
+        <code>formControlName</code>. Implementación: <code>reactive-form-lab/</code>.
+      </p>
+      <pre tabindex="0"><code>const form = fb.nonNullable.group(&#123;
+  title: ['', [Validators.required, Validators.minLength(3)]],
+  year: new FormControl&lt;number | null&gt;(2026, [
+    Validators.required, Validators.min(1450), Validators.max(2026),
+  ]),
+  additionalAuthors: fb.array&lt;FormControl&lt;string&gt;&gt;([]),
+&#125;);</code></pre>
+      <p>
+        Usa <code>setValue()</code> para proporcionar el objeto completo,
+        <code>patchValue()</code> para actualizar una parte y <code>reset()</code> para restaurar
+        valores y estados. Los botones del laboratorio ejecutan esas tres operaciones.
+      </p>
+    </article>
+
+    <article>
+      <h3>2. Signal Forms: FieldTree y enlazado</h3>
+      <p>
+        Signal Forms, estable desde Angular 22, conecta un modelo <code>signal()</code> con
+        <code>form()</code>. El resultado es un <code>FieldTree</code> cuya forma refleja el modelo:
+        cada nodo expone estado reactivo y puede enlazarse a un control con <code>FormField</code> y
+        <code>[formField]</code>. No es un <code>FormGroup</code> ni se modifica con métodos de
+        Reactive Forms. Implementación: <code>signal-form-lab/</code>.
+      </p>
+      <pre tabindex="0"><code>const model = signal(&#123; title: '', year: 2026 &#125;);
+const bookForm = form(model, schema(path =&gt; &#123;
+  required(path.title);
+  minLength(path.title, 3);
+  min(path.year, 1450);
+&#125;));
+
+&lt;form [formRoot]="bookForm"&gt;
+  &lt;input [formField]="bookForm.title" /&gt;
+&lt;/form&gt;</code></pre>
+      <p>
+        El laboratorio lee <code>value()</code>, <code>valid()</code>, <code>invalid()</code>,
+        <code>touched()</code>, <code>dirty()</code>, <code>errors()</code> y
+        <code>pending()</code> desde los estados de campo. Las reglas personalizadas y las
+        validaciones incorporadas viven en un esquema tipado.
+      </p>
+    </article>
+
+    <article>
+      <h3>3. Validación asíncrona y envío</h3>
+      <p>
+        Reactive Forms utiliza <code>AsyncValidatorFn</code>; cada valor nuevo cancela la
+        suscripción anterior y su resultado tardío se ignora. Signal Forms usa
+        <code>validateAsync()</code>, apropiado para un repositorio simulado que no necesita HTTP.
+        Su recurso aborta validaciones obsoletas. Ambos muestran <code>pending</code>, duplicados y
+        errores de comprobación.
+      </p>
+      <pre tabindex="0"><code>validateAsync(path.isbn, &#123;
+  params: ctx =&gt; ctx.value() ? &#123; isbn: ctx.value() &#125; : undefined,
+  factory: params =&gt; resource(&#123;
+    params: () =&gt; params(),
+    loader: (&#123; params &#125;) =&gt; repository.isDuplicateIsbn(params.isbn),
+  &#125;),
+  onSuccess: duplicate =&gt; duplicate ? [&#123; kind: 'duplicate' &#125;] : undefined,
+  onError: () =&gt; [&#123; kind: 'unavailable', message: 'Reintenta la comprobación.' &#125;],
+&#125;);</code></pre>
+      <p>
+        <code>FormRoot</code> intercepta el submit y ejecuta <code>submission.action</code>. La
+        opción <code>ignoreValidators: 'none'</code> bloquea el action mientras hay validaciones
+        pendientes. La API también mantiene <code>submitting()</code> y rechaza envíos concurrentes.
+        El laboratorio Reactive aplica la misma protección con su estado de guardado.
+      </p>
+    </article>
+
+    <article>
+      <h3>4. Campos dinámicos y persistencia</h3>
+      <p>
+        Reactive Forms agrega y elimina controles mediante <code>FormArray</code>. Signal Forms
+        refleja el arreglo del modelo y obtiene los nodos correspondientes del
+        <code>FieldTree</code>. Cada fila de ambas listas se renderiza con un identificador estable
+        y su campo es obligatorio. El DTO de creación es independiente del modelo editable; un
+        repositorio local en memoria guarda libros durante la sesión.
+      </p>
+      <pre tabindex="0"><code>// Reactive Forms
+authors.push(fb.control('', Validators.required));
+authors.removeAt(index);
+
+// Signal Forms: actualizar el modelo; no usar FormArray aquí
+model.update(value =&gt; (&#123;
+  ...value,
+  additionalAuthors: [...value.additionalAuthors, ''],
+&#125;));</code></pre>
+      <p>
+        El ISBN duplicado se comprueba en un conjunto local de demostración. La comprobación de
+        cliente mejora la experiencia, pero nunca sustituye la validación definitiva del backend.
+      </p>
+    </article>
+
+    <article>
+      <h3>5. Reto práctico</h3>
+      <p>
+        Extiende el registro para capturar una editorial: agrégala al modelo y al DTO, márcala como
+        obligatoria en ambos enfoques y muestra su error después de tocar el campo o enviar. Guarda
+        un libro de cada laboratorio y confirma que ambos aparecen en el mismo repositorio local.
+      </p>
+    </article>
+
+    <div class="forms-page__comparison">
+      <h3>¿Cuándo elegir cada enfoque?</h3>
+      <div class="forms-page__table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Aspecto</th>
+              <th>Reactive Forms</th>
+              <th>Signal Forms</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Estado</th>
+              <td>Árbol de controles y Observables.</td>
+              <td>Modelo signal y estado signal por campo.</td>
+            </tr>
+            <tr>
+              <th>Validación</th>
+              <td>Funciones ligadas a controles.</td>
+              <td>Esquema declarativo y validadores reutilizables.</td>
+            </tr>
+            <tr>
+              <th>Ventaja</th>
+              <td>Maduro, ampliamente conocido y con APIs detalladas.</td>
+              <td>Menos sincronización manual y mejor integración con Signals.</td>
+            </tr>
+            <tr>
+              <th>Consideración</th>
+              <td>Más coordinación entre controles, suscripciones y vistas.</td>
+              <td>API reciente; revisar compatibilidad de ecosistema y patrones de equipo.</td>
+            </tr>
+            <tr>
+              <th>Recomendación</th>
+              <td>Ideal para aplicaciones existentes y equipos que dependen de su ecosistema.</td>
+              <td>Buena opción para formularios nuevos en Angular 22 con equipo preparado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Para un proyecto empresarial nuevo en Angular 22, elegiría Signal Forms si la versión y sus
+        APIs estables están aprobadas por la organización y el equipo puede establecer patrones y
+        pruebas. Mantendría Reactive Forms donde haya controles de terceros, integraciones o
+        convenciones existentes que lo hagan más fiable; ambas opciones siguen siendo válidas.
+      </p>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,248 @@
+// Estilos compartidos por los dos laboratorios de formularios.
+@mixin styles {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--atlas-space-lg);
+  }
+
+  .forms-page__panel-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--atlas-space-sm);
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 650;
+    }
+
+    p {
+      color: var(--atlas-text-muted);
+      line-height: 1.6;
+    }
+  }
+
+  form {
+    display: grid;
+    gap: var(--atlas-space-md);
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-md, var(--atlas-radius-sm));
+    background: var(--atlas-bg);
+    padding: var(--atlas-space-lg);
+  }
+
+  .forms-page__field,
+  .forms-page__dynamic {
+    display: grid;
+    gap: var(--atlas-space-xs);
+
+    label,
+    legend {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 2.75rem;
+      border: 1px solid var(--atlas-border);
+      border-radius: var(--atlas-radius-sm);
+      background: var(--atlas-surface);
+      color: var(--atlas-text);
+      padding: 0.55rem 0.75rem;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 5rem;
+      resize: vertical;
+      max-width: -webkit-fill-available;
+    }
+  }
+
+  .forms-page__field :is(input, select, textarea):focus-visible,
+  .forms-page__button:focus-visible {
+    outline: 3px solid var(--atlas-accent-strong);
+    outline-offset: 2px;
+  }
+
+  .forms-page__field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--atlas-space-md);
+  }
+
+  .forms-page__error {
+    color: var(--atlas-danger, #a32626);
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .forms-page__pending {
+    color: var(--atlas-accent-strong);
+    font-size: 0.9rem;
+  }
+
+  .forms-page__dynamic {
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-sm);
+    padding: var(--atlas-space-md);
+
+    legend {
+      padding-inline: var(--atlas-space-xs);
+    }
+
+    > p {
+      color: var(--atlas-text-muted);
+      line-height: 1.6;
+    }
+  }
+
+  .forms-page__dynamic-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: var(--atlas-space-sm);
+  }
+
+  .forms-page__button {
+    min-height: 2.5rem;
+    border: 1px solid var(--atlas-border);
+    border-radius: var(--atlas-radius-sm);
+    background: var(--atlas-surface);
+    color: var(--atlas-text);
+    padding: 0.5rem 0.85rem;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+  }
+
+  .forms-page__button--quiet {
+    width: fit-content;
+    font-size: 0.9rem;
+  }
+
+  .forms-page__button--primary {
+    border-color: var(--atlas-accent-strong);
+    background: var(--atlas-accent-strong);
+    color: var(--atlas-text-inverse, #fff);
+  }
+
+  .forms-page__examples,
+  .forms-page__state,
+  .forms-page__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--atlas-space-sm);
+  }
+
+  .forms-page__actions {
+    justify-content: space-between;
+  }
+
+  .forms-page__state span {
+    border: 1px solid var(--atlas-border);
+    border-radius: 999px;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.8rem;
+  }
+
+  .forms-page__status-pill {
+    width: fit-content;
+    border-radius: 999px;
+    background: var(--atlas-surface-raised, var(--atlas-border));
+    padding: 0.25rem 0.65rem;
+    font-size: 0.8rem;
+  }
+
+  .forms-page__status-pill--valid {
+    background: var(--atlas-accent-soft);
+    color: var(--atlas-accent-strong);
+  }
+
+  .forms-page__values,
+  .forms-page__field-states {
+    border-top: 1px solid var(--atlas-border);
+    padding-top: var(--atlas-space-md);
+  }
+
+  .forms-page__values summary {
+    width: fit-content;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .forms-page__values pre {
+    overflow-x: auto;
+    border-radius: var(--atlas-radius-sm);
+    background: var(--atlas-navy);
+    color: var(--atlas-text-inverse);
+    padding: var(--atlas-space-md);
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  .forms-page__field-states {
+    display: grid;
+    gap: var(--atlas-space-sm);
+
+    h4 {
+      font-size: 0.95rem;
+      font-weight: 650;
+    }
+
+    dl {
+      display: grid;
+      gap: var(--atlas-space-xs);
+    }
+
+    dl > div {
+      display: grid;
+      grid-template-columns: 9rem minmax(0, 1fr);
+      gap: var(--atlas-space-sm);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    dt {
+      font-weight: 600;
+    }
+
+    dd {
+      color: var(--atlas-text-muted);
+    }
+  }
+
+  .forms-page__result {
+    border-left: 4px solid var(--atlas-accent-strong);
+    background: var(--atlas-accent-soft);
+    padding: var(--atlas-space-sm) var(--atlas-space-md);
+  }
+
+  code {
+    border-radius: 4px;
+    background: var(--atlas-accent-soft);
+    color: var(--atlas-accent-strong);
+    padding: 0.1rem 0.35rem;
+    font-size: 0.85em;
+  }
+
+  @media (max-width: 640px) {
+    .forms-page__field-grid,
+    .forms-page__field-states dl > div {
+      grid-template-columns: 1fr;
+    }
+
+    form {
+      padding: var(--atlas-space-md);
+    }
+  }
+}

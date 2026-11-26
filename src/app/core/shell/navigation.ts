@@ -97,7 +97,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         id: 'forms',
         label: 'Formularios y Signal Forms',
         description: 'Captura y validación de datos',
-        status: 'upcoming',
+        status: 'available',
+        path: '/forms',
       },
       {
         id: 'dependency-injection',
