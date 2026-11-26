@@ -12,6 +12,16 @@ Guía interactiva en español para aprender Angular moderno con explicaciones, e
 
 </div>
 
+## Guía interactiva en ChatGPT
+
+Usa el **Prompt maestro** para recorrer Angular Atlas con un mentor en español. ChatGPT adapta las explicaciones a tu experiencia y a la versión de Angular que tengas instalada, propone laboratorios prácticos y evalúa lo aprendido con preguntas en el chat.
+
+1. Abre la [guía de la carpeta `chat`](chat/CHAT.md) y copia todo el contenido del bloque **Prompt maestro**.
+2. Pégalo y envíalo en una conversación nueva de [ChatGPT](https://chatgpt.com/). Puedes indicar tu nivel y si ya clonaste Angular Atlas o vas a crear un proyecto desde cero.
+3. Sigue una fase a la vez. Cuando quieras avanzar, escribe **«Continuemos a la siguiente fase»**.
+
+Para implementar los laboratorios puedes usar los prompts para GitHub Copilot Agent o pedir los pasos manuales en el chat.
+
 ## Temáticas
 
 Angular Atlas reúne 11 temáticas. Puedes empezar por Fundamentos o ir directamente al tema que quieras practicar.
